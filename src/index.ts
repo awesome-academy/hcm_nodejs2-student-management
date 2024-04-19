@@ -7,6 +7,7 @@ import flash from "connect-flash";
 import i18next from "i18next";
 import i18nextBackend from "i18next-fs-backend";
 import i18nextMiddleware from "i18next-http-middleware";
+import { AppDataSource } from "./config/typeorm";
 
 const port = process.env.PORT || 3000;
 
@@ -58,3 +59,9 @@ app.use(logger("dev"));
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
+AppDataSource.initialize()
+  .then(async () => {
+    console.log("Database initialized");
+  })
+  .catch((error) => console.log("Database connect failed: ", error));
