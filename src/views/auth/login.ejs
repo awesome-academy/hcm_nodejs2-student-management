@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('login.title') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="left">
+        <div class="icon">
+          <img class="icon-img" src="/images/logo.svg" />
+        </div>
+        <img class="illus-img" src="/images/school.jpg" />
+      </div>
+      <div class="right">
+        <div class="login-form-container">
+          <h2><%= t('login.title') %></h2>
+          <p><%= t('login.instruction') %></p>
+          <form method="POST">
+            <input
+              type="text"
+              name="username"
+              placeholder="<%= t('login.username_ph') %>"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="<%= t('login.password_ph') %>"
+              required
+            />
+            <div class="fp-container">
+              <a href="/forgot-password"><strong><%= t('forgot-password') %></strong></a>
+            </div>
+            <button type="submit"><strong><%= t('login.title') %></strong></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

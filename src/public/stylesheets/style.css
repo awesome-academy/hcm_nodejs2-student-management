@@ -1,0 +1,139 @@
+/* styles for login page */
+body {
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: roboto, sans-serif;
+}
+.login-container {
+    display: flex;
+    padding: 15px;
+    height: calc(100vh - 30px);
+}
+.left {
+    background-color: #ffffff;
+    width: 30%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.right {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-form-container {
+    max-width: 400px;
+}
+.login-form-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.login-form-container p {
+   color: #6b6868;
+}
+.login-form-container a {
+   color: #0574be;
+   text-align: right;
+   text-decoration: none;
+   align-self: flex-end;
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+.login-form-container input[type="text"],
+.login-form-container input[type="password"],
+.login-form-container button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.login-form-container button {
+    background-color: #359bdf;
+    color: white;
+    cursor: pointer;
+}
+.login-form-container button:hover {
+    background-color: #0574be;
+}
+.icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 5px;
+}
+.icon-img {
+    width: 50px;
+    height: 50px;
+}
+.illus-img {
+    width: 100%;
+}
+.fp-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* styles for sidebar */
+.sidebar {
+    width: 280px;
+    height: 100vh
+}
+.sidebar-icon {
+    margin-right: 10px;
+}
+.sidebar-item {
+    border-radius: 5px;
+}
+.sidebar-item-active {
+    background-color: #e4e4e4;
+    color: #0574be;
+    font-weight: bold;
+}
+.profile-card {
+    border-radius: 10px;
+    display: flex;
+    background-color: #e4e4e4;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+}
+.profile-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.profile-text-container {
+    flex: 1;
+}
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+    margin-right: 10px;
+}
+.content-container {
+    flex: 1;
+}
+.layout-container{
+    display: flex;
+    flex-direction: row;
+}
+.avatar-dropdown {
+    display: flex;
+    justify-content: end;
+    background-color: #ffffff;
+    padding: 20px 30px 20px 0;
+}
+.avatar-dropdown-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 100px;
+}
