@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('teacher') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar', {name: "", role:""}); -%>
+        <div class="content-container">
+          <%- include('../layout/header'); -%>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "grade": "Grade",
+  "english": "English",
+  "vietnamese": "Vietnamese",
+  "profile": "Profile",
+  "logout": "Log out",
+  "dashboard": "Dashboard",
+  "student": "Student",
+  "class": "Class",
+  "teacher": "Teacher",
+  "schedule": "Schedule",
+  "subject": "Subject",
+  "login": {
+    "title": "Login",
+    "instruction": "Please login to continue",
+    "username_ph": "Username",
+    "password_ph": "Password"
+  },
+  "forgot-password": "Forgot password?"
+}

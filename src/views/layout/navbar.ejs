@@ -1,0 +1,67 @@
+<div
+  class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar"
+>
+  <div>
+    <img class="icon-img" src="/images/logo.svg" />
+  </div>
+  <div class="profile-card">
+    <img class="avatar" src="/images/school.jpg" />
+    <div class="profile-info">
+      <div class="profile-text-container">
+        <strong><%= name %></strong>
+      </div>
+      <div class="profile-text-container">
+        <span><%= role %></span>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item sidebar-item sidebar-item-active">
+      <a href="/dashboard" class="nav-link" aria-current="page">
+        <img class="sidebar-icon" src="/icons/bar-chart.svg" />
+        <span><%= t('dashboard') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="/subjects" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/book.svg" />
+        <span><%= t('subject') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="/students" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/mortarboard.svg" />
+        <span><%= t('student') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="grades" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/backpack2.svg" />
+        <span><%= t('grade') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="/classes" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/people-fill.svg" />
+        <span><%= t('class') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="/teachers" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/person-workspace.svg" />
+        <span><%= t('teacher') %></span>
+      </a>
+    </li>
+    <li>
+      <a href="/schedules" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/calendar4-week.svg" />
+        <span><%= t('schedule') %></span>
+      </a>
+    </li>
+  </ul>
+  <span>
+    <a href="?locale=en"><%= t('english') %></a> |
+    <a href="?locale=vi"><%= t('vietnamese') %></a>
+  </span>
+</div>

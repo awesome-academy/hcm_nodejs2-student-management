@@ -1,0 +1,20 @@
+{
+  "grade": "Khối",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "profile": "Thông tin cá nhân",
+  "logout": "Đăng xuất",
+  "dashboard": "Trang chủ",
+  "student": "Học sinh",
+  "class": "Lớp học",
+  "teacher": "Giáo viên",
+  "schedule": "Thời khóa biểu",
+  "subject": "Môn học",
+  "login": {
+    "title": "Đăng nhập",
+    "instruction": "Nhập thông tin đăng nhập để tiếp tục",
+    "username_ph": "Tên đăng nhập",
+    "password_ph": "Mật khẩu"
+  },
+  "forgot-password": "Quên mật khẩu?"
+}

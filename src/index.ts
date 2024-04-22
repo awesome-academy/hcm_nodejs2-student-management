@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import express, { Request, Response, NextFunction } from "express";
 import path from "path";
+import router from "./routes/index";
 import logger from "morgan";
 import session from "express-session";
 import flash from "connect-flash";
@@ -52,9 +53,14 @@ app.use(flash());
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "ejs");
+
 app.use(i18nextMiddleware.handle(i18next));
 
 app.use(logger("dev"));
+
+app.use("/", router);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
