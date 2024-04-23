@@ -1,18 +1,18 @@
-<div
-  class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar"
->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar">
   <div>
     <img class="icon-img" src="/images/logo.svg" />
   </div>
   <div class="profile-card">
     <img class="avatar" src="/images/school.jpg" />
     <div class="profile-info">
+      <% if (typeof user !== 'undefined') { %>
       <div class="profile-text-container">
-        <strong><%= name %></strong>
+        <strong><%= user.name %></strong>
       </div>
       <div class="profile-text-container">
-        <span><%= role %></span>
+        <span><%= user.role %></span>
       </div>
+      <% } %>
     </div>
   </div>
   <hr />

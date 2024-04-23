@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= t('login.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
   </head>
   <body>
     <div class="login-container">
@@ -22,19 +23,32 @@
             <input
               type="text"
               name="username"
-              placeholder="<%= t('login.username_ph') %>"
               required
+              placeholder="<%= t('login.username_ph') %>"
+              value="<%= typeof data !== 'undefined' ? data.username : '' %>"
             />
             <input
               type="password"
               name="password"
-              placeholder="<%= t('login.password_ph') %>"
               required
+              placeholder="<%= t('login.password_ph') %>"
+              value="<%= typeof data !== 'undefined' ? data.password : '' %>"
             />
+            <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+            <ul class="error-list">
+              <% errors.forEach(error => { %>
+              <li class="text-danger"><%= error.msg %></li>
+              <% }); %>
+            </ul>
+            <% } %>
             <div class="fp-container">
-              <a href="/forgot-password"><strong><%= t('forgot-password') %></strong></a>
+              <a href="/forgot-password"
+                ><strong><%= t('forgot-password') %></strong></a
+              >
             </div>
-            <button type="submit"><strong><%= t('login.title') %></strong></button>
+            <button type="submit">
+              <strong><%= t('login.title') %></strong>
+            </button>
           </form>
         </div>
       </div>
