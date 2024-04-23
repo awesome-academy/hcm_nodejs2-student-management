@@ -16,5 +16,17 @@
     "username_ph": "Tên đăng nhập",
     "password_ph": "Mật khẩu"
   },
-  "forgot-password": "Quên mật khẩu?"
+  "forgot-password": "Quên mật khẩu?",
+  "username": {
+    "notfound": "Tên đăng nhập không tồn tại",
+    "not_empty": "Vui lòng điền tên đăng nhập"
+  },
+  "user": {
+    "notfound": "Không tìm thấy người dùng"
+  },
+  "password": {
+    "wrong": "Tên đăng nhập hoặc mật khẩu không chính xác",
+    "not_empty": "Vui lòng điền mật khẩu"
+  },
+  "staff": "Nhân viên giáo vụ"
 }

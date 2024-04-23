@@ -79,6 +79,9 @@ body {
     display: flex;
     justify-content: flex-end;
 }
+.error-list {
+    margin-top: 15px;
+}
 
 /* styles for sidebar */
 .sidebar {

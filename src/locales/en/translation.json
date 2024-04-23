@@ -16,5 +16,17 @@
     "username_ph": "Username",
     "password_ph": "Password"
   },
-  "forgot-password": "Forgot password?"
+  "forgot-password": "Forgot password?",
+  "username": {
+    "notfound": "Username is not found",
+    "not_empty": "Username is not empty"
+  },
+  "user": {
+    "notfound": "User is not found"
+  },
+  "password": {
+    "wrong": "Username or password is incorrect",
+    "not_empty": "Password is not empty"
+  },
+  "staff": "Staff"
 }
