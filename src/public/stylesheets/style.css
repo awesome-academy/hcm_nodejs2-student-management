@@ -122,8 +122,10 @@ body {
     border-radius: 100px;
     margin-right: 10px;
 }
-.content-container {
+.parent-content-container {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 .layout-container{
     display: flex;
@@ -139,4 +141,50 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 100px;
+}
+
+/* styles for header */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.header-title {
+    font-weight: bold;
+    font-size: x-large;
+    align-items:flex-start;
+    flex: 1;
+}
+.header-btn {
+    align-items: flex-end;
+}
+
+/* style for content */
+.content-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+}
+.content {
+    flex-grow: 1;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 3px 3px #e4e4e4;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.empty-list {
+    font-size: xx-large;
+    color: #6e6e6e;
+}
+.grade-list {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    justify-content:flex-start;
+    width: calc(100% - 80px) ;
 }

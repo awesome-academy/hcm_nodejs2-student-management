@@ -4,5 +4,6 @@ import { Router } from "express";
 const router: Router = Router();
 
 router.get("/", authMiddlewares.isAuth, gradeController.getGrades);
+router.post("/", authMiddlewares.isAuth, gradeController.updateGrades);
 
 export default router;
