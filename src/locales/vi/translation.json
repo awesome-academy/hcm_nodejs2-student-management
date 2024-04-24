@@ -1,5 +1,4 @@
 {
-  "grade": "Khối",
   "english": "Tiếng Anh",
   "vietnamese": "Tiếng Việt",
   "profile": "Thông tin cá nhân",
@@ -28,5 +27,16 @@
     "wrong": "Tên đăng nhập hoặc mật khẩu không chính xác",
     "not_empty": "Vui lòng điền mật khẩu"
   },
-  "staff": "Nhân viên giáo vụ"
+  "staff": "Nhân viên giáo vụ",
+  "modal": {
+    "cancel": "Hủy"
+  },
+  "grade": {
+    "title": "Khối",
+    "update": "Cập nhật khối",
+    "empty": "Chưa có dữ liệu",
+    "manage": "Quản lý khối",
+    "secondary": "Trung học cơ sở (Khối 6, 7, 8, 9)",
+    "high": "Trung học phổ thông (Khối 10, 11, 12)"
+  }
 }

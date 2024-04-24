@@ -1,5 +1,4 @@
 {
-  "grade": "Grade",
   "english": "English",
   "vietnamese": "Vietnamese",
   "profile": "Profile",
@@ -28,5 +27,16 @@
     "wrong": "Username or password is incorrect",
     "not_empty": "Password is not empty"
   },
-  "staff": "Staff"
+  "staff": "Staff",
+  "modal": {
+    "cancel": "Cancel"
+  },
+  "grade": {
+    "title": "Grade",
+    "update": "Update grades",
+    "empty": "There are no grades",
+    "manage": "Manage grades",
+    "secondary": "Secondary school (Grade 6, 7, 8, 9)",
+    "high": "High school (Grade 10, 11, 12)"
+  }
 }

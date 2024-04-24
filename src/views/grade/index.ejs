@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= t('grade') %></title>
+    <title><%= t('grade.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -14,8 +14,99 @@
     <main>
       <div class="layout-container">
         <%- include('../layout/navbar'); -%>
-        <div class="content-container">
+        <div class="parent-content-container">
           <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('grade.title') %></span>
+              <button
+                type="button"
+                class="btn btn-primary header-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#manageGrades"
+              >
+                <%= t('grade.manage') %>
+              </button>
+
+              <div
+                class="modal fade"
+                id="manageGrades"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        <%= t('grade.manage') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form method="POST">
+                      <div class="modal-body">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="1"
+                            name="level"
+                            id="secondary"
+                          />
+                          <label class="form-check-label" for="secondary">
+                            <%= t('grade.secondary') %>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="2"
+                            name="level"
+                            id="high"
+                          />
+                          <label class="form-check-label" for="high">
+                            <%= t('grade.high') %>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          <%= t('modal.cancel') %>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          <%= t('grade.update') %>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <% if (grades && grades.length > 0) { %>
+              <div class="grade-list list-group">
+                <% grades.forEach(function(grade) { %>
+                <a href="/grades/<%= grade.id %>/classes" class="list-group-item list-group-item-action"
+                  ><strong><%= t('grade.title') %>&nbsp<%= grade.name %></strong></a
+                >
+                <% }); %>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('grade.empty') %></span>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </main>
