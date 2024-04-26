@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= t('subject') %></title>
+    <title><%= t('subject.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -16,9 +16,216 @@
         <%- include('../layout/navbar'); -%>
         <div class="parent-content-container">
           <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('subject.title') %></span>
+              <button
+                type="button"
+                name="addSubject"
+                class="btn btn-primary header-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#subjectModal"
+                data-bs-title="<%= t('subject.add') %>"
+              >
+                <%= t('subject.add') %>
+              </button>
+              <div
+                class="modal fade"
+                id="subjectModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="modalLabel"></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form method="POST" id="subjectForm">
+                      <div class="modal-body">
+                        <div>
+                          <input
+                            type="text"
+                            class="form-control name-input"
+                            placeholder="<%= t('subject.name_ph') %>"
+                            name="name"
+                            id="name"
+                            required
+                            value="<%= typeof data !== 'undefined' ? data.name : '' %>"
+                            aria-label="Subject name"
+                          />
+                          <span
+                            ><strong
+                              ><%= t('subject.grades_text') %></strong
+                            ></span
+                          >
+                          <% if (grades && grades.length > 0) { %>
+                          <div class="grade-list-subject list-group">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="selectAll"
+                              />
+                              <label class="form-check-label">
+                                <%= t('subject.selectAll') %>
+                              </label>
+                            </div>
+                            <% grades.forEach(function(grade) { %>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input grade-checkbox"
+                                type="checkbox"
+                                value="<%= grade.id %>"
+                                name="grades"
+                              />
+                              <label class="form-check-label">
+                                <%= t('grade.title') %>&nbsp<%= grade.name %>
+                              </label>
+                            </div>
+                            <% }); %>
+                          </div>
+                          <% } %>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          <%= t('modal.cancel') %>
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn btn-primary"
+                          id="submitBtn"
+                        >
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              id="content"
+            >
+              <% if (subjects && subjects.length > 0) { %>
+              <div class="grade-list list-group">
+                <% subjects.forEach(function(subject) { %>
+                <div
+                  class="subject-item list-group-item list-group-item-action"
+                >
+                  <a
+                    href="/subjects/<%= subject.id %>/teachers"
+                    class="subject-item-name"
+                    ><strong><%= subject.name %></strong></a
+                  >
+                  <img
+                    class="sidebar-icon"
+                    name="updateSubject"
+                    data-subjectId="<%= subject.id %>"
+                    data-subject="<%= JSON.stringify(subject) %>"
+                    data-bs-toggle="modal"
+                    data-bs-target="#subjectModal"
+                    data-bs-title="<%= t('subject.update') %>"
+                    src="/icons/pencil-square.svg"
+                  />
+                  <img
+                    class="sidebar-icon"
+                    data-bs-toggle="modal"
+                    data-subjectId="<%= subject.id %>"
+                    data-bs-target="#deleteModal"
+                    src="/icons/trash-fill.svg"
+                  />
+                </div>
+                <% }); %>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('subject.empty') %></span>
+              </div>
+              <% } %>
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="deleteModal"
+                data-subjectId=""
+                tabindex="-1"
+                aria-labelledby="deleteModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="deleteModalLabel">
+                        <%= t('subject.delete') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <%= t('subject.delete_warning') %>
+                    </div>
+                    <div class="modal-footer">
+                      <form id="deleteForm" method="POST">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                        <%= t('modal.cancel') %>
+                        </button>
+                        <button
+                          type="submit"
+                          id="deleteBtn"
+                          class="btn btn-danger"
+                        >
+                        <%= t('subject.delete') %>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success", extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %>
+                    <%- include('../partials/toast', {bg_color: "text-bg-danger", extra_class: "toast-error", msg: error.msg}); -%>
+                  <% }); %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </main>
     <script src="/scripts/auth.js"></script>
+    <script src="/scripts/subject.js"></script>
   </body>
 </html>

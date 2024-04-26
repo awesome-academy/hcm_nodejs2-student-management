@@ -8,7 +8,6 @@
   "class": "Lớp học",
   "teacher": "Giáo viên",
   "schedule": "Thời khóa biểu",
-  "subject": "Môn học",
   "login": {
     "title": "Đăng nhập",
     "instruction": "Nhập thông tin đăng nhập để tiếp tục",
@@ -38,5 +37,20 @@
     "manage": "Quản lý khối",
     "secondary": "Trung học cơ sở (Khối 6, 7, 8, 9)",
     "high": "Trung học phổ thông (Khối 10, 11, 12)"
+  },
+  "subject": {
+    "title": "Môn học",
+    "add": "Thêm môn học",
+    "selectAll": "Chọn tất cả",
+    "update": "Cập nhật",
+    "name_not_empty": "Tên môn học không được để trống",
+    "existing": "Môn học đã tồn tại",
+    "update_toast_msg": "Cập nhật môn học thành công",
+    "create_toast_msg": "Thêm môn học thành công",
+    "delete_toast_msg": "Xóa môn học thành công",
+    "grades_text": "Chọn các khối được phép cho môn học",
+    "name_ph": "Tên môn học",
+    "delete": "Xóa môn học",
+    "delete_warning": "Bạn có chắc muốn xóa môn học này?"
   }
 }

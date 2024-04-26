@@ -8,7 +8,6 @@
   "class": "Class",
   "teacher": "Teacher",
   "schedule": "Schedule",
-  "subject": "Subject",
   "login": {
     "title": "Login",
     "instruction": "Please login to continue",
@@ -38,5 +37,20 @@
     "manage": "Manage grades",
     "secondary": "Secondary school (Grade 6, 7, 8, 9)",
     "high": "High school (Grade 10, 11, 12)"
+  },
+  "subject": {
+    "title": "Subject",
+    "add": "Add subject",
+    "selectAll": "Select all",
+    "update": "Update subject",
+    "name_not_empty": "Subject name must be not empty",
+    "existing": "Subject is existing",
+    "update_toast_msg": "Update subject successfully",
+    "create_toast_msg": "Create subject successfully",
+    "delete_toast_msg": "Delete subject successfully",
+    "grades_text": "Select grades that can study this subject",
+    "name_ph": "Subject name",
+    "delete": "Delete subject",
+    "delete_warning": "Are you sure to delete this subject?"
   }
 }

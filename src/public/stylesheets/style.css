@@ -2,7 +2,6 @@
 body {
     margin: 0;
     background-color: #f0f0f0;
-    font-family: roboto, sans-serif;
 }
 .login-container {
     display: flex;
@@ -187,4 +186,20 @@ body {
     left: 40px;
     justify-content:flex-start;
     width: calc(100% - 80px) ;
+}
+.name-input {
+    margin-bottom: 15px;
+}
+.subject-item {
+    display: flex;
+}
+.subject-item-name {
+    color: black;
+    text-decoration: none;
+    flex-grow: 1;
+}
+#toast-wrapper {
+    position: absolute;
+    width: 100%;
+    align-self: flex-end;
 }
