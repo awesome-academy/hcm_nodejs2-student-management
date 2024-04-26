@@ -50,7 +50,13 @@ export enum Days {
 
 export enum EducationLevels {
   SECONDARY = 1,
-  HIGH = 2
+  HIGH = 2,
+}
+
+export enum Actions {
+  CREATE = "create",
+  UPDATE = "update",
+  DELETE = "delete",
 }
 
 export const MAX_LENGTH_30 = 30;
