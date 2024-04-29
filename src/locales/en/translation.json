@@ -6,7 +6,6 @@
   "dashboard": "Dashboard",
   "student": "Student",
   "class": "Class",
-  "teacher": "Teacher",
   "schedule": "Schedule",
   "login": {
     "title": "Login",
@@ -52,5 +51,47 @@
     "name_ph": "Subject name",
     "delete": "Delete subject",
     "delete_warning": "Are you sure to delete this subject?"
-  }
+  },
+  "teacher": {
+    "title": "Teacher",
+    "add": "Add teacher",
+    "empty": "There are no teachers",
+    "name_not_empty": "Name must be not empty",
+    "address_min_length": "Address must be at least 5 characters",
+    "email_invalid": "Invalid email",
+    "email_not_empty": "Email must be not empty",
+    "phone_invalid": "Invalid phone number",
+    "phone_not_empty": "Phone number must be not empty",
+    "gender_invalid": "Invalid genre",
+    "dob_invalid": "Invalid date of birth",
+    "status_invalid": "Invalid status",
+    "subjects_min": "Teacher must teach at least 1 subject",
+    "create_toast_msg": "Create teacher successfully",
+    "update_toast_msg": "Update teacher successfully",
+    "delete_toast_msg": "Delete teacher successfully",
+    "update": "Update teacher",
+    "delete": "Delete teacher",
+    "delete_warning": "Are you sure to delete this teacher?"
+  },
+  "invalid_dob": "Date of birth must be smaller than current date",
+  "search": "Search",
+  "name": "Name",
+  "email": "Email",
+  "address": "Address",
+  "gender": {
+    "title": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "phone": "Phone number",
+  "dob": "Date of birth",
+  "status": {
+    "title": "Status",
+    "active": "Active",
+    "non_active": "Non-active"
+  },
+  "filter": "Filter",
+  "email_existing": "Email is existing",
+  "action": "Action"
 }

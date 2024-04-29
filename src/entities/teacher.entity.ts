@@ -1,15 +1,17 @@
 import {
+  Column,
   Entity,
-  OneToOne,
   JoinColumn,
-  ManyToMany,
   JoinTable,
+  ManyToMany,
   OneToMany,
+  OneToOne,
 } from "typeorm";
-import { Base } from "./base";
+import { TeacherStatus } from "../common/constants";
 import { Account } from "./account.entity";
-import { Subject } from "./subject.entity";
+import { Base } from "./base";
 import { Class } from "./class.entity";
+import { Subject } from "./subject.entity";
 import { Teaching } from "./teaching.entity";
 
 @Entity()
@@ -17,6 +19,9 @@ export class Teacher extends Base {
   @OneToOne(() => Account)
   @JoinColumn()
   account: Account;
+
+  @Column({ type: "enum", enum: TeacherStatus, default: TeacherStatus.ACTIVE })
+  status: TeacherStatus;
 
   @ManyToMany(() => Subject, (subject) => subject.teachers)
   @JoinTable()

@@ -6,7 +6,6 @@
   "dashboard": "Trang chủ",
   "student": "Học sinh",
   "class": "Lớp học",
-  "teacher": "Giáo viên",
   "schedule": "Thời khóa biểu",
   "login": {
     "title": "Đăng nhập",
@@ -52,5 +51,47 @@
     "name_ph": "Tên môn học",
     "delete": "Xóa môn học",
     "delete_warning": "Bạn có chắc muốn xóa môn học này?"
-  }
+  },
+  "teacher": {
+    "title": "Giáo viên",
+    "add": "Thêm giáo viên",
+    "empty": "Chưa có dữ liệu",
+    "name_not_empty": "Vui lòng điền họ và tên",
+    "address_min_length": "Địa chỉ phải tối thiểu 5 ký tự",
+    "email_invalid": "Địa chỉ email không hợp lệ",
+    "email_not_empty": "Vui lòng điền địa chỉ email",
+    "phone_invalid": "Số điện thoại không hợp lệ",
+    "phone_not_empty": "Vui lòng điền số điện thoại",
+    "gender_invalid": "Giới tính không hợp lệ",
+    "dob_invalid": "Ngày sinh không hợp lệ",
+    "status_invalid": "Trạng thái không hợp lệ",
+    "subjects_min": "Giáo viên phải dạy tối thiểu 1 môn học",
+    "create_toast_msg": "Thêm giáo viên thành công",
+    "update_toast_msg": "Cập nhật giáo viên thành công",
+    "delete_toast_msg": "Xóa giáo viên thành công",
+    "update": "Cập nhật giáo viên",
+    "delete": "Xóa giáo viên",
+    "delete_warning": "Bạn có chắc muốn xóa giáo viên này?"
+  },
+  "invalid_dob": "Ngày sinh phải nhỏ hơn ngày hiện tại",
+  "search": "Tìm kiếm",
+  "name": "Họ và tên",
+  "email": "Email",
+  "address": "Địa chỉ",
+  "gender": {
+    "title": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "other": "Khác"
+  },
+  "phone": "Số điện thoại",
+  "dob": "Ngày sinh",
+  "status": {
+    "title": "Trạng thái",
+    "active": "Đang dạy",
+    "non_active": "Đã nghỉ"
+  },
+  "filter": "Bộ lọc",
+  "email_existing": "Địa chỉ email đã tồn tại",
+  "action": "Tuỳ chọn"
 }

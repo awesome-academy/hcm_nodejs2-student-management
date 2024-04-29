@@ -2,9 +2,9 @@ import {
   EducationLevels,
   HIGH_GRADES,
   SECONDARY_GRADES,
-} from "../common/constants";
-import { CustomSessionData } from "../interfaces/session.interface";
-import * as gradeService from "../services/grade.service";
+} from "../../common/constants";
+import { CustomSessionData } from "../../interfaces/session.interface";
+import * as gradeService from "../../services/grade.service";
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
 

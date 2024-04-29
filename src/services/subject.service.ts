@@ -1,7 +1,7 @@
-import { Grade } from "../entities/grade.entity";
-import { AppDataSource } from "../config/typeorm";
-import { Subject } from "../entities/subject.entity";
 import { In } from "typeorm";
+import { AppDataSource } from "../config/typeorm";
+import { Grade } from "../entities/grade.entity";
+import { Subject } from "../entities/subject.entity";
 
 const subjectRepository = AppDataSource.getRepository(Subject);
 const gradeRepository = AppDataSource.getRepository(Grade);
@@ -9,6 +9,12 @@ const gradeRepository = AppDataSource.getRepository(Grade);
 export async function getSubjects(): Promise<Subject[]> {
   return await subjectRepository.find({
     loadRelationIds: { relations: ["grades"] },
+  });
+}
+
+export async function getSubjectsById(ids: number[]): Promise<Subject[]> {
+  return await subjectRepository.find({
+    where: { id: In(ids) },
   });
 }
 
@@ -84,7 +90,7 @@ export async function deleteSubject(id: number): Promise<void | string> {
     loadRelationIds: { relations: ["grades", "teachers", "teachings"] },
   });
   if (!subject) return;
-  if(subject.teachings.length > 0) return "subject.existing_teachings"
+  if (subject.teachings.length > 0) return "subject.existing_teachings";
   if (subject.teachers.length > 0) return "subject.existing_teachers";
   const grades = await gradeRepository.find({
     where: { id: In(subject.grades) },

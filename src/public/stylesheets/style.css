@@ -1,7 +1,7 @@
 /* styles for login page */
 body {
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #f9f9f9;
 }
 .login-container {
     display: flex;
@@ -101,7 +101,7 @@ body {
 .profile-card {
     border-radius: 10px;
     display: flex;
-    background-color: #e4e4e4;
+    background-color: #f9f9f9;
     align-items: center;
     padding: 10px;
     margin: 10px 0 20px 0;
@@ -176,6 +176,27 @@ body {
     justify-content: center;
     position: relative;
 }
+.filter-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 3px 3px #e4e4e4;
+    margin-top: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.filter-row {
+    display: flex;
+    justify-content: space-between;
+}
+#subjects-filter {
+    flex-grow: 1;
+}
+#btn-search {
+    margin-top: 8px;
+    align-self: flex-end;
+}
 .empty-list {
     font-size: xx-large;
     color: #6e6e6e;
@@ -202,4 +223,38 @@ body {
     position: absolute;
     width: 100%;
     align-self: flex-end;
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.form-row-item {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+.form-row-item:last-child {
+    margin-right: 0;
+}
+.form-container{
+    justify-content: space-between;
+}
+.checkbox-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
+.checkbox-columns-search {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+}
+.table-responsive {
+    max-height:500px;
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    justify-content:flex-start;
+    width: calc(100% - 20px) ;
 }
