@@ -20,6 +20,11 @@ export enum ClassStatus {
   NON_ACTIVE = 2,
 }
 
+export enum TeacherStatus {
+  ACTIVE = 1,
+  NON_ACTIVE = 2,
+}
+
 export enum ScoreFactors {
   SINGLE = 1,
   DOUBLE = 2,
@@ -64,6 +69,7 @@ export const MAX_LENGTH_50 = 50;
 export const MAX_LENGTH_100 = 100;
 export const DEFAULT_SECRET = "secret";
 export const TOKEN_EXPIRE = "2h";
+export const DEFAULT_TEXT_SG = "Account info for login Student Management";
 
 export const SECONDARY_GRADES = [6, 7, 8, 9];
 export const HIGH_GRADES = [10, 11, 12];

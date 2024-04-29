@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= t('teacher') %></title>
+    <title><%= t('teacher.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -16,9 +16,344 @@
         <%- include('../layout/navbar'); -%>
         <div class="parent-content-container">
           <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('teacher.title') %></span>
+              <button
+                type="button"
+                class="btn btn-primary header-btn"
+                name="addTeacher"
+                data-bs-toggle="modal"
+                data-bs-target="#teacherModal"
+                data-bs-title="<%= t('teacher.add') %>"
+              >
+                <%= t('teacher.add') %>
+              </button>
+              <div
+                class="modal fade"
+                id="teacherModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="modalTitle"></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form method="POST" id="teacherForm" action="/">
+                      <div class="modal-body form-container">
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="name"><%= t('name') %></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="name"
+                              placeholder="Enter name"
+                            />
+                            <ul class="error-list" id="error-name"></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="email"><%= t('email') %></label>
+                            <input
+                              type="email"
+                              class="form-control"
+                              id="email"
+                              placeholder="Enter email"
+                            />
+                            <ul class="error-list" id="error-email"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="address"><%= t('address') %></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="address"
+                              placeholder="Enter address"
+                            />
+                            <ul class="error-list" id="error-address"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label><%= t('subject.title') %></label>
+                            <% if (subjects && subjects.length > 0) { %>
+                            <div class="checkbox-columns">
+                              <% subjects.forEach(function(subject) { %>
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input subjects"
+                                  type="checkbox"
+                                  value="<%= subject.id %>"
+                                />
+                                <label class="form-check-label">
+                                  <%= subject.name %>
+                                </label>
+                              </div>
+                              <% }); %>
+                            </div>
+                            <% } %>
+                            <ul class="error-list" id="error-subjects"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="gender"><%= t('gender.title') %></label>
+                            <select class="form-control" id="gender">
+                              <option value="1"><%= t('gender.male') %></option>
+                              <option value="2">
+                                <%= t('gender.female') %>
+                              </option>
+                              <option value="3">
+                                <%= t('gender.other') %>
+                              </option>
+                            </select>
+                            <ul class="error-list" id="error-gender"></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="phone"><%= t('phone') %></label>
+                            <input
+                              type="tel"
+                              class="form-control"
+                              id="phone"
+                              placeholder="Enter phone"
+                            />
+                            <ul class="error-list" id="error-phone"></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="dateOfBirth"><%= t('dob') %></label>
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="dateOfBirth"
+                            />
+                            <ul
+                              class="error-list"
+                              id="error-date_of_birth"
+                            ></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="status"><%= t('status.title') %></label>
+                            <select class="form-control" id="status" disabled>
+                              <option value="1">
+                                <%= t('status.active') %>
+                              </option>
+                              <option value="2">
+                                <%= t('status.non_active') %>
+                              </option>
+                            </select>
+                            <ul class="error-list" id="error-status"></ul>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="submitBtn"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('filter') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div id="subjects-filter">
+                  <label><strong><%= t('subject.title') %></strong></label>
+                  <% if (subjects && subjects.length > 0) { %>
+                  <div class="checkbox-columns-search">
+                    <% subjects.forEach(function(subject) { %>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input subjects"
+                        type="checkbox"
+                        value="<%= subject.id %>"
+                      />
+                      <label class="form-check-label">
+                        <%= subject.name %>
+                      </label>
+                    </div>
+                    <% }); %>
+                  </div>
+                  <% } %>
+                </div>
+                <div>
+                  <label for="status"
+                    ><strong><%= t('status.title') %></strong></label
+                  >
+                  <select class="form-control" id="status">
+                    <option value="1"><%= t('status.active') %></option>
+                    <option value="2"><%= t('status.non_active') %></option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-search">
+                <%= t('search') %>
+              </button>
+            </div>
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              id="content"
+            >
+              <div
+                class="modal fade"
+                id="deleteModal"
+                data-subjectId=""
+                tabindex="-1"
+                aria-labelledby="deleteModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="deleteModalLabel">
+                        <%= t('teacher.delete') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <%= t('teacher.delete_warning') %>
+                    </div>
+                    <div class="modal-footer">
+                      <form id="deleteForm" method="POST">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          <%= t('modal.cancel') %>
+                        </button>
+                        <button
+                          type="submit"
+                          id="deleteBtn"
+                          class="btn btn-danger"
+                        >
+                          <%= t('teacher.delete') %>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (teachers && teachers.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table list-content">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('name') %></th>
+                      <th scope="col"><%= t('subject.title') %></th>
+                      <th scope="col"><%= t('gender.title') %></th>
+                      <th scope="col"><%= t('dob') %></th>
+                      <th scope="col"><%= t('address') %></th>
+                      <th scope="col"><%= t('phone') %></th>
+                      <th scope="col"><%= t('email') %></th>
+                      <th scope="col"><%= t('status.title') %></th>
+                      <th scope="col"><%= t('action') %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% teachers.forEach(function(teacher) { %>
+                    <tr>
+                      <td><%= teacher.name %></td>
+                      <td>
+                        <%= teacher.subjects.map(function(subject) { return subject.name; }).join(', '); %>
+                      </td>
+                      <td>
+                        <% if (teacher.gender === 1) { %> <%= t('gender.male')
+                        %> <% } else if (teacher.gender === 2) { %> <%=
+                        t('gender.female') %> <% } else { %> <%=
+                        t('gender.other') %> <% } %>
+                      </td>
+                      <td><%= teacher.date_of_birth %></td>
+                      <td><%= teacher.address %></td>
+                      <td><%= teacher.phone %></td>
+                      <td><%= teacher.email %></td>
+                      <% if (teacher.status === 1) { %>
+                      <td class="active-td"><%= t('status.active') %></td>
+                      <% } else { %>
+                      <td><%= t('status.non_active') %></td>
+                      <% } %>
+                      <td>
+                        <img
+                          class="sidebar-icon"
+                          name="updateSubject"
+                          data-teacherId="<%= teacher.id %>"
+                          data-teacher="<%= JSON.stringify(teacher) %>"
+                          data-bs-toggle="modal"
+                          data-bs-target="#teacherModal"
+                          data-bs-title="<%= t('teacher.update') %>"
+                          src="/icons/pencil-square.svg"
+                        />
+                        <img
+                          class="sidebar-icon"
+                          data-bs-toggle="modal"
+                          data-teacherId="<%= teacher.id %>"
+                          data-bs-target="#deleteModal"
+                          src="/icons/trash-fill.svg"
+                        />
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('teacher.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </main>
     <script src="/scripts/auth.js"></script>
+    <script src="/scripts/teacher.js"></script>
   </body>
 </html>

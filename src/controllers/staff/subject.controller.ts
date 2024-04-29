@@ -1,33 +1,21 @@
-import { CustomSessionData } from "../interfaces/session.interface";
+import { CustomSessionData } from "../../interfaces/session.interface";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
-import * as subjectService from "../services/subject.service";
-import * as gradeService from "../services/grade.service";
+import * as subjectService from "../../services/subject.service";
+import * as gradeService from "../../services/grade.service";
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
-import { SubjectDto } from "../dto/subject/subject.dto";
-import { Actions } from "../common/constants";
+import { SubjectDto } from "../../dto/subject/subject.dto";
+import { Actions } from "../../common/constants";
+import { getSuccessMessage } from "../../common/utils";
 
 export const getSubjects = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const subjects = await subjectService.getSubjects();
     const grades = await gradeService.getGrades();
-    const source = req.query.source;
-    let success_msg;
-    switch (source) {
-      case Actions.CREATE:
-        success_msg = req.t("subject.create_toast_msg");
-        break;
-      case Actions.UPDATE:
-        success_msg = req.t("subject.update_toast_msg");
-        break;
-      case Actions.DELETE:
-        success_msg = req.t("subject.delete_toast_msg");
-        break;
-      default:
-        success_msg = undefined;
-        break;
-    }
+    const source = req.query.source?.toString() || "";
+    const msg = getSuccessMessage(source, "subject");
+    const success_msg = msg.length > 0 ? req.t(msg) : undefined;
     res.render("subject/index", {
       user: (req.session as CustomSessionData).user,
       subjects,

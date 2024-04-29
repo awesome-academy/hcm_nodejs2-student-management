@@ -27,7 +27,6 @@
               >
                 <%= t('grade.manage') %>
               </button>
-
               <div
                 class="modal fade"
                 id="manageGrades"
@@ -95,8 +94,12 @@
               <% if (grades && grades.length > 0) { %>
               <div class="grade-list list-group">
                 <% grades.forEach(function(grade) { %>
-                <a href="/grades/<%= grade.id %>/classes" class="list-group-item list-group-item-action"
-                  ><strong><%= t('grade.title') %>&nbsp<%= grade.name %></strong></a
+                <a
+                  href="/grades/<%= grade.id %>/classes"
+                  class="list-group-item list-group-item-action"
+                  ><strong
+                    ><%= t('grade.title') %>&nbsp<%= grade.name %></strong
+                  ></a
                 >
                 <% }); %>
               </div>
