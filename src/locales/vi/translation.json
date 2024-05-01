@@ -5,7 +5,6 @@
   "logout": "Đăng xuất",
   "dashboard": "Trang chủ",
   "student": "Học sinh",
-  "class": "Lớp học",
   "schedule": "Thời khóa biểu",
   "login": {
     "title": "Đăng nhập",
@@ -71,7 +70,10 @@
     "delete_toast_msg": "Xóa giáo viên thành công",
     "update": "Cập nhật giáo viên",
     "delete": "Xóa giáo viên",
-    "delete_warning": "Bạn có chắc muốn xóa giáo viên này?"
+    "delete_warning": "Bạn có chắc muốn xóa giáo viên này?",
+    "homeroom": "Giáo viên chủ nhiệm",
+    "not_exist": "Giáo viên không tồn tại",
+    "existing_teachings": "Không thể xóa giáo viên đang giảng dạy"
   },
   "invalid_dob": "Ngày sinh phải nhỏ hơn ngày hiện tại",
   "search": "Tìm kiếm",
@@ -93,5 +95,27 @@
   },
   "filter": "Bộ lọc",
   "email_existing": "Địa chỉ email đã tồn tại",
-  "action": "Tuỳ chọn"
+  "action": "Tuỳ chọn",
+  "class": {
+    "title": "Lớp học",
+    "add": "Thêm lớp học",
+    "delete": "Xóa lớp học",
+    "delete_warning": "Bạn có chắc muốn xóa lớp học này?",
+    "empty": "Chưa có dữ liệu",
+    "name": "Tên lớp học",
+    "status": {
+      "active": "Đang học",
+      "non_active": "Đã nghỉ"
+    },
+    "number": "Sỉ số",
+    "create_toast_msg": "Thêm lớp học thành công",
+    "update": "Cập nhật lớp học",
+    "update_toast_msg": "Cập nhật lớp học thành công",
+    "existing": "Lớp học đã tồn tại",
+    "delete_toast_msg": "Xóa lớp học thành công"
+  },
+  "classname": {
+    "not_empty": "Vui lòng điền tên lớp"
+  },
+  "school_year": "Niên khóa"
 }

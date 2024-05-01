@@ -1,4 +1,4 @@
-import { In } from "typeorm";
+import { In, IsNull } from "typeorm";
 import { AccountRoles } from "../common/constants";
 import { createAccount } from "./common.service";
 import { AppDataSource } from "../config/typeorm";
@@ -7,16 +7,30 @@ import { Account } from "../entities/account.entity";
 import { Subject } from "../entities/subject.entity";
 import { Teacher } from "../entities/teacher.entity";
 import * as subjectService from "./subject.service";
+import { Class } from "../entities/class.entity";
 
 const teacherRepository = AppDataSource.getRepository(Teacher);
 const subjectRepository = AppDataSource.getRepository(Subject);
 const accountRepository = AppDataSource.getRepository(Account);
+const classRepository = AppDataSource.getRepository(Class);
 
 export async function getTeachers(): Promise<Teacher[]> {
   return await teacherRepository.find({
     order: { name: "ASC" },
-    relations: ["subjects", "class_school"],
+    relations: ["subjects", "classes"],
   });
+}
+
+export async function getNonHomeRoomTeachers(year: number): Promise<Teacher[]> {
+  const allTeachers =  await teacherRepository.find({
+    order: { name: "ASC" },
+    select: ["name", "id"]
+  });
+  const school_year = year + '-' + (year+1)
+  const classes = await classRepository.find({where: {school_year}, loadRelationIds: {relations: ["teacher"]}});
+  const homeroomTeacherIds = classes.map(_class => +_class.teacher);
+  const teachers = allTeachers.filter(teacher => !homeroomTeacherIds.includes(teacher.id) );
+  return teachers;
 }
 
 export async function createTeacher(teacherDto: TeacherDto): Promise<void> {
@@ -101,11 +115,11 @@ export async function deleteTeacher(id: number): Promise<void | string> {
   const teacher = await teacherRepository.findOne({
     where: { id },
     loadRelationIds: {
-      relations: ["account", "subjects", "teachings", "class_school"],
+      relations: ["account", "subjects", "teachings", "classes"],
     },
   });
   if (!teacher) return;
-  if (teacher.teachings.length > 0 || teacher.class_school)
+  if (teacher.teachings.length > 0 || teacher.classes.length > 0)
     return "teacher.existing_teachings";
   const subjects = await subjectRepository.find({
     where: { id: In(teacher.subjects) },

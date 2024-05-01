@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Entity, JoinColumn, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { Account } from "./account.entity";
 import { Base } from "./base";
 import { Class } from "./class.entity";
@@ -10,8 +10,8 @@ export class Student extends Base {
   @JoinColumn()
   account: Account;
 
-  @ManyToOne(() => Class, (_class) => _class.students)
-  class_school: Class;
+  @ManyToMany(() => Class, (_class) => _class.students)
+  class_schools: Class[];
 
   @OneToMany(() => StudentScore, (student_score) => student_score.class_score)
   student_scores: StudentScore[];
