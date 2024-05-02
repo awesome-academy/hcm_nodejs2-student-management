@@ -4,7 +4,6 @@
   "profile": "Profile",
   "logout": "Log out",
   "dashboard": "Dashboard",
-  "student": "Student",
   "schedule": "Schedule",
   "login": {
     "title": "Login",
@@ -117,5 +116,17 @@
   "school_year": "School year",
   "classname": {
     "not_empty": "Class name must not be empty"
-  }
+  },
+  "student": {
+    "title": "Student",
+    "add": "Add student",
+    "delete": "Delete student",
+    "delete_warning": "Do you want to delete this student",
+    "empty": "There are no students",
+    "update": "Update student",
+    "create_toast_msg": "Create student successfully",
+    "update_toast_msg": "Update student successfully",
+    "delete_toast_msg": "Delete student successfully"
+  },
+  "select_all": "All"
 }

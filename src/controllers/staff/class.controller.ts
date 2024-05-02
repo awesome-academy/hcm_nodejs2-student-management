@@ -58,6 +58,21 @@ export const getClasses = asyncHandler(
   }
 );
 
+export const getClassesByGrade = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const gradeId = parseInt(req.params.gradeId);
+  let errors;
+  if (!gradeId) {
+    errors = [{ msg: req.t("grade.invalid") }];
+    return res.json({ errors });
+  }
+  const classes = await classService.getClassesByGrade(gradeId);
+  return res.json(classes);
+};
+
 export const createClass = async (
   req: Request,
   res: Response,
@@ -138,6 +153,7 @@ export const deleteClass = async (
       teachers,
       classes,
       school_years,
+      errors,
     });
   }
   return res.redirect("/classes?source=" + Actions.DELETE);

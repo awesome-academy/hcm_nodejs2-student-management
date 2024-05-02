@@ -4,7 +4,12 @@ import {
   UpdateDateColumn,
   Column,
 } from "typeorm";
-import { MAX_LENGTH_30, MAX_LENGTH_50, MAX_LENGTH_100, Genders } from "../common/constants";
+import {
+  MAX_LENGTH_30,
+  MAX_LENGTH_50,
+  MAX_LENGTH_100,
+  Genders,
+} from "../common/constants";
 
 export abstract class Base {
   @PrimaryGeneratedColumn()
@@ -16,7 +21,7 @@ export abstract class Base {
   @Column({ length: MAX_LENGTH_100 })
   address: string;
 
-  @Column({ length: MAX_LENGTH_30 })
+  @Column({ length: MAX_LENGTH_50 })
   email: string;
 
   @Column({ length: MAX_LENGTH_30 })

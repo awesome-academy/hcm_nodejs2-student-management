@@ -6,15 +6,13 @@ const router: Router = Router();
 router.get("/", authMiddlewares.isAuth, classController.getClasses);
 router.post("/", authMiddlewares.isAuth, classController.createClass);
 
-router.post(
-  "/:id/update",
+router.get(
+  "/classes-by-grade/:gradeId",
   authMiddlewares.isAuth,
-  classController.updateClass
+  classController.getClassesByGrade
 );
-router.post(
-  "/:id/delete",
-  authMiddlewares.isAuth,
-  classController.deleteClass
-);
+
+router.post("/:id/update", authMiddlewares.isAuth, classController.updateClass);
+router.post("/:id/delete", authMiddlewares.isAuth, classController.deleteClass);
 
 export default router;

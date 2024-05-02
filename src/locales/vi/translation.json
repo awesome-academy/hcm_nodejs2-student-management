@@ -4,7 +4,6 @@
   "profile": "Thông tin cá nhân",
   "logout": "Đăng xuất",
   "dashboard": "Trang chủ",
-  "student": "Học sinh",
   "schedule": "Thời khóa biểu",
   "login": {
     "title": "Đăng nhập",
@@ -117,5 +116,17 @@
   "classname": {
     "not_empty": "Vui lòng điền tên lớp"
   },
-  "school_year": "Niên khóa"
+  "school_year": "Niên khóa",
+  "student": {
+    "title": "Học sinh",
+    "add": "Thêm học sinh",
+    "delete": "Xóa học sinh",
+    "delete_warning": "Bạn có chắc muốn xóa học sinh này?",
+    "empty": "Chưa có dữ liệu",
+    "update": "Cập nhật học sinh",
+    "create_toast_msg": "Thêm học sinh thành công",
+    "update_toast_msg": "Cập nhật học sinh thành công",
+    "delete_toast_msg": "Xóa học sinh thành công"
+  },
+  "select_all": "Tất cả"
 }

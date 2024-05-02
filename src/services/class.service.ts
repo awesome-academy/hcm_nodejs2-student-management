@@ -1,11 +1,10 @@
-import { AppDataSource } from "../config/typeorm";
-import { In } from "typeorm";
-import { Class } from "../entities/class.entity";
-import { ClassDto } from "../dto/class/class.dto";
-import { Grade } from "../entities/grade.entity";
-import { Teacher } from "../entities/teacher.entity";
-import { Semester } from "../entities/semester.entity";
 import { SemesterNames } from "../common/constants";
+import { AppDataSource } from "../config/typeorm";
+import { ClassDto } from "../dto/class/class.dto";
+import { Class } from "../entities/class.entity";
+import { Grade } from "../entities/grade.entity";
+import { Semester } from "../entities/semester.entity";
+import { Teacher } from "../entities/teacher.entity";
 
 const classRepository = AppDataSource.getRepository(Class);
 const gradeRepository = AppDataSource.getRepository(Grade);
@@ -22,9 +21,11 @@ export async function getClasses(
     .createQueryBuilder("class")
     .leftJoinAndSelect("class.grade", "grade")
     .leftJoinAndSelect("class.teacher", "teacher")
+    .loadRelationCountAndMap("class.studentCount", "class.students")
     .where("class.school_year = :school_year", { school_year })
     .orderBy("grade.name", "ASC")
     .getMany();
+
   if (grade) {
     classes = classes.filter((_class) => _class.grade.name === grade);
   }
@@ -34,13 +35,22 @@ export async function getClasses(
   return classes;
 }
 
+export async function getClassesByGrade(gradeId: number): Promise<Class[]> {
+  const school_year =
+    new Date().getFullYear() + "-" + (new Date().getFullYear() + 1);
+  const classes = await classRepository.find({
+    where: { school_year, grade: { id: gradeId } },
+    select: ["id", "name"],
+  });
+  return classes;
+}
+
 export async function isExistingClass(
   classDto: ClassDto,
   id?: number
 ): Promise<boolean> {
   const { name, grade, school_year } = { ...classDto };
   const year = school_year + "-" + (school_year + 1);
-  console.log(grade);
   const existingClass = await classRepository.findOne({
     where: { name, school_year: year, grade: { id: grade } },
   });
