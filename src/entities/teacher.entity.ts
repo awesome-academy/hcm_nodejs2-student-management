@@ -27,9 +27,9 @@ export class Teacher extends Base {
   @JoinTable()
   subjects: Subject[];
 
-  @OneToOne(() => Class, (_class) => _class.teacher)
+  @OneToMany(() => Class, (_class) => _class.teacher, { nullable: true })
   @JoinColumn()
-  class_school: Class;
+  classes: Class[];
 
   @OneToMany(() => Teaching, (teaching) => teaching.teacher)
   teachings: Teaching[];

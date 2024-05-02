@@ -1,8 +1,20 @@
-import * as classController from "../controllers/class.controller";
+import * as classController from "../controllers/staff/class.controller";
 import { Router } from "express";
-import * as authMiddlewares from '../middlewares/auth.middleware'
+import * as authMiddlewares from "../middlewares/auth.middleware";
 const router: Router = Router();
 
 router.get("/", authMiddlewares.isAuth, classController.getClasses);
+router.post("/", authMiddlewares.isAuth, classController.createClass);
+
+router.post(
+  "/:id/update",
+  authMiddlewares.isAuth,
+  classController.updateClass
+);
+router.post(
+  "/:id/delete",
+  authMiddlewares.isAuth,
+  classController.deleteClass
+);
 
 export default router;

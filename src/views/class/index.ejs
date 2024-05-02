@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= t('class') %></title>
+    <title><%= t('class.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -16,9 +16,296 @@
         <%- include('../layout/navbar'); -%>
         <div class="parent-content-container">
           <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('class.title') %></span>
+              <button
+                type="button"
+                class="btn btn-primary header-btn"
+                name="addClass"
+                data-bs-toggle="modal"
+                bg_color
+                data-bs-target="#classModal"
+                data-bs-title="<%= t('class.add') %>"
+              >
+                <%= t('class.add') %>
+              </button>
+              <div
+                class="modal fade"
+                id="classModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="modalTitle"></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form method="POST" id="classForm" action="/">
+                      <div class="modal-body form-container">
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="name"><%= t('class.name') %></label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="name"
+                              placeholder="Enter name"
+                            />
+                            <ul class="error-list" id="error-name"></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="grade"><%= t('grade.title') %></label>
+                            <select class="form-control" id="grade">
+                              <% grades.forEach(function(grade) { %>
+                              <option value="<%= grade.id %>">
+                                <%= t('grade.title') %>&nbsp<%= grade.name %>
+                              </option>
+                              <% }); %>
+                            </select>
+                            <ul class="error-list" id="error-grade"></ul>
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="teacher"
+                              ><%= t('teacher.homeroom') %></label
+                            >
+                            <select class="form-control" id="teacher">
+                              <% teachers.forEach(function(teacher) { %>
+                              <option value="<%= teacher.id %>">
+                                <%= teacher.name %>
+                              </option>
+                              <% }); %>
+                            </select>
+                            <ul class="error-list" id="error-teacher"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="school_year"
+                              ><%= t('school_year') %></label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="name"
+                              value="<%= new Date().getFullYear() + '-' + (new Date().getFullYear() + 1) %>"
+                              disabled
+                            />
+                          </div>
+                          <div class="form-group form-row-item">
+                            <label for="status"><%= t('status.title') %></label>
+                            <select class="form-control" id="status" disabled>
+                              <option value="1">
+                                <%= t('class.status.active') %>
+                              </option>
+                              <option value="2">
+                                <%= t('class.status.non_active') %>
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="submitBtn"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('filter') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div class="form-row-item">
+                  <label for="year"><%= t('school_year') %></label>
+                  <select class="form-control" id="year">
+                    <% school_years.forEach(function(year) { %>
+                    <option value="<%= year.split('-')[0] %>">
+                      <%= year %>
+                    </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="grade"><%= t('grade.title') %></label>
+                  <select class="form-control" id="grade">
+                    <% grades.forEach(function(grade) { %>
+                    <option value="<%= grade.id %>">
+                      <%= t('grade.title') %>&nbsp<%= grade.name %>
+                    </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="status"
+                    ><strong><%= t('status.title') %></strong></label
+                  >
+                  <select class="form-control" id="status">
+                    <option value="1"><%= t('class.status.active') %></option>
+                    <option value="2">
+                      <%= t('class.status.non_active') %>
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-search">
+                <%= t('search') %>
+              </button>
+            </div>
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              id="content"
+            >
+              <div
+                class="modal fade"
+                id="deleteModal"
+                tabindex="-1"
+                aria-labelledby="deleteModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="deleteModalLabel">
+                        <%= t('class.delete') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <%= t('class.delete_warning') %>
+                    </div>
+                    <div class="modal-footer">
+                      <form id="deleteForm" method="POST">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          <%= t('modal.cancel') %>
+                        </button>
+                        <button
+                          type="submit"
+                          id="deleteBtn"
+                          class="btn btn-danger"
+                        >
+                          <%= t('class.delete') %>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (classes && classes.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table list-content">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('class.name') %></th>
+                      <th scope="col"><%= t('grade.title') %></th>
+                      <th scope="col"><%= t('school_year') %></th>
+                      <th scope="col"><%= t('teacher.homeroom') %></th>
+                      <th scope="col"><%= t('class.number') %></th>
+                      <th scope="col"><%= t('status.title') %></th>
+                      <th scope="col"><%= t('action') %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% classes.forEach(function(_class) { %>
+                    <tr>
+                      <td><%= _class.name %></td>
+                      <td><%= _class.grade.name %></td>
+                      <td><%= _class.school_year %></td>
+                      <td><%= _class.teacher.name %></td>
+                      <% if (_class.students && classes.students.length > 0) {
+                      %>
+                      <td><%= _class.students.length %></td>
+                      <% } else { %>
+                      <td>0</td>
+                      <% } %> <% if (_class.status === 1) { %>
+                      <td><%= t('class.status.active') %></td>
+                      <% } else { %>
+                      <td><%= t('class.status.non_active') %></td>
+                      <% } %>
+                      <td>
+                        <img
+                          class="sidebar-icon"
+                          name="updateClass"
+                          data-classId="<%= _class.id %>"
+                          data-class="<%= JSON.stringify(_class) %>"
+                          data-bs-toggle="modal"
+                          data-bs-target="#classModal"
+                          data-bs-title="<%= t('class.update') %>"
+                          src="/icons/pencil-square.svg"
+                        />
+                        <img
+                          class="sidebar-icon"
+                          data-bs-toggle="modal"
+                          data-classId="<%= _class.id %>"
+                          data-bs-target="#deleteModal"
+                          src="/icons/trash-fill.svg"
+                        />
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('class.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </main>
     <script src="/scripts/auth.js"></script>
+    <script src="/scripts/class.js"></script>
   </body>
 </html>

@@ -5,7 +5,6 @@
   "logout": "Log out",
   "dashboard": "Dashboard",
   "student": "Student",
-  "class": "Class",
   "schedule": "Schedule",
   "login": {
     "title": "Login",
@@ -71,7 +70,10 @@
     "delete_toast_msg": "Delete teacher successfully",
     "update": "Update teacher",
     "delete": "Delete teacher",
-    "delete_warning": "Are you sure to delete this teacher?"
+    "delete_warning": "Are you sure to delete this teacher?",
+    "homeroom": "Homeroom teacher",
+    "not_exist": "Teacher doesn't exist",
+    "existing_teachings": "Teaching teachers cannot be deleted"
   },
   "invalid_dob": "Date of birth must be smaller than current date",
   "search": "Search",
@@ -93,5 +95,27 @@
   },
   "filter": "Filter",
   "email_existing": "Email is existing",
-  "action": "Action"
+  "action": "Action",
+  "class": {
+    "title": "Class",
+    "add": "Add class",
+    "delete": "Delete class",
+    "delete_warning": "Are you sure to delete this class?",
+    "empty": "There are no classes",
+    "name": "Class name",
+    "status": {
+      "active": "Active",
+      "non_active": "Non-active"
+    },
+    "number": "Number of students",
+    "create_toast_msg": "Create class successfully",
+    "update": "Update class",
+    "update_toast_msg": "Update class successfully",
+    "existing": "Class is existing",
+    "delete_toast_msg": "Delete class successfully"
+  },
+  "school_year": "School year",
+  "classname": {
+    "not_empty": "Class name must not be empty"
+  }
 }

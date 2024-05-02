@@ -21,6 +21,6 @@ export class Grade {
   @JoinTable()
   subjects: Subject[];
 
-  @OneToMany(() => Class, (_class) => _class.grade)
+  @OneToMany(() => Class, (_class: Class) => _class.grade)
   classes: Class[];
 }

@@ -10,6 +10,10 @@ export async function getGrades(): Promise<Grade[]> {
   return await gradeRepository.find({ order: { name: "ASC" } });
 }
 
+export async function getGradeById(id: number): Promise<Grade | null> {
+  return await gradeRepository.findOne({where: {id}, relations: ["subjects", "classes"]});
+}
+
 export async function createGrades(grades: number[]): Promise<void> {
   const existingGrade = await gradeRepository.findOneBy({ name: In(grades) });
   if (existingGrade) return;

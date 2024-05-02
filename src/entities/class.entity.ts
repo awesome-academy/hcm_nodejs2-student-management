@@ -3,9 +3,10 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { ClassScore } from "./class_score.entity";
@@ -22,20 +23,23 @@ export class Class {
   @Column({ length: MAX_LENGTH_30 })
   name: string;
 
+  @Column({ length: MAX_LENGTH_30 })
+  school_year: string;
+
   @Column({ type: "enum", enum: ClassStatus, default: ClassStatus.ACTIVE })
   status: ClassStatus;
 
-  @OneToOne(() => Teacher, (teacher) => teacher.class_school)
+  @ManyToOne(() => Teacher, (teacher) => teacher.classes)
   teacher: Teacher;
 
-  @OneToMany(() => Student, (student) => student.class_school)
+  @ManyToMany(() => Student, (student) => student.class_schools)
+  @JoinTable()
   students: Student[];
 
   @ManyToOne(() => Grade, (grade) => grade.classes)
-  @JoinColumn()
   grade: Grade;
 
-  @OneToMany(() => Teaching, (teaching) => teaching.teacher)
+  @OneToMany(() => Teaching, (teaching) => teaching.class_school)
   teachings: Teaching[];
 
   @OneToMany(() => ClassScore, (class_score) => class_score.class_school)

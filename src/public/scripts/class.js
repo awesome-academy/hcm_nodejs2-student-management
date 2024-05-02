@@ -1,7 +1,7 @@
 $(document).ready(function () {
-  const modal = $("#teacherModal");
+  const modal = $("#classModal");
   const deleteModal = $("#deleteModal");
-  const form = modal.find("#teacherForm");
+  const form = modal.find("#classForm");
   const submitBtn = modal.find("#submitBtn");
   const content = $("#content");
   const deleteForm = deleteModal.find("#deleteForm");
@@ -10,37 +10,35 @@ $(document).ready(function () {
     clearError();
     clearForm();
     const button = $(event.relatedTarget);
+    const data = button.data("class");
     const title = button.data("bs-title");
     const modalTitle = modal.find("#modalTitle");
     const modalButton = modal.find("#submitBtn");
     modalTitle.text(title);
     modalButton.text(title);
-
-    if (button.attr("name") !== "addTeacher") {
-      const id = button.attr("data-teacherId");
-      form.attr("action", "/teachers/" + id + "/update");
-      const data = button.data("teacher");
+    if (button.attr("name") !== "addClass") {
+      const id = button.attr("data-classId");
+      form.attr("action", "/classes/" + id + "/update");
       const nameInput = modal.find("#name");
-      const emailInput = modal.find("#email");
-      const addressInput = modal.find("#address");
-      const genderInput = modal.find("#gender");
-      const phoneInput = modal.find("#phone");
-      const dobInput = modal.find("#dateOfBirth");
+      const gradeInput = modal.find("#grade");
+      const teacherInput = modal.find("#teacher");
       const statusInput = modal.find("#status");
-      const checkboxes = modal.find(".subjects");
+      const teacherOption = $("<option>")
+        .val(data.teacher.id)
+        .text(data.teacher.name)
+        .attr("selected", true)
+        .attr("data-added-option", true);
+      teacherInput.append(teacherOption);
       nameInput.val(data.name);
-      emailInput.val(data.email);
-      addressInput.val(data.address);
-      genderInput.val(data.gender);
-      phoneInput.val(data.phone);
-      dobInput.val(data.date_of_birth);
+      gradeInput.val(data.grade.id);
       statusInput.val(data.status);
-      statusInput.prop("disabled", false);
-      checkboxes.each(function () {
-        subjectsIds = data.subjects.map((subject) => subject.id);
-        $(this).prop("checked", subjectsIds.includes(+$(this).val()));
-      });
+      statusInput.attr("disabled", false);
     }
+  });
+
+  modal.on("hidden.bs.modal", function () {
+    const teacherInput = modal.find("#teacher");
+    teacherInput.find("option[data-added-option]").remove();
   });
 
   clearError = () => {
@@ -49,53 +47,24 @@ $(document).ready(function () {
       errorList.innerHTML = "";
     }
   };
-
   clearForm = () => {
     const nameInput = modal.find("#name");
-    const emailInput = modal.find("#email");
-    const addressInput = modal.find("#address");
-    const genderInput = modal.find("#gender");
-    const phoneInput = modal.find("#phone");
-    const dobInput = modal.find("#dateOfBirth");
-    const statusInput = modal.find("#status");
-    const checkboxes = modal.find(".subjects");
     nameInput.val("");
-    emailInput.val("");
-    addressInput.val("");
-    genderInput.val("1");
-    phoneInput.val("");
-    dobInput.val(undefined);
-    statusInput.val("1");
-    statusInput.prop("disabled", true);
-    checkboxes.each(function () {
-      $(this).prop("checked", false);
-    });
   };
 
   submitBtn.on("click", function () {
     clearError();
     const name = $("#name").val();
-    const email = $("#email").val();
-    const phone = $("#phone").val();
-    const address = $("#address").val();
-    const gender = $("#gender").val();
-    const date_of_birth = $("#dateOfBirth").val();
+    const grade = $("#grade").val();
+    const teacher = $("#teacher").val();
     const status = $("#status").val();
-    const subjects = [];
-    $(".subjects:checked").each(function () {
-      subjects.push($(this).val());
-    });
     const body = {};
     body.name = name;
-    body.email = email;
-    body.phone = phone;
-    body.address = address;
-    body.gender = gender;
+    body.grade = grade;
+    body.teacher = teacher;
     body.status = status;
-    body.subjects = subjects;
-    body.date_of_birth = date_of_birth;
     const route =
-      form.attr("action") === "/" ? "/teachers" : form.attr("action");
+      form.attr("action") === "/" ? "/classes" : form.attr("action");
     fetch(route, {
       method: "POST",
       headers: {
@@ -105,10 +74,10 @@ $(document).ready(function () {
     })
       .then((res) => {
         if (res.redirected) {
-          if (route === "/teachers") {
-            window.location.href = "/teachers?source=create";
+          if (route === "/classes") {
+            window.location.href = "/classes?source=create";
           } else {
-            window.location.href = "/teachers?source=update";
+            window.location.href = "/classes?source=update";
           }
         }
         const contentType = res.headers.get("content-type");
@@ -135,8 +104,8 @@ $(document).ready(function () {
 
   deleteModal.on("show.bs.modal", function (event) {
     const button = $(event.relatedTarget);
-    const id = button.attr("data-teacherId");
-    deleteForm.attr("action", "/teachers/" + id + "/delete");
+    const id = button.attr("data-classId");
+    deleteForm.attr("action", "/classes/" + id + "/delete");
   });
 
   if (content.data("errors").length > 0) {
