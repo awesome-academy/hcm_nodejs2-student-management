@@ -1,9 +1,9 @@
 import {
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Class } from "./class.entity";
 import { PeriodSchedule } from "./period_schedule.entity";

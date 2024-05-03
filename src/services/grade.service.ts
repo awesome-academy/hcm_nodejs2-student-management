@@ -11,7 +11,10 @@ export async function getGrades(): Promise<Grade[]> {
 }
 
 export async function getGradeById(id: number): Promise<Grade | null> {
-  return await gradeRepository.findOne({where: {id}, relations: ["subjects", "classes"]});
+  return await gradeRepository.findOne({
+    where: { id },
+    relations: ["subjects", "classes"],
+  });
 }
 
 export async function createGrades(grades: number[]): Promise<void> {

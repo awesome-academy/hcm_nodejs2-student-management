@@ -34,7 +34,7 @@ export async function validateLogin(
       return "account.invalid";
   }
   const user = await repository.findOne({
-    where: {account: account},
+    where: { account: account },
     relations: ["account"],
   });
   if (!user) return "user.notfound";

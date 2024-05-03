@@ -9,8 +9,7 @@ export async function sendAccountInfo(
     .send({
       to: email,
       from: process.env.EMAIL!,
-      text: DEFAULT_TEXT_SG,
-      templateId: process.env.SG_ACCOUNT_INFO_TEMPLATE_ID,
+      templateId: process.env.SG_ACCOUNT_INFO_TEMPLATE_ID!,
       dynamicTemplateData: {
         username: account.username,
         password: account.password,
@@ -36,6 +35,6 @@ export function getSuccessMessage(
     case Actions.DELETE:
       return `${i18fieldName}.delete_toast_msg`;
     default:
-      return '';
+      return "";
   }
 }

@@ -1,13 +1,13 @@
-import { In, IsNull } from "typeorm";
+import { In } from "typeorm";
 import { AccountRoles } from "../common/constants";
-import { createAccount } from "./common.service";
 import { AppDataSource } from "../config/typeorm";
 import { TeacherDto } from "../dto/teacher/teacher.dto";
 import { Account } from "../entities/account.entity";
+import { Class } from "../entities/class.entity";
 import { Subject } from "../entities/subject.entity";
 import { Teacher } from "../entities/teacher.entity";
+import { createAccount } from "./common.service";
 import * as subjectService from "./subject.service";
-import { Class } from "../entities/class.entity";
 
 const teacherRepository = AppDataSource.getRepository(Teacher);
 const subjectRepository = AppDataSource.getRepository(Subject);
@@ -22,14 +22,19 @@ export async function getTeachers(): Promise<Teacher[]> {
 }
 
 export async function getNonHomeRoomTeachers(year: number): Promise<Teacher[]> {
-  const allTeachers =  await teacherRepository.find({
+  const allTeachers = await teacherRepository.find({
     order: { name: "ASC" },
-    select: ["name", "id"]
+    select: ["name", "id"],
   });
-  const school_year = year + '-' + (year+1)
-  const classes = await classRepository.find({where: {school_year}, loadRelationIds: {relations: ["teacher"]}});
-  const homeroomTeacherIds = classes.map(_class => +_class.teacher);
-  const teachers = allTeachers.filter(teacher => !homeroomTeacherIds.includes(teacher.id) );
+  const school_year = year + "-" + (year + 1);
+  const classes = await classRepository.find({
+    where: { school_year },
+    loadRelationIds: { relations: ["teacher"] },
+  });
+  const homeroomTeacherIds = classes.map((_class) => +_class.teacher);
+  const teachers = allTeachers.filter(
+    (teacher) => !homeroomTeacherIds.includes(teacher.id)
+  );
   return teachers;
 }
 
@@ -118,7 +123,7 @@ export async function deleteTeacher(id: number): Promise<void | string> {
       relations: ["account", "subjects", "teachings", "classes"],
     },
   });
-  if (!teacher) return;
+  if (!teacher) return "teacher.not_exist";
   if (teacher.teachings.length > 0 || teacher.classes.length > 0)
     return "teacher.existing_teachings";
   const subjects = await subjectRepository.find({

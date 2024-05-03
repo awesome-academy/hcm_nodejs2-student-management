@@ -25,6 +25,11 @@ export enum TeacherStatus {
   NON_ACTIVE = 2,
 }
 
+export enum StudentStatus {
+  ACTIVE = 1,
+  NON_ACTIVE = 2,
+}
+
 export enum ScoreFactors {
   SINGLE = 1,
   DOUBLE = 2,

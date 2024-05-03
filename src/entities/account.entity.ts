@@ -1,5 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { AccountRoles, MAX_LENGTH_30, MAX_LENGTH_100 } from "../common/constants";
+import {
+  AccountRoles,
+  MAX_LENGTH_30,
+  MAX_LENGTH_100,
+} from "../common/constants";
 
 @Entity()
 export class Account {

@@ -242,12 +242,8 @@
                       <td><%= _class.grade.name %></td>
                       <td><%= _class.school_year %></td>
                       <td><%= _class.teacher.name %></td>
-                      <% if (_class.students && classes.students.length > 0) {
-                      %>
-                      <td><%= _class.students.length %></td>
-                      <% } else { %>
-                      <td>0</td>
-                      <% } %> <% if (_class.status === 1) { %>
+                      <td><%= _class.studentCount %></td>
+                      <% if (_class.status === 1) { %>
                       <td><%= t('class.status.active') %></td>
                       <% } else { %>
                       <td><%= t('class.status.non_active') %></td>
