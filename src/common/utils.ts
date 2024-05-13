@@ -1,5 +1,6 @@
+import { Request, Response } from "express";
 import sgMail from "../config/sendgrid";
-import { Actions, DEFAULT_TEXT_SG } from "./constants";
+import { Actions } from "./constants";
 
 export async function sendAccountInfo(
   email: string,
@@ -37,4 +38,14 @@ export function getSuccessMessage(
     default:
       return "";
   }
+}
+
+export function handleError(_errors: any[], req: Request, res: Response) {
+  let errors: any = {};
+  _errors.map((error) => {
+    errors[error.property] = Object.values(error.constraints!).map(
+      (error_msg) => req.t(error_msg as string)
+    );
+  });
+  return errors;
 }

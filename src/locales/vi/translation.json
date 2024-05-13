@@ -4,7 +4,6 @@
   "profile": "Thông tin cá nhân",
   "logout": "Đăng xuất",
   "dashboard": "Trang chủ",
-  "schedule": "Thời khóa biểu",
   "login": {
     "title": "Đăng nhập",
     "instruction": "Nhập thông tin đăng nhập để tiếp tục",
@@ -33,7 +32,10 @@
     "empty": "Chưa có dữ liệu",
     "manage": "Quản lý khối",
     "secondary": "Trung học cơ sở (Khối 6, 7, 8, 9)",
-    "high": "Trung học phổ thông (Khối 10, 11, 12)"
+    "high": "Trung học phổ thông (Khối 10, 11, 12)",
+    "update_toast_msg": "Cập nhật khối thành công",
+    "hclass_delete_required": "Không thể xóa khối trung học phổ thông do vẫn còn lớp học",
+    "sclass_delete_required": "Không thể xóa khối trung học cơ sở do vẫn còn lớp học"
   },
   "subject": {
     "title": "Môn học",
@@ -111,7 +113,8 @@
     "update": "Cập nhật lớp học",
     "update_toast_msg": "Cập nhật lớp học thành công",
     "existing": "Lớp học đã tồn tại",
-    "delete_toast_msg": "Xóa lớp học thành công"
+    "delete_toast_msg": "Xóa lớp học thành công",
+    "existing_students": "Không thể xóa lớp học do lớp vẫn còn học sinh"
   },
   "classname": {
     "not_empty": "Vui lòng điền tên lớp"
@@ -128,5 +131,28 @@
     "update_toast_msg": "Cập nhật học sinh thành công",
     "delete_toast_msg": "Xóa học sinh thành công"
   },
-  "select_all": "Tất cả"
+  "select_all": "Tất cả",
+  "schedule": {
+    "title": "Thời khóa biểu",
+    "delete": "Xóa lịch học",
+    "delete_warning": "Bạn có chắc muốn xóa lịch học này?",
+    "note": "Tiết/Thứ",
+    "monday": "Thứ 2",
+    "tuesday": "Thứ 3",
+    "wednesday": "Thứ 4",
+    "thursday": "Thứ 5",
+    "friday": "Thứ 6",
+    "saturday": "Thứ 7",
+    "empty": "Chưa có dữ liệu",
+    "create": "Thêm lịch học",
+    "update": "Cập nhật lịch học",
+    "create_toast_msg": "Thêm tiết học thành công",
+    "update_toast_msg": "Cập nhật tiết học thành công",
+    "conflict": "Lịch học trùng, vui lòng kiểm tra lại",
+    "delete_toast_msg": "Xóa lịch học thành công",
+    "instruction": "(*) Nhấn vào ô trên thời khóa biểu để thay đổi lịch học"
+  },
+  "start_period": "Tiết bắt đầu",
+  "end_period": "Tiết kết thúc",
+  "semester": "Học kỳ"
 }

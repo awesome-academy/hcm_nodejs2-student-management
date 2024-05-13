@@ -6,6 +6,15 @@ $(document).ready(function () {
   const form = modal.find("#subjectForm");
   const deleteForm = deleteModal.find("#deleteForm");
 
+  const currentPath = window.location.pathname;
+  $(".nav-link").each(function() {
+    var href = $(this).attr("href");
+    if (href === currentPath) {
+      $(this).removeClass('link-dark')
+      $(this).closest("li").addClass("nav-item sidebar-item sidebar-item-active");
+    }
+  });
+
   modal.on("show.bs.modal", function (event) {
     const button = $(event.relatedTarget);
     const title = button.data("bs-title");

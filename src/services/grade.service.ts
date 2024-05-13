@@ -17,6 +17,13 @@ export async function getGradeById(id: number): Promise<Grade | null> {
   });
 }
 
+export async function getGradesById(ids: number[]): Promise<Grade[]> {
+  return await gradeRepository.find({
+    where: { id: In(ids) },
+    relations: ["subjects"],
+  });
+}
+
 export async function createGrades(grades: number[]): Promise<void> {
   const existingGrade = await gradeRepository.findOneBy({ name: In(grades) });
   if (existingGrade) return;

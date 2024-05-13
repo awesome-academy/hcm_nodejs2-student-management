@@ -32,8 +32,8 @@ export class StudentDto {
   @IsBeforeCurrentDate()
   date_of_birth: Date;
 
-  @IsNotEmpty({ message: "student.class_not_empty" })
-  _class: number;
+  @IsNotEmpty({ message: "student.grade_not_empty" })
+  grade: number;
 
   @IsEnum(StudentStatus, { message: "student.status_invalid" })
   status: StudentStatus;

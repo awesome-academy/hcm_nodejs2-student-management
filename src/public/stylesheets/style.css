@@ -94,7 +94,7 @@ body {
     border-radius: 5px;
 }
 .sidebar-item-active {
-    background-color: #e4e4e4;
+    background-color: #daecf8;
     color: #0574be;
     font-weight: bold;
 }
@@ -175,6 +175,14 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+#note {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    font-size:medium;
+    color: #6e6e6e;
+    font-style: italic;
 }
 .filter-container {
     background-color: #ffffff;
@@ -257,4 +265,17 @@ body {
     left: 10px;
     justify-content:flex-start;
     width: calc(100% - 20px) ;
+}
+.vertical-center {
+    vertical-align: middle !important;
+}
+.schedule-table th:first-child,
+.schedule-table td:first-child {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.schedule-table tr:first-child th {
+  background-color: #007bff;
+  color: #fff;
 }

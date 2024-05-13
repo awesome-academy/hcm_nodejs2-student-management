@@ -6,6 +6,15 @@ $(document).ready(function () {
   const content = $("#content");
   const deleteForm = deleteModal.find("#deleteForm");
 
+  const currentPath = window.location.pathname;
+  $(".nav-link").each(function() {
+    var href = $(this).attr("href");
+    if (href === currentPath) {
+      $(this).removeClass('link-dark')
+      $(this).closest("li").addClass("nav-item sidebar-item sidebar-item-active");
+    }
+  });
+
   modal.on("show.bs.modal", function (event) {
     clearError();
     clearForm();
@@ -13,6 +22,7 @@ $(document).ready(function () {
     const title = button.data("bs-title");
     const modalTitle = modal.find("#modalTitle");
     const modalButton = modal.find("#submitBtn");
+    form.attr("action", "/");
     modalTitle.text(title);
     modalButton.text(title);
 

@@ -11,3 +11,15 @@ export async function getDistinctSchoolYears(): Promise<string[]> {
     .getRawMany();
   return school_years.map((item) => item.school_year);
 }
+
+export async function getSemesterById(id: number) : Promise<Semester | null> {
+  return await semesterRepository.findOne({
+    where: { id },
+  });
+}
+
+export async function getSemesterByData(name: number, school_year: string) : Promise<Semester | null> {
+  return await semesterRepository.findOne({
+    where: { school_year, name },
+  });
+}

@@ -45,6 +45,19 @@ export async function getClassesByGrade(gradeId: number): Promise<Class[]> {
   return classes;
 }
 
+export async function getClassesByYear(school_year: string): Promise<Class[]> {
+  return await classRepository.find({
+    where: { school_year },
+    loadRelationIds: { relations: ["teacher"] },
+  });
+}
+
+export async function getClassById(id: number): Promise<Class | null> {
+  return await classRepository.findOne({
+    where: { id },
+  });
+}
+
 export async function isExistingClass(
   classDto: ClassDto,
   id?: number
