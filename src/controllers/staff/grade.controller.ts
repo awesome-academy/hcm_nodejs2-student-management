@@ -1,4 +1,6 @@
+import { getSuccessMessage } from "../../common/utils";
 import {
+  Actions,
   EducationLevels,
   HIGH_GRADES,
   SECONDARY_GRADES,
@@ -11,9 +13,13 @@ import asyncHandler from "express-async-handler";
 export const getGrades = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const grades = await gradeService.getGrades();
+    const source = req.query.source?.toString() || "";
+    const msg = getSuccessMessage(source, "grade");
+    const success_msg = msg.length > 0 ? req.t(msg) : undefined;
     res.render("grade/index", {
       user: (req.session as CustomSessionData).user,
       grades,
+      success_msg,
     });
     return;
   }
@@ -47,12 +53,12 @@ export const updateGrades = [
       }
     }
     if (errors.length > 0) {
-      return res.render("grades/index", {
+      return res.render("grade/index", {
         errors,
         user: (req.session as CustomSessionData).user,
         grades: await gradeService.getGrades(),
       });
     }
-    res.redirect("/grades");
+    res.redirect("/grades?source=" + Actions.UPDATE);
   }),
 ];

@@ -22,7 +22,6 @@ export class StudentScore {
   student: Student;
 
   @ManyToOne(() => Semester)
-  @JoinColumn([{ name: "semester_id", referencedColumnName: "id" }])
   semester: Semester;
 
   @OneToMany(() => Score, (score) => score.student_score)

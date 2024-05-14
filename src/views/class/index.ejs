@@ -93,8 +93,8 @@
                             <input
                               type="text"
                               class="form-control"
-                              id="name"
-                              value="<%= new Date().getFullYear() + '-' + (new Date().getFullYear() + 1) %>"
+                              id="school_year"
+                              value="<%= (new Date().getMonth() > 7 && new Date().getMonth() < 12) ? new Date().getFullYear() + 1 : new Date().getFullYear() %>"
                               disabled
                             />
                           </div>

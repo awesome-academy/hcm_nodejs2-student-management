@@ -3,17 +3,15 @@ import { AppDataSource } from "../config/typeorm";
 import { TeacherCheckQueryDto } from "../dto/teacher/teacher-check-query.dto";
 import { TeacherQueryDto } from "../dto/teacher/teacher-query.dto";
 import { TeacherDto } from "../dto/teacher/teacher.dto";
-import { Account } from "../entities/account.entity";
 import { Teacher } from "../entities/teacher.entity";
 import * as classService from "./class.service";
-import { createAccount } from "./common.service";
+import * as accountService from "./account.service";
 import * as scheduleService from "./schedule.service";
 import * as semesterService from "./semester.service";
 import * as subjectService from "./subject.service";
 import * as teachingService from "./teaching.service";
 
 const teacherRepository = AppDataSource.getRepository(Teacher);
-const accountRepository = AppDataSource.getRepository(Account);
 
 export async function getTeachers(): Promise<Teacher[]> {
   return await teacherRepository.find({
@@ -28,6 +26,12 @@ export async function getTeacherById(id: number): Promise<Teacher | null> {
     loadRelationIds: {
       relations: ["subjects"],
     },
+  });
+}
+
+export async function getTeacherBySubject(id: number): Promise<Teacher | null> {
+  return await teacherRepository.findOne({
+    where: { subjects: { id } },
   });
 }
 
@@ -99,7 +103,7 @@ export async function createTeacher(teacherDto: TeacherDto): Promise<void> {
     subjects: existingSubjects,
   });
   const teacher = await teacherRepository.save(_teacher);
-  const account = await createAccount(
+  const account = await accountService.createAccount(
     AccountRoles.TEACHER,
     teacher.id,
     teacher.email
@@ -153,8 +157,5 @@ export async function deleteTeacher(id: number): Promise<void | string> {
   const existingTeaching = await teachingService.getTeachingByTeacher(teacher);
   if (existingTeaching || teacher.classes.length > 0)
     return "teacher.existing_teachings";
-  const account = await accountRepository.findOne({
-    where: { id: +teacher.account },
-  });
-  await accountRepository.remove(account!);
+  await accountService.deleteAccount(+teacher.account);
 }

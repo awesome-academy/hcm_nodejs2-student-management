@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
 } from "typeorm";
@@ -11,12 +12,16 @@ import { Base } from "./base";
 import { Class } from "./class.entity";
 import { StudentScore } from "./student_score.entity";
 import { StudentStatus } from "../common/constants";
+import { Grade } from "./grade.entity";
 
 @Entity()
 export class Student extends Base {
-  @OneToOne(() => Account)
+  @OneToOne(() => Account, {cascade: true, onDelete: "CASCADE"})
   @JoinColumn()
   account: Account;
+
+  @ManyToOne(() => Grade)
+  grade: Grade;
 
   @ManyToMany(() => Class, (_class) => _class.students)
   class_schools: Class[];

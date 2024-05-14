@@ -1,19 +1,15 @@
-import { ClassStatus, MAX_LENGTH_30 } from "../common/constants";
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { ClassScore } from "./class_score.entity";
+import { ClassStatus, MAX_LENGTH_30 } from "../common/constants";
 import { Grade } from "./grade.entity";
 import { Student } from "./student.entity";
 import { Teacher } from "./teacher.entity";
-import { Teaching } from "./teaching.entity";
 
 @Entity()
 export class Class {
@@ -38,10 +34,4 @@ export class Class {
 
   @ManyToOne(() => Grade, (grade) => grade.classes)
   grade: Grade;
-
-  @OneToMany(() => Teaching, (teaching) => teaching.class_school)
-  teachings: Teaching[];
-
-  @OneToMany(() => ClassScore, (class_score) => class_score.class_school)
-  class_scores: ClassScore[];
 }

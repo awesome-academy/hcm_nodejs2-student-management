@@ -15,7 +15,7 @@ const refineDto = (data: any) => {
   studentDto.date_of_birth = new Date(data.date_of_birth);
   studentDto.gender = +data.gender;
   studentDto.status = +data.status;
-  studentDto._class = +data._class;
+  studentDto.grade = +data.grade;
   return studentDto;
 };
 

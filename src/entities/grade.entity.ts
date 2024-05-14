@@ -1,13 +1,13 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
-import { Subject } from "./subject.entity";
 import { Class } from "./class.entity";
+import { Subject } from "./subject.entity";
 
 @Entity()
 export class Grade {

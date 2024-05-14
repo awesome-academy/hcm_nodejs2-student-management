@@ -17,7 +17,6 @@ export class Score {
   score: number;
 
   @ManyToOne(() => ScoreType)
-  @JoinColumn([{ name: "score_type_id", referencedColumnName: "id" }])
   scoreType: ScoreType;
 
   @ManyToOne(() => StudentScore, (student_score) => student_score.scores)

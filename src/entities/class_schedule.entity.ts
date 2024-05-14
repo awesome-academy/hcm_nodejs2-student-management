@@ -1,9 +1,8 @@
 import {
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Class } from "./class.entity";
 import { PeriodSchedule } from "./period_schedule.entity";
@@ -14,12 +13,10 @@ export class ClassSchedule {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Class)
-  @JoinColumn({ name: "class_id", referencedColumnName: "id" })
-  class: Class;
+  @ManyToOne(() => Class, {cascade: true, onDelete: "CASCADE"})
+  class_school: Class;
 
   @ManyToOne(() => Semester)
-  @JoinColumn({ name: "semester_id", referencedColumnName: "id" })
   semester: Semester;
 
   @OneToMany(

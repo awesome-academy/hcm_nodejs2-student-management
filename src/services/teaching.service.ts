@@ -15,6 +15,22 @@ export async function getTeachingByTeacher(
   });
 }
 
+export async function getTeachingBySubject(
+  subject: Subject
+): Promise<Teaching | null> {
+  return await teachingRepository.findOne({
+    where: { subject },
+  });
+}
+
+export async function getTeachingByClass(
+  class_school: Class
+): Promise<Teaching | null> {
+  return await teachingRepository.findOne({
+    where: { class_school },
+  });
+}
+
 export async function getExistingTeaching(
   teacherId: number,
   subjectId: number,
@@ -61,4 +77,8 @@ export async function createTeaching(
     return await teachingRepository.save(_teaching);
   }
   return existingTeaching;
+}
+
+export async function deleteTeaching(teaching: Teaching): Promise<void> {
+  await teachingRepository.remove(teaching);
 }

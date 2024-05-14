@@ -2,6 +2,8 @@ import { In } from "typeorm";
 import { AppDataSource } from "../config/typeorm";
 import { Subject } from "../entities/subject.entity";
 import * as gradeService from "./grade.service";
+import * as teacherService from "./teacher.service";
+import * as teachingService from "./teaching.service";
 
 const subjectRepository = AppDataSource.getRepository(Subject);
 
@@ -21,6 +23,13 @@ export async function getSubjectsById(ids: number[]): Promise<Subject[]> {
   return await subjectRepository.find({
     where: { id: In(ids) },
   });
+}
+
+export async function getSubjectsByGrade(id: number): Promise<Subject[]> {
+  if (!id) return [];
+  const grade = await gradeService.getGradeById(id);
+  if (!grade) return [];
+  return grade.subjects;
 }
 
 export async function createSubject(
@@ -62,10 +71,11 @@ export async function isExistingSubject(
 export async function deleteSubject(id: number): Promise<void | string> {
   const subject = await subjectRepository.findOne({
     where: { id },
-    loadRelationIds: { relations: ["grades", "teachers", "teachings"] },
   });
   if (!subject) return;
-  if (subject.teachings.length > 0) return "subject.existing_teachings";
-  if (subject.teachers.length > 0) return "subject.existing_teachers";
+  const teaching = await teachingService.getTeachingBySubject(subject);
+  if (teaching) return "subject.existing_teachings";
+  const existingTeacher = await teacherService.getTeacherBySubject(id);
+  if (existingTeacher) return "subject.existing_teachers";
   await subjectRepository.remove(subject);
 }

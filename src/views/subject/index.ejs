@@ -67,24 +67,28 @@
                           <% if (grades && grades.length > 0) { %>
                           <div class="grade-list-subject list-group">
                             <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                id="selectAll"
-                              />
-                              <label class="form-check-label">
+                              <label class="form-check-label" for="selectAll">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="selectAll"
+                                />
                                 <%= t('subject.selectAll') %>
                               </label>
                             </div>
                             <% grades.forEach(function(grade) { %>
                             <div class="form-check">
-                              <input
-                                class="form-check-input grade-checkbox"
-                                type="checkbox"
-                                value="<%= grade.id %>"
-                                name="grades"
-                              />
-                              <label class="form-check-label">
+                              <label
+                                class="form-check-label"
+                                for="<%= grade.id %>"
+                              >
+                                <input
+                                  class="form-check-input grade-checkbox"
+                                  type="checkbox"
+                                  value="<%= grade.id %>"
+                                  name="grades"
+                                  id="<%= grade.id %>"
+                                />
                                 <%= t('grade.title') %>&nbsp<%= grade.name %>
                               </label>
                             </div>
@@ -105,8 +109,7 @@
                           type="submit"
                           class="btn btn-primary"
                           id="submitBtn"
-                        >
-                        </button>
+                        ></button>
                       </div>
                     </form>
                   </div>
@@ -187,14 +190,14 @@
                           class="btn btn-secondary"
                           data-bs-dismiss="modal"
                         >
-                        <%= t('modal.cancel') %>
+                          <%= t('modal.cancel') %>
                         </button>
                         <button
                           type="submit"
                           id="deleteBtn"
                           class="btn btn-danger"
                         >
-                        <%= t('subject.delete') %>
+                          <%= t('subject.delete') %>
                         </button>
                       </form>
                     </div>
@@ -203,7 +206,8 @@
               </div>
               <% if (typeof success_msg !== 'undefined') { %>
               <div class="toast-container bottom-0 end-0 p-3">
-                <%- include('../partials/toast', {bg_color: "text-bg-success", extra_class: "", msg: success_msg}); -%>
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
               </div>
               <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
               { %>
@@ -214,9 +218,9 @@
                 id="toast-wrapper"
               >
                 <div class="toast-container bottom-0 end-0 p-3">
-                  <% errors.forEach(error => { %>
-                    <%- include('../partials/toast', {bg_color: "text-bg-danger", extra_class: "toast-error", msg: error.msg}); -%>
-                  <% }); %>
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
                 </div>
               </div>
               <% } %>
