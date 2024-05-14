@@ -1,16 +1,16 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   ManyToOne,
-  JoinColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
+import { Days } from "../common/constants";
 import { PeriodSchedule } from "./period_schedule.entity";
-import { Teacher } from "./teacher.entity";
 import { Subject } from "./subject.entity";
+import { Teacher } from "./teacher.entity";
+import { Teaching } from "./teaching.entity";
 import { Class } from "./class.entity";
 import { Semester } from "./semester.entity";
-import { Days } from "../common/constants";
 
 @Entity()
 export class Schedule {
@@ -23,21 +23,20 @@ export class Schedule {
   )
   period_schedule: PeriodSchedule;
 
-  @ManyToOne(() => Teacher)
-  @JoinColumn({ name: "teacher_id", referencedColumnName: "id" })
-  teacher: Teacher;
-
-  @ManyToOne(() => Subject)
-  @JoinColumn({ name: "subject_id", referencedColumnName: "id" })
-  subject: Subject;
-
   @ManyToOne(() => Class)
-  @JoinColumn({ name: "class_id", referencedColumnName: "id" })
   class_school: Class;
 
   @ManyToOne(() => Semester)
-  @JoinColumn({ name: "semester_id", referencedColumnName: "id" })
   semester: Semester;
+
+  @ManyToOne(() => Teaching)
+  teaching: Teaching;
+
+  @ManyToOne(() => Teacher)
+  teacher: Teacher;
+
+  @ManyToOne(() => Subject)
+  subject: Subject;
 
   @Column({ type: "enum", enum: Days })
   day: Days;

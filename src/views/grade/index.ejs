@@ -90,13 +90,19 @@
                 </div>
               </div>
             </div>
-            <div class="content">
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              id="content"
+            >
               <% if (grades && grades.length > 0) { %>
               <div class="grade-list list-group">
                 <% grades.forEach(function(grade) { %>
                 <a
                   href="/grades/<%= grade.id %>/classes"
                   class="list-group-item list-group-item-action"
+                  data-grade="<%= grade.name %>"
                   ><strong
                     ><%= t('grade.title') %>&nbsp<%= grade.name %></strong
                   ></a
@@ -107,6 +113,25 @@
               <div class="empty-list">
                 <span><%= t('grade.empty') %></span>
               </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
+                </div>
+              </div>
               <% } %>
             </div>
           </div>
@@ -114,5 +139,6 @@
       </div>
     </main>
     <script src="/scripts/auth.js"></script>
+    <script src="/scripts/grade.js"></script>
   </body>
 </html>

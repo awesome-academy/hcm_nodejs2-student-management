@@ -9,13 +9,13 @@ export class ClassScore {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Class, (_class) => _class.class_scores)
+  @ManyToOne(() => Class)
   class_school: Class;
 
-  @ManyToOne(() => Subject, (subject) => subject.class_scores)
+  @ManyToOne(() => Subject)
   subject: Subject;
 
-  @ManyToOne(() => Semester, (semester) => semester.class_scores)
+  @ManyToOne(() => Semester)
   semester: Semester;
 
   @OneToMany(() => StudentScore, (student_score) => student_score.class_score)

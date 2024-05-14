@@ -1,63 +1,65 @@
 import { In } from "typeorm";
-import { AccountRoles, ClassStatus } from "../common/constants";
+import { AccountRoles, ClassStatus, StudentStatus } from "../common/constants";
 import { AppDataSource } from "../config/typeorm";
 import { StudentDto } from "../dto/student/student.dto";
 import { Account } from "../entities/account.entity";
-import { Class } from "../entities/class.entity";
 import { Student } from "../entities/student.entity";
-import { createAccount } from "./common.service";
+import * as accountService from "./account.service";
+import * as classService from "./class.service";
+import * as gradeService from "./grade.service"
 
-const classRepository = AppDataSource.getRepository(Class);
 const studentRepository = AppDataSource.getRepository(Student);
 const accountRepository = AppDataSource.getRepository(Account);
 
 export async function getStudents(): Promise<any[]> {
-  const school_year =
-    new Date().getFullYear() + "-" + (new Date().getFullYear() + 1);
-  const classes = await classRepository.find({
-    where: { school_year, status: ClassStatus.ACTIVE },
-    relations: ["students"],
-    loadRelationIds: { relations: ["grade"] },
-  });
   let allStudents: any[] = [];
-  classes.forEach((classObj) => {
-    classObj.students.forEach((student) => {
+  const students = await studentRepository.find({ relations: ["grade"] });
+  const promises = Promise.all(
+    students.map(async (s) => {
+      const _class = await classService.getActiveClassByStudent(s.id);
       allStudents.push({
-        ...student,
-        _class: classObj.name,
-        grade: classObj.grade,
-        classId: classObj.id,
+        ...s,
+        grade: s.grade.name,
+        _class: _class ? _class.name : undefined,
       });
-    });
-  });
-
+    })
+  );
+  await promises;
   return allStudents;
+}
+
+export async function getStudentsByIds(studentIds: number[]): Promise<any[]> {
+  return await studentRepository.find({
+    where: { id: In(studentIds) },
+    relations: {
+      class_schools: {
+        grade: true,
+      },
+    },
+    loadRelationIds: {
+      relations: ["grade"],
+    },
+  });
 }
 
 export async function createStudent(
   studentDto: StudentDto
 ): Promise<void | string> {
-  const { _class } = { ...studentDto };
-  const existingClass = await classRepository.findOne({
-    where: { id: _class },
-    relations: ["students"],
-  });
-  if (!existingClass) return "class.not_exist";
+  const { grade } = { ...studentDto };
+  const existingGrade = await gradeService.getGradeById(grade)
+  if (!existingGrade) return "grade.not_exist";
   const _student = studentRepository.create({
     ...studentDto,
-    class_schools: [existingClass],
+    grade: existingGrade,
   });
   const student = await studentRepository.save(_student);
-  const account = await createAccount(
+  const account = await accountService.createAccount(
     AccountRoles.STUDENT,
     student.id,
     student.email
   );
   student.account = account;
   await studentRepository.save(student);
-  if (!existingClass.students) existingClass.students = [student];
-  else existingClass.students.push(student);
-  await classRepository.save(existingClass);
 }
 
 export async function updateStudent(
@@ -88,26 +90,15 @@ export async function deleteStudent(id: number): Promise<void | string> {
   const student = await studentRepository.findOne({
     where: { id },
     loadRelationIds: {
-      relations: ["account", "class_schools", "student_scores"],
+      relations: ["account", "student_scores"],
     },
+    relations: ["class_schools"],
   });
   if (!student) return "student.not_exist";
   if (student.student_scores.length > 0) return "student.existing_scores";
-  const classes = await classRepository.find({
-    where: { id: In(student.class_schools) },
-    relations: ["students"],
-  });
-  const account = await accountRepository.findOne({
-    where: { id: +student.account },
-  });
-  await Promise.all(
-    classes.map(async (_class) => {
-      _class.students = _class.students.filter(
-        (_student) => _student.id !== id
-      );
-      await classRepository.save(classes);
-    })
+  const isActiveClass = student.class_schools.filter(
+    (_class) => _class.status === ClassStatus.ACTIVE
   );
-  await studentRepository.remove(student);
-  await accountRepository.remove(account!);
+  if (isActiveClass.length > 0) return "student.existing_active_class";
+  await accountService.deleteAccount(+student.account);
 }

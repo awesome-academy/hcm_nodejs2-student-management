@@ -64,12 +64,14 @@ export const getClassesByGrade = async (
   next: NextFunction
 ) => {
   const gradeId = parseInt(req.params.gradeId);
+  const year = req.query.year;
+  const school_year = year ? parseInt(year.toString()) : undefined;
   let errors;
   if (!gradeId) {
     errors = [{ msg: req.t("grade.invalid") }];
     return res.json({ errors });
   }
-  const classes = await classService.getClassesByGrade(gradeId);
+  const classes = await classService.getClassesByGrade(gradeId, school_year);
   return res.json(classes);
 };
 

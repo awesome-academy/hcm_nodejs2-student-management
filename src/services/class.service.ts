@@ -1,15 +1,16 @@
-import { SemesterNames } from "../common/constants";
+import { In } from "typeorm";
+import { ClassStatus } from "../common/constants";
 import { AppDataSource } from "../config/typeorm";
 import { ClassDto } from "../dto/class/class.dto";
 import { Class } from "../entities/class.entity";
-import { Grade } from "../entities/grade.entity";
-import { Semester } from "../entities/semester.entity";
-import { Teacher } from "../entities/teacher.entity";
+import * as gradeService from "./grade.service";
+import * as scheduleService from "./schedule.service";
+import * as semesterService from "./semester.service";
+import * as studentService from "./student.service";
+import * as teacherService from "./teacher.service";
+import * as teachingService from "./teaching.service";
 
 const classRepository = AppDataSource.getRepository(Class);
-const gradeRepository = AppDataSource.getRepository(Grade);
-const teacherRepository = AppDataSource.getRepository(Teacher);
-const semesterRepository = AppDataSource.getRepository(Semester);
 
 export async function getClasses(
   year: number,
@@ -35,14 +36,39 @@ export async function getClasses(
   return classes;
 }
 
-export async function getClassesByGrade(gradeId: number): Promise<Class[]> {
-  const school_year =
-    new Date().getFullYear() + "-" + (new Date().getFullYear() + 1);
+export async function getClassesByGrade(
+  gradeId: number,
+  year?: number
+): Promise<Class[]> {
+  const school_year = year
+    ? year + "-" + (year + 1)
+    : new Date().getFullYear() + "-" + (new Date().getFullYear() + 1);
   const classes = await classRepository.find({
     where: { school_year, grade: { id: gradeId } },
     select: ["id", "name"],
   });
   return classes;
+}
+
+export async function getClassByGrades(
+  gradeNames: number[]
+): Promise<Class | null> {
+  return classRepository.findOne({
+    where: { grade: { name: In(gradeNames) } },
+  });
+}
+
+export async function getActiveClassByStudent(
+  studentId: number
+): Promise<Class | null> {
+  return await classRepository.findOne({
+    where: {
+      status: ClassStatus.ACTIVE,
+      students: {
+        id: studentId,
+      },
+    },
+  });
 }
 
 export async function getClassesByYear(school_year: string): Promise<Class[]> {
@@ -73,29 +99,13 @@ export async function isExistingClass(
 export async function createClass(classDto: ClassDto): Promise<void | string> {
   const { grade, school_year, teacher } = { ...classDto };
   const year = school_year + "-" + (school_year + 1);
-  const existingGrade = await gradeRepository.findOne({
-    where: { id: grade },
-    relations: ["classes"],
-  });
+  const existingGrade = await gradeService.getGradeById(grade);
   if (!existingGrade) return "grade.not_exist";
-  const existingTeacher = await teacherRepository.findOne({
-    where: { id: teacher },
-    relations: ["classes"],
-  });
+  const existingTeacher = await teacherService.getTeacherById(teacher);
   if (!existingTeacher) return "teacher.not_exist";
-  const existingSemester = await semesterRepository.findOne({
-    where: { school_year: year },
-  });
-  if (!existingSemester) {
-    const firstSemester = semesterRepository.create({
-      semester_name: SemesterNames.FIRST,
-      school_year: year,
-    });
-    const secondSemester = semesterRepository.create({
-      semester_name: SemesterNames.SECOND,
-      school_year: year,
-    });
-    await semesterRepository.save([firstSemester, secondSemester]);
+  let existingSemesters = await semesterService.getSemestersByYear(year);
+  if (existingSemesters.length === 0) {
+    existingSemesters = await semesterService.createSemesters(year);
   }
   const _class = classRepository.create({
     ...classDto,
@@ -104,68 +114,23 @@ export async function createClass(classDto: ClassDto): Promise<void | string> {
     school_year: year,
   });
   const classInstance = await classRepository.save(_class);
-  if (!existingGrade.classes) existingGrade.classes = [classInstance];
-  else existingGrade.classes.push(classInstance);
-  if (!existingTeacher.classes) existingTeacher.classes = [classInstance];
-  else existingTeacher.classes.push(classInstance);
-  await Promise.all([
-    gradeRepository.save(existingGrade),
-    teacherRepository.save(existingTeacher),
-  ]);
+  await scheduleService.createClassSchedule(classInstance, existingSemesters);
 }
 
 export async function updateClass(
   id: number,
   classDto: ClassDto
 ): Promise<void | string> {
-  const { name, grade, teacher, status } = { ...classDto };
+  const { name, teacher, status } = { ...classDto };
   const _class = await classRepository.findOne({
-    where: { id: id },
+    where: { id },
     relations: ["grade", "teacher"],
     loadRelationIds: { relations: ["students"] },
   });
   if (!_class) return "class.not_found";
-  if (_class.grade.id !== grade) {
-    if (_class.students.length > 0) return "class.grade_reject";
-    else {
-      const [oldGrade, newGrade] = await Promise.all([
-        gradeRepository.findOne({
-          where: { id: _class.grade.id },
-          relations: ["classes"],
-        }),
-        gradeRepository.findOne({
-          where: { id: classDto.grade },
-          relations: ["classes"],
-        }),
-      ]);
-      if (!oldGrade || !newGrade) return "grade.not_exist";
-      oldGrade.classes = oldGrade.classes.filter(
-        (oldClass) => oldClass.id !== _class.id
-      );
-      newGrade.classes.push(_class);
-      _class.grade = newGrade;
-      await gradeRepository.save([oldGrade, newGrade]);
-    }
-  }
-  if (_class.teacher.id !== teacher) {
-    const [oldTeacher, newTeacher] = await Promise.all([
-      teacherRepository.findOne({
-        where: { id: _class.teacher.id },
-        relations: ["classes"],
-      }),
-      teacherRepository.findOne({
-        where: { id: classDto.teacher },
-        relations: ["classes"],
-      }),
-    ]);
-    if (!oldTeacher || !newTeacher) return "teacher.not_exist";
-    oldTeacher.classes = oldTeacher.classes.filter(
-      (oldClass) => oldClass.id !== _class.id
-    );
-    newTeacher.classes.push(_class);
-    _class.teacher = newTeacher;
-    await teacherRepository.save([oldTeacher, newTeacher]);
-  }
+  const _teacher = await teacherService.getTeacherById(teacher)
+  if (!_teacher) return "teacher.not_exist";
+  _class.teacher = _teacher;
   _class.name = name;
   _class.status = status;
   await classRepository.save(_class);
@@ -175,27 +140,46 @@ export async function deleteClass(id: number): Promise<void | string> {
   const _class = await classRepository.findOne({
     where: { id },
     loadRelationIds: {
-      relations: ["teacher", "grade", "teachings", "students"],
+      relations: ["teacher", "grade", "students"],
     },
   });
-  if (!_class) return;
-  if (_class.teachings.length > 0) return "class.existing_teachings";
+  if (!_class) return "class.not_exist";
+  const existingTeaching = await teachingService.getTeachingByClass(_class)
+  if (existingTeaching) return "class.existing_teachings";
   if (_class.students.length > 0) return "class.existing_students";
-  const teacher = await teacherRepository.findOne({
-    where: { id: +_class.teacher },
-    relations: ["classes"],
-  });
-  if (!teacher) return "teacher.not_exist";
-  const grade = await gradeRepository.findOne({
-    where: { id: +_class.grade },
-    relations: ["classes"],
-  });
-  if (!grade) return "grade.not_exist";
-  teacher.classes = teacher.classes.filter((oldClass) => oldClass.id !== id);
-  grade.classes = grade.classes.filter((oldClass) => oldClass.id !== id);
-  await Promise.all([
-    gradeRepository.save(grade),
-    teacherRepository.save(teacher),
-  ]);
   await classRepository.remove(_class);
+}
+
+export async function addStudentsToClass(
+  studentIds: number[],
+  classId: number
+): Promise<void | string> {
+  const students = await studentService.getStudentsByIds(studentIds);
+  let isConflictClass = false;
+  students.map((s) => {
+    s.class_schools.map((_class: Class) => {
+      if (_class.grade.id === +s.grade) isConflictClass = true;
+    });
+  });
+  if (isConflictClass) return "student.conflict_class";
+  const _class = await classRepository.findOne({
+    where: { id: classId },
+    relations: ["students"],
+  });
+  if (!_class) return "class.not_exist";
+  _class.students.push(...students);
+  await classRepository.save(_class);
+}
+
+export async function removeStudentsFromClass(
+  studentIds: number[],
+  classId: number
+): Promise<void | string> {
+  const _class = await classRepository.findOne({
+    where: { id: classId },
+    relations: ["students"],
+  });
+  if (!_class) return "class.not_exist";
+  _class.students = _class.students.filter((s) => !studentIds.includes(s.id));
+  await classRepository.save(_class);
 }

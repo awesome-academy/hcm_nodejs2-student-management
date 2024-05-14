@@ -12,25 +12,20 @@ import { Account } from "./account.entity";
 import { Base } from "./base";
 import { Class } from "./class.entity";
 import { Subject } from "./subject.entity";
-import { Teaching } from "./teaching.entity";
 
 @Entity()
 export class Teacher extends Base {
-  @OneToOne(() => Account)
+  @OneToOne(() => Account, {cascade: true, onDelete: "CASCADE"})
   @JoinColumn()
   account: Account;
 
   @Column({ type: "enum", enum: TeacherStatus, default: TeacherStatus.ACTIVE })
   status: TeacherStatus;
 
-  @ManyToMany(() => Subject, (subject) => subject.teachers)
+  @ManyToMany(() => Subject)
   @JoinTable()
   subjects: Subject[];
 
-  @OneToMany(() => Class, (_class) => _class.teacher, { nullable: true })
-  @JoinColumn()
+  @OneToMany(() => Class, (_class) => _class.teacher)
   classes: Class[];
-
-  @OneToMany(() => Teaching, (teaching) => teaching.teacher)
-  teachings: Teaching[];
 }

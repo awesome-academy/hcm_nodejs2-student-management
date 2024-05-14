@@ -10,25 +10,17 @@ import {
 import { AppDataSource } from "../config/typeorm";
 import { CreateScheduleDto } from "../dto/schedule/create-schedule.dto";
 import { DeleteScheduleDto } from "../dto/schedule/delete-schedule.dto";
-import { Class } from "../entities/class.entity";
 import { ClassSchedule } from "../entities/class_schedule.entity";
 import { PeriodSchedule } from "../entities/period_schedule.entity";
 import { Schedule } from "../entities/schedule.entity";
 import { Semester } from "../entities/semester.entity";
-import { Subject } from "../entities/subject.entity";
-import { Teacher } from "../entities/teacher.entity";
-import { Teaching } from "../entities/teaching.entity";
 import * as semesterService from "./semester.service";
 import * as subjectService from "./subject.service";
 import * as classService from "./class.service";
 import * as teacherService from "./teacher.service";
 import * as teachingService from "./teaching.service";
+import { Class } from "@src/entities/class.entity";
 
-const semesterRepository = AppDataSource.getRepository(Semester);
-const classRepository = AppDataSource.getRepository(Class);
-const subjectRepository = AppDataSource.getRepository(Subject);
-const teacherRepository = AppDataSource.getRepository(Teacher);
-const teachingRepository = AppDataSource.getRepository(Teaching);
 const scheduleRepository = AppDataSource.getRepository(Schedule);
 const periodScheduleRepository = AppDataSource.getRepository(PeriodSchedule);
 const classScheduleRepository = AppDataSource.getRepository(ClassSchedule);
@@ -37,7 +29,7 @@ export async function getSchedules(
   classId: number,
   semester: number
 ): Promise<ClassSchedule | string> {
-  const _class = await classRepository.findOne({ where: { id: classId } });
+  const _class = await classService.getClassById(classId);
   if (!_class) return "class.not_found";
   const _semester = await semesterService.getSemesterByData(
     semester,
@@ -130,6 +122,32 @@ export async function getTeacherSchedule(
       },
     },
   });
+}
+
+export async function createClassSchedule(
+  class_school: Class,
+  semesters: Semester[]
+) {
+  const _schedules = semesters.map((semester) =>
+    classScheduleRepository.create({
+      class_school,
+      semester,
+      period_schedules: [],
+    })
+  );
+  const schedules = await classScheduleRepository.save(_schedules);
+  let promises;
+  for (let i = 1; i <= 10; i++) {
+    promises = schedules.map(async (schedule) => {
+      const period_schedule = periodScheduleRepository.create({
+        period: i,
+        class_schedule: schedule,
+      });
+      periodScheduleRepository.save(period_schedule);
+      return schedule;
+    });
+  }
+  await Promise.all([promises])
 }
 
 export async function createSchedule(
@@ -306,7 +324,7 @@ export async function updateSchedule(
       _semester.id
     );
     if (!teaching) return "schedule.teaching_not_exist";
-    await teachingRepository.remove(teaching);
+    await teachingService.deleteTeaching(teaching);
   }
   const newTeaching = await teachingService.createTeaching(
     _teacher,
@@ -486,7 +504,7 @@ export async function deleteSchedule(
     );
     if (!teaching) return "schedule.teaching_not_exist";
     await scheduleRepository.remove(oldSchedules);
-    await teachingRepository.remove(teaching);
+    await teachingService.deleteTeaching(teaching);
     return;
   }
   await scheduleRepository.remove(oldSchedules);

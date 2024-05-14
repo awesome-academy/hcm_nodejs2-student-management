@@ -43,10 +43,10 @@ export const login = asyncHandler(
           role = req.t("staff");
           break;
         case user instanceof Teacher:
-          role = req.t("teacher");
+          role = req.t("teacher.title");
           break;
         case user instanceof Student:
-          role = req.t("student");
+          role = req.t("student.title");
           break;
         default:
           return;

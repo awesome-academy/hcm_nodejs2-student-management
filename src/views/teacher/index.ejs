@@ -89,12 +89,16 @@
                             <div class="checkbox-columns">
                               <% subjects.forEach(function(subject) { %>
                               <div class="form-check">
-                                <input
-                                  class="form-check-input subjects"
-                                  type="checkbox"
-                                  value="<%= subject.id %>"
-                                />
-                                <label class="form-check-label">
+                                <label
+                                  class="form-check-label"
+                                  for="<%= subject.id %>"
+                                >
+                                  <input
+                                    class="form-check-input subjects"
+                                    type="checkbox"
+                                    value="<%= subject.id %>"
+                                    id="<%= subject.id %>"
+                                  />
                                   <%= subject.name %>
                                 </label>
                               </div>
@@ -184,12 +188,13 @@
                   <div class="checkbox-columns-search">
                     <% subjects.forEach(function(subject) { %>
                     <div class="form-check">
-                      <input
-                        class="form-check-input subjects"
-                        type="checkbox"
-                        value="<%= subject.id %>"
-                      />
-                      <label class="form-check-label">
+                      <label class="form-check-label" for="<%= subject.id %>">
+                        <input
+                          class="form-check-input subjects"
+                          type="checkbox"
+                          value="<%= subject.id %>"
+                          id="<%= subject.id %>"
+                        />
                         <%= subject.name %>
                       </label>
                     </div>

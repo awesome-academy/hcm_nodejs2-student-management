@@ -19,7 +19,8 @@ export class PeriodSchedule {
 
   @ManyToOne(
     () => ClassSchedule,
-    (class_schedule) => class_schedule.period_schedules
+    (class_schedule) => class_schedule.period_schedules,
+    {cascade: true, onDelete: "CASCADE"}
   )
   class_schedule: ClassSchedule;
 
