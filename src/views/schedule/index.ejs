@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= t('schedule') %></title>
+    <title><%= t('schedule.title') %></title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
@@ -16,9 +16,210 @@
         <%- include('../layout/navbar'); -%>
         <div class="parent-content-container">
           <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('schedule.title') %></span>
+              <div
+                class="modal fade"
+                id="scheduleModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="modalTitle"></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form method="POST" id="scheduleForm" action="/">
+                      <div class="modal-body form-container">
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="subject"
+                              ><%= t('subject.title') %></label
+                            >
+                            <select class="form-control" id="subject">
+                              <% if (typeof subjects !== 'undefined' &&
+                              subjects.length > 0) { %> <%
+                              subjects.forEach(function(subject) { %>
+                              <option value="<%= subject.id %>">
+                                <%= subject.name %>
+                              </option>
+                              <% }); }%>
+                            </select>
+                            <ul class="error-list" id="error-subject"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="startPeriod"
+                              ><%= t('start_period') %></label
+                            >
+                            <input
+                              class="form-control"
+                              id="startPeriod"
+                              disabled
+                            />
+                            <ul class="error-list" id="error-startPeriod"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="endPeriod"
+                              ><%= t('end_period') %></label
+                            >
+                            <select
+                              class="form-control"
+                              id="endPeriod"
+                            ></select>
+                            <ul class="error-list" id="error-endPeriod"></ul>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group form-row-item">
+                            <label for="teacher"
+                              ><%= t('teacher.title') %></label
+                            >
+                            <select class="form-control" id="teacher"></select>
+                            <ul class="error-list" id="error-teacher"></ul>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="submitBtn"
+                      ></button>
+                      <button
+                        type="button"
+                        class="btn btn-danger d-none"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        id="deleteBtn"
+                      >
+                        <%= t('schedule.delete') %>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('filter') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div class="form-row-item">
+                  <label for="year"><%= t('school_year') %></label>
+                  <select class="form-control" id="year">
+                    <% school_years.forEach(function(year) { %>
+                    <option value="<%= year.split('-')[0] %>">
+                      <%= year %>
+                    </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="semester"><%= t('semester') %></label>
+                  <select class="form-control" id="semester">
+                    <option value="1"><%= t('semester') %>&nbsp1</option>
+                    <option value="2"><%= t('semester') %>&nbsp2</option>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="gradeFilter"><%= t('grade.title') %></label>
+                  <select class="form-control" id="gradeFilter">
+                    <% grades.forEach(function(grade) { %>
+                    <option value="<%= grade.id %>">
+                      <%= t('grade.title') %>&nbsp<%= grade.name %>
+                    </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="class_filter"><%= t('class.title') %></label>
+                  <select class="form-control" id="class_filter"></select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-search">
+                <%= t('search') %>
+              </button>
+            </div>
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              data-schedule="<%= typeof schedule !== 'undefined' ? JSON.stringify(schedule) : '' %>"
+              id="content"
+            >
+              <% if (typeof schedule !== 'undefined') { %>
+              <p id="note"><%= t('schedule.instruction') %></p>
+              <table
+                id="scheduleTable"
+                class="table table-bordered table-responsive text-center schedule-table"
+                data-create-title="<%= t('schedule.create') %>"
+                data-update-title="<%= t('schedule.update') %>"
+                data-teacher-title="<%= t('teacher.title') %>"
+                data-semester-id="<%= typeof schedule !== 'undefined' ? schedule.semester.id : '' %>"
+                data-class-id="<%= typeof schedule !== 'undefined' ? schedule.class_school.id : '' %>"
+              >
+                <thead>
+                  <tr>
+                    <th class="col-1"><%= t('schedule.note') %></th>
+                    <th><%= t('schedule.monday') %></th>
+                    <th><%= t('schedule.tuesday') %></th>
+                    <th><%= t('schedule.wednesday') %></th>
+                    <th><%= t('schedule.thursday') %></th>
+                    <th><%= t('schedule.friday') %></th>
+                    <th><%= t('schedule.saturday') %></th>
+                  </tr>
+                </thead>
+                <tbody id="scheduleBody"></tbody>
+              </table>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('schedule.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
         </div>
       </div>
     </main>
     <script src="/scripts/auth.js"></script>
+    <script src="/scripts/schedule.js"></script>
   </body>
 </html>

@@ -6,6 +6,15 @@ $(document).ready(function () {
   const content = $("#content");
   const deleteForm = deleteModal.find("#deleteForm");
 
+  const currentPath = window.location.pathname;
+  $(".nav-link").each(function() {
+    var href = $(this).attr("href");
+    if (href === currentPath) {
+      $(this).removeClass('link-dark')
+      $(this).closest("li").addClass("nav-item sidebar-item sidebar-item-active");
+    }
+  });
+
   modal.on("show.bs.modal", function (event) {
     clearError();
     clearForm();
@@ -58,11 +67,13 @@ $(document).ready(function () {
     const grade = $("#grade").val();
     const teacher = $("#teacher").val();
     const status = $("#status").val();
+    const school_year = $('#school_year').val();
     const body = {};
     body.name = name;
     body.grade = grade;
     body.teacher = teacher;
     body.status = status;
+    body.school_year = school_year;
     const route =
       form.attr("action") === "/" ? "/classes" : form.attr("action");
     fetch(route, {

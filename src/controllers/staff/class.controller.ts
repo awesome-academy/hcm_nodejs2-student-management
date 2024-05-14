@@ -11,7 +11,7 @@ import {
   HIGH_GRADES,
   SECONDARY_GRADES,
 } from "../../common/constants";
-import { getSuccessMessage } from "../../common/utils";
+import { getSuccessMessage, handleError } from "../../common/utils";
 import { ClassDto } from "../../dto/class/class.dto";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
@@ -81,23 +81,15 @@ export const createClass = async (
   const data = { ...req.body };
   const createClassDto = refineDto(data);
   const _errors = await validate(createClassDto);
-  let errors: any = {};
   if (_errors.length > 0) {
-    _errors.map((error) => {
-      errors[error.property] = Object.values(error.constraints!).map(
-        (error_msg) => req.t(error_msg)
-      );
-    });
-    return res.json({ errors });
+    return res.json({ errors: handleError(_errors, req, res) });
   }
   if (await classService.isExistingClass(createClassDto)) {
-    errors = { name: [req.t("class.existing")] };
-    return res.json({ errors });
+    return res.json({ errors: { name: [req.t("class.existing")] } });
   }
   const createResult = await classService.createClass(createClassDto);
   if (typeof createResult === "string") {
-    errors = { name: [req.t(createResult)] };
-    return res.json({ errors });
+    return res.json({ errors: { name: [req.t(createResult)] } });
   }
   return res.redirect("/classes");
 };
@@ -110,24 +102,16 @@ export const updateClass = async (
   const data = { ...req.body };
   const updateClassDto = refineDto(data);
   const _errors = await validate(updateClassDto);
-  let errors: any = {};
   const id = parseInt(req.params.id);
   if (_errors.length > 0) {
-    _errors.map((error) => {
-      errors[error.property] = Object.values(error.constraints!).map(
-        (error_msg) => req.t(error_msg)
-      );
-    });
-    return res.json({ errors });
+    return res.json({ errors: handleError(_errors, req, res) });
   }
   if (await classService.isExistingClass(updateClassDto, id)) {
-    errors = { name: [req.t("class.existing")] };
-    return res.json({ errors });
+    return res.json({ errors: { name: [req.t("class.existing")] } });
   }
   const updateResult = await classService.updateClass(id, updateClassDto);
   if (typeof updateResult === "string") {
-    errors = { name: [req.t(updateResult)] };
-    return res.json({ errors });
+    return res.json({ errors: { name: [req.t(updateResult)] } });
   }
   return res.redirect("/classes");
 };

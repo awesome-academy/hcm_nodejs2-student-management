@@ -6,6 +6,15 @@ $(document).ready(function () {
   const content = $("#content");
   const deleteForm = deleteModal.find("#deleteForm");
 
+  const currentPath = window.location.pathname;
+  $(".nav-link").each(function() {
+    var href = $(this).attr("href");
+    if (href === currentPath) {
+      $(this).removeClass('link-dark')
+      $(this).closest("li").addClass("nav-item sidebar-item sidebar-item-active");
+    }
+  });
+  
   modal.on("show.bs.modal", function (event) {
     clearError();
     clearForm();
@@ -13,8 +22,6 @@ $(document).ready(function () {
     const title = button.data("bs-title");
     const modalTitle = modal.find("#modalTitle");
     const modalButton = modal.find("#submitBtn");
-    const gradeId = $("#grade").val();
-    updateClassSelect("_class", gradeId);
     modalTitle.text(title);
     modalButton.text(title);
 
@@ -30,7 +37,6 @@ $(document).ready(function () {
       const gradeInput = modal.find("#grade");
       const dobInput = modal.find("#dateOfBirth");
       const statusInput = modal.find("#status");
-      const classSelect = modal.find("#_class");
       nameInput.val(data.name);
       emailInput.val(data.email);
       addressInput.val(data.address);
@@ -41,10 +47,6 @@ $(document).ready(function () {
       statusInput.prop("disabled", false);
       gradeInput.val(data.grade);
       gradeInput.prop("disabled", true);
-      const gradeId = gradeInput.val();
-      updateClassSelect("_class", gradeId);
-      classSelect.val(data.classId);
-      classSelect.prop("disabled", true);
     }
   });
 
@@ -52,41 +54,6 @@ $(document).ready(function () {
     const teacherInput = modal.find("#teacher");
     teacherInput.find("option[data-added-option]").remove();
   });
-
-  $("#gradeFilter").change(function () {
-    const gradeId = $(this).val();
-    updateClassSelect("class_filter", gradeId);
-  });
-
-  $("#grade").change(function () {
-    const gradeId = $(this).val();
-    updateClassSelect("_class", gradeId);
-  });
-
-  updateClassSelect = (selectId, gradeId) => {
-    fetch(`/classes/classes-by-grade/${gradeId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.errors) {
-          content.attr("data-errors", JSON.stringify(res.errors));
-          window.location.href = "/students";
-        } else return res.json();
-      })
-      .then((classes) => {
-        const classSelect = $(`#${selectId}`);
-        classSelect.empty();
-        if (classes.length > 0) {
-          classes.forEach((_class) => {
-            const option = $("<option>").val(_class.id).text(_class.name);
-            classSelect.append(option);
-          });
-        }
-      });
-  };
 
   clearError = () => {
     const errorLists = $(".error-list");
@@ -114,8 +81,6 @@ $(document).ready(function () {
     const firstOption = grade.find("option").eq(0);
     firstOption.prop("selected", true);
     grade.prop("disabled", false);
-    const _class = $("#_class");
-    _class.prop("disabled", false);
   };
 
   submitBtn.on("click", function () {
@@ -126,7 +91,7 @@ $(document).ready(function () {
     const address = $("#address").val();
     const gender = $("#gender").val();
     const date_of_birth = $("#dateOfBirth").val();
-    const _class = $("#_class").val();
+    const grade = $("#grade").val();
     const status = $("#status").val();
     const body = {};
     body.name = name;
@@ -135,7 +100,7 @@ $(document).ready(function () {
     body.address = address;
     body.gender = gender;
     body.status = status;
-    body._class = _class;
+    body.grade = grade;
     body.date_of_birth = date_of_birth;
     const route =
       form.attr("action") === "/" ? "/students" : form.attr("action");
@@ -181,9 +146,6 @@ $(document).ready(function () {
     const id = button.attr("data-studentId");
     deleteForm.attr("action", "/students/" + id + "/delete");
   });
-
-  const gradeId = $("#gradeFilter").val();
-  updateClassSelect("class_filter", gradeId);
 
   if (content.data("errors").length > 0) {
     const toast = $(".toast-error");

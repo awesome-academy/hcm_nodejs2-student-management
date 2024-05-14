@@ -1,24 +1,79 @@
-import { In } from "typeorm";
 import { AccountRoles } from "../common/constants";
 import { AppDataSource } from "../config/typeorm";
+import { TeacherCheckQueryDto } from "../dto/teacher/teacher-check-query.dto";
+import { TeacherQueryDto } from "../dto/teacher/teacher-query.dto";
 import { TeacherDto } from "../dto/teacher/teacher.dto";
 import { Account } from "../entities/account.entity";
-import { Class } from "../entities/class.entity";
-import { Subject } from "../entities/subject.entity";
 import { Teacher } from "../entities/teacher.entity";
+import * as classService from "./class.service";
 import { createAccount } from "./common.service";
+import * as scheduleService from "./schedule.service";
+import * as semesterService from "./semester.service";
 import * as subjectService from "./subject.service";
+import * as teachingService from "./teaching.service";
 
 const teacherRepository = AppDataSource.getRepository(Teacher);
-const subjectRepository = AppDataSource.getRepository(Subject);
 const accountRepository = AppDataSource.getRepository(Account);
-const classRepository = AppDataSource.getRepository(Class);
 
 export async function getTeachers(): Promise<Teacher[]> {
   return await teacherRepository.find({
     order: { name: "ASC" },
-    relations: ["subjects", "classes"],
+    relations: ["subjects"],
   });
+}
+
+export async function getTeacherById(id: number): Promise<Teacher | null> {
+  return await teacherRepository.findOne({
+    where: { id },
+    loadRelationIds: {
+      relations: ["subjects"],
+    },
+  });
+}
+
+export async function getAvailableTeachers(
+  teacherQueryDto: TeacherQueryDto
+): Promise<Teacher[]> {
+  const { semester, subject, day, start, end } = { ...teacherQueryDto };
+  const _semester = await semesterService.getSemesterById(semester);
+  if (!_semester) return [];
+  const _subject = await subjectService.getSubjectById(subject);
+  if (!_subject) return [];
+  const schedules = await scheduleService.getExistingSchedules(
+    _semester,
+    day,
+    start,
+    end
+  );
+  const subjectTeachers = await teacherRepository.find({
+    where: { subjects: { id: subject } },
+  });
+  const busyTeachersSet = new Set<number>();
+  schedules.forEach((schedule) => {
+    busyTeachersSet.add(schedule.teacher.id);
+  });
+  const busyTeachers = Array.from(busyTeachersSet);
+  return subjectTeachers.filter(
+    (teacher) => !busyTeachers.includes(teacher.id)
+  );
+}
+
+export async function checkAvailableTeacher(
+  teacherCheckQueryDto: TeacherCheckQueryDto
+): Promise<boolean> {
+  const { semester, teacher, day, start, end } = { ...teacherCheckQueryDto };
+  const _semester = await semesterService.getSemesterById(semester);
+  if (!_semester) return false;
+  const _teacher = await getTeacherById(teacher);
+  if (!_teacher) return false;
+  const schedule = scheduleService.getTeacherSchedule(
+    _semester,
+    day,
+    start,
+    end,
+    teacher
+  );
+  return !schedule;
 }
 
 export async function getNonHomeRoomTeachers(year: number): Promise<Teacher[]> {
@@ -27,10 +82,7 @@ export async function getNonHomeRoomTeachers(year: number): Promise<Teacher[]> {
     select: ["name", "id"],
   });
   const school_year = year + "-" + (year + 1);
-  const classes = await classRepository.find({
-    where: { school_year },
-    loadRelationIds: { relations: ["teacher"] },
-  });
+  const classes = await classService.getClassesByYear(school_year);
   const homeroomTeacherIds = classes.map((_class) => +_class.teacher);
   const teachers = allTeachers.filter(
     (teacher) => !homeroomTeacherIds.includes(teacher.id)
@@ -54,13 +106,6 @@ export async function createTeacher(teacherDto: TeacherDto): Promise<void> {
   );
   teacher.account = account;
   await teacherRepository.save(teacher);
-  await Promise.all(
-    existingSubjects.map(async (subject) => {
-      if (!subject.teachers) subject.teachers = [teacher];
-      else subject.teachers.push(teacher);
-      await subjectRepository.save(subject);
-    })
-  );
 }
 
 export async function updateTeacher(
@@ -79,68 +124,37 @@ export async function updateTeacher(
   } = teacherDto;
   const teacher = await teacherRepository.findOne({
     where: { id },
-    loadRelationIds: { relations: ["subjects"] },
+    relations: ["subjects"],
   });
   if (!teacher) return;
-  const oldSubjects = await subjectRepository.find({
-    where: { id: In(teacher.subjects) },
-    relations: ["teachers"],
-  });
-  await Promise.all(
-    oldSubjects.map(async (subject) => {
-      subject.teachers = subject.teachers.filter(
-        (teacher) => teacher.id !== id
-      );
-      await subjectRepository.save(subject);
-    })
-  );
-  const existingSubjects = await subjectRepository.find({
-    where: { id: In(subjects) },
-    relations: ["teachers"],
-  });
-  teacher.name = name;
-  teacher.address = address;
-  teacher.email = email;
-  teacher.phone = phone;
-  teacher.gender = gender;
-  teacher.date_of_birth = date_of_birth;
-  teacher.status = status;
-  teacher.subjects = existingSubjects;
-  await teacherRepository.save(teacher);
-  await Promise.all(
-    existingSubjects.map(async (subject) => {
-      if (!subject.teachers) subject.teachers = [teacher];
-      else subject.teachers.push(teacher);
-      await subjectRepository.save(subject);
-    })
-  );
+  const existingSubjects = await subjectService.getSubjectsById(subjects);
+  const updatedTeacher = {
+    ...teacher,
+    name,
+    address,
+    email,
+    phone,
+    gender,
+    date_of_birth,
+    status,
+    subjects: existingSubjects,
+  };
+  await teacherRepository.save(updatedTeacher);
 }
 
 export async function deleteTeacher(id: number): Promise<void | string> {
   const teacher = await teacherRepository.findOne({
     where: { id },
     loadRelationIds: {
-      relations: ["account", "subjects", "teachings", "classes"],
+      relations: ["classes", "account"],
     },
   });
   if (!teacher) return "teacher.not_exist";
-  if (teacher.teachings.length > 0 || teacher.classes.length > 0)
+  const existingTeaching = await teachingService.getTeachingByTeacher(teacher);
+  if (existingTeaching || teacher.classes.length > 0)
     return "teacher.existing_teachings";
-  const subjects = await subjectRepository.find({
-    where: { id: In(teacher.subjects) },
-    relations: ["teachers"],
-  });
   const account = await accountRepository.findOne({
     where: { id: +teacher.account },
   });
-  await Promise.all(
-    subjects.map(async (subject) => {
-      subject.teachers = subject.teachers.filter(
-        (teacher) => teacher.id !== id
-      );
-      await subjectRepository.save(subject);
-    })
-  );
-  await teacherRepository.remove(teacher);
   await accountRepository.remove(account!);
 }

@@ -7,7 +7,7 @@ import { plainToClass } from "class-transformer";
 import { StudentDto } from "../../dto/student/student.dto";
 import { validate } from "class-validator";
 import { isExistingEmail } from "../../services/common.service";
-import { getSuccessMessage } from "../../common/utils";
+import { getSuccessMessage, handleError } from "../../common/utils";
 import { Actions } from "../../common/constants";
 
 const refineDto = (data: any) => {
@@ -44,23 +44,15 @@ export const createStudent = async (
   const data = { ...req.body };
   const createStudentDto = refineDto(data);
   const _errors = await validate(createStudentDto);
-  let errors: any = {};
   if (_errors.length > 0) {
-    _errors.map((error) => {
-      errors[error.property] = Object.values(error.constraints!).map(
-        (error_msg) => req.t(error_msg)
-      );
-    });
-    return res.json({ errors });
+    return res.json({ errors: handleError(_errors, req, res) });
   }
   if (await isExistingEmail(data.email)) {
-    errors = { email: [req.t("email_existing")] };
-    return res.json({ errors });
+    return res.json({ errors : { email: [req.t("email_existing")] }});
   }
   const createResult = await studentService.createStudent(createStudentDto);
   if (typeof createResult === "string") {
-    errors = { _class: [req.t(createResult)] };
-    return res.json({ errors });
+    return res.json({ errors: { _class: [req.t(createResult)] } });
   }
   return res.redirect("/students");
 };
@@ -74,18 +66,11 @@ export const updateStudent = async (
   const updateStudentDto = refineDto(data);
   const _errors = await validate(updateStudentDto);
   const id = parseInt(req.params.id);
-  let errors: any = {};
   if (_errors.length > 0) {
-    _errors.map((error) => {
-      errors[error.property] = Object.values(error.constraints!).map(
-        (error_msg) => req.t(error_msg)
-      );
-    });
-    return res.json({ errors });
+    return res.json({ errors: handleError(_errors, req, res) });
   }
   if (await isExistingEmail(data.email, id)) {
-    errors = { email: [req.t("email_existing")] };
-    return res.json({ errors });
+    return res.json({ errors: { email: [req.t("email_existing")] } });
   }
   await studentService.updateStudent(id, updateStudentDto);
   return res.redirect("/students");

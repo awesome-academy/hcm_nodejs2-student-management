@@ -4,7 +4,6 @@
   "profile": "Profile",
   "logout": "Log out",
   "dashboard": "Dashboard",
-  "schedule": "Schedule",
   "login": {
     "title": "Login",
     "instruction": "Please login to continue",
@@ -33,7 +32,10 @@
     "empty": "There are no grades",
     "manage": "Manage grades",
     "secondary": "Secondary school (Grade 6, 7, 8, 9)",
-    "high": "High school (Grade 10, 11, 12)"
+    "high": "High school (Grade 10, 11, 12)",
+    "update_toast_msg": "Update grade successfully",
+    "hclass_delete_required": "Can not delete high grades because there is existing class",
+    "sclass_delete_required": "Can not delete secondary grades because there is existing class"
   },
   "subject": {
     "title": "Subject",
@@ -111,7 +113,8 @@
     "update": "Update class",
     "update_toast_msg": "Update class successfully",
     "existing": "Class is existing",
-    "delete_toast_msg": "Delete class successfully"
+    "delete_toast_msg": "Delete class successfully",
+    "existing_students": "Can not delete class because existing students"
   },
   "school_year": "School year",
   "classname": {
@@ -121,12 +124,35 @@
     "title": "Student",
     "add": "Add student",
     "delete": "Delete student",
-    "delete_warning": "Do you want to delete this student",
+    "delete_warning": "Are you sure to delete this student?",
     "empty": "There are no students",
     "update": "Update student",
     "create_toast_msg": "Create student successfully",
     "update_toast_msg": "Update student successfully",
     "delete_toast_msg": "Delete student successfully"
   },
-  "select_all": "All"
+  "select_all": "All",
+  "schedule": {
+    "title": "Schedule",
+    "delete": "Delete lession",
+    "delete_warning": "Are you sure to delete this lession?",
+    "note": "Period/Day",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "empty": "There is no data",
+    "create": "Create lession",
+    "update": "Update lession",
+    "create_toast_msg": "Create lession successfully",
+    "update_toast_msg": "Update lession successfully",
+    "conflict": "Conflict lession, please check again",
+    "delete_toast_msg": "Delete lession successfully",
+    "instruction": "(*) Click to a table cell to update schedule"
+  },
+  "start_period": "Start period",
+  "end_period": "End period",
+  "semester": "Semester"
 }

@@ -74,7 +74,13 @@ export const MAX_LENGTH_50 = 50;
 export const MAX_LENGTH_100 = 100;
 export const DEFAULT_SECRET = "secret";
 export const TOKEN_EXPIRE = "2h";
-export const DEFAULT_TEXT_SG = "Account info for login Student Management";
 
 export const SECONDARY_GRADES = [6, 7, 8, 9];
 export const HIGH_GRADES = [10, 11, 12];
+
+//The first semester will be from September (9) to December (12)
+//The second semester will be from January (1) to May (5)
+export const START_MONTH_FS = 9;
+export const END_MONTH_FS = 12;
+export const START_MONTH_SS = 1;
+export const END_MONTH_SS = 5;

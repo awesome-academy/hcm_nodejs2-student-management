@@ -1,14 +1,19 @@
 import { In } from "typeorm";
 import { AppDataSource } from "../config/typeorm";
-import { Grade } from "../entities/grade.entity";
 import { Subject } from "../entities/subject.entity";
+import * as gradeService from "./grade.service";
 
 const subjectRepository = AppDataSource.getRepository(Subject);
-const gradeRepository = AppDataSource.getRepository(Grade);
 
 export async function getSubjects(): Promise<Subject[]> {
   return await subjectRepository.find({
     loadRelationIds: { relations: ["grades"] },
+  });
+}
+
+export async function getSubjectById(id: number): Promise<Subject | null> {
+  return await subjectRepository.findOne({
+    where: { id },
   });
 }
 
@@ -22,19 +27,9 @@ export async function createSubject(
   name: string,
   grades: number[]
 ): Promise<void> {
-  const existingGrades = await gradeRepository.find({
-    where: { id: In(grades) },
-    relations: ["subjects"],
-  });
+  const existingGrades = await gradeService.getGradesById(grades);
   const _subject = subjectRepository.create({ name, grades: existingGrades });
-  const subject = await subjectRepository.save(_subject);
-  await Promise.all(
-    existingGrades.map(async (grade) => {
-      if (!grade.subjects) grade.subjects = [subject];
-      else grade.subjects.push(subject);
-      await gradeRepository.save(grade);
-    })
-  );
+  await subjectRepository.save(_subject);
 }
 
 export async function updateSubject(
@@ -47,30 +42,10 @@ export async function updateSubject(
     loadRelationIds: { relations: ["grades"] },
   });
   if (!subject) return;
-  const oldGrades = await gradeRepository.find({
-    where: { id: In(subject.grades) },
-    relations: ["subjects"],
-  });
-  await Promise.all(
-    oldGrades.map(async (grade) => {
-      grade.subjects = grade.subjects.filter((subject) => subject.id !== id);
-      await gradeRepository.save(grade);
-    })
-  );
-  const existingGrades = await gradeRepository.find({
-    where: { id: In(grades) },
-    relations: ["subjects"],
-  });
+  const existingGrades = await gradeService.getGradesById(grades);
   subject.name = name;
   subject.grades = existingGrades;
   await subjectRepository.save(subject);
-  await Promise.all(
-    existingGrades.map(async (grade) => {
-      if (!grade.subjects) grade.subjects = [subject];
-      else grade.subjects.push(subject);
-      await gradeRepository.save(grade);
-    })
-  );
 }
 
 export async function isExistingSubject(
@@ -92,16 +67,5 @@ export async function deleteSubject(id: number): Promise<void | string> {
   if (!subject) return;
   if (subject.teachings.length > 0) return "subject.existing_teachings";
   if (subject.teachers.length > 0) return "subject.existing_teachers";
-  const grades = await gradeRepository.find({
-    where: { id: In(subject.grades) },
-    relations: ["subjects"],
-  });
-
-  await Promise.all(
-    grades.map(async (grade) => {
-      grade.subjects = grade.subjects.filter((subject) => subject.id !== id);
-      await gradeRepository.save(grade);
-    })
-  );
   await subjectRepository.remove(subject);
 }
