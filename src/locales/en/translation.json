@@ -114,7 +114,9 @@
     "update_toast_msg": "Update class successfully",
     "existing": "Class is existing",
     "delete_toast_msg": "Delete class successfully",
-    "existing_students": "Can not delete class because existing students"
+    "existing_students": "Can not delete class because existing students",
+    "my_class": "My class",
+    "info": "Class information"
   },
   "school_year": "School year",
   "classname": {

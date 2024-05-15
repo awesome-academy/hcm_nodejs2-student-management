@@ -84,6 +84,20 @@ export async function getClassById(id: number): Promise<Class | null> {
   });
 }
 
+export async function getStudentClasses(studentId: number): Promise<Class[]> {
+  const student = await studentService.getStudentById(studentId);
+  if(!student) return [];
+  const classes = student.class_schools.sort((a, b) => (a.school_year > b.school_year ? -1 : 1));
+return classes;
+}
+
+export async function getClassDetail(id: number): Promise<Class | null> {
+  return await classRepository.findOne({
+    where: { id },
+    relations: ["teacher", "students", "grade"],
+  });
+}
+
 export async function isExistingClass(
   classDto: ClassDto,
   id?: number
@@ -128,7 +142,7 @@ export async function updateClass(
     loadRelationIds: { relations: ["students"] },
   });
   if (!_class) return "class.not_found";
-  const _teacher = await teacherService.getTeacherById(teacher)
+  const _teacher = await teacherService.getTeacherById(teacher);
   if (!_teacher) return "teacher.not_exist";
   _class.teacher = _teacher;
   _class.name = name;
@@ -144,7 +158,7 @@ export async function deleteClass(id: number): Promise<void | string> {
     },
   });
   if (!_class) return "class.not_exist";
-  const existingTeaching = await teachingService.getTeachingByClass(_class)
+  const existingTeaching = await teachingService.getTeachingByClass(_class);
   if (existingTeaching) return "class.existing_teachings";
   if (_class.students.length > 0) return "class.existing_students";
   await classRepository.remove(_class);

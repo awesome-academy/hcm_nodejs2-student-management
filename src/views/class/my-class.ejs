@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('class.my_class') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('class.my_class') %></span>
+              <div class="form-group class-select">
+                <select class="form-control" id="_class">
+                  <% classes.forEach(function(_class) { %>
+                  <option value="<%= _class.id %>"><%= _class.name %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+            <% if (classDetail) { %>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('class.info') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div>
+                  <label
+                    ><strong><%= t('class.name') %>:</strong> <%=
+                    classDetail.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('grade.title') %>:</strong> <%=
+                    classDetail.grade.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('school_year') %>:</strong> <%=
+                    classDetail.school_year %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('class.number') %>:</strong> <%=
+                    classDetail.students.length %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('teacher.homeroom') %>:</strong> <%=
+                    classDetail.teacher.name %></label
+                  >
+                </div>
+              </div>
+            </div>
+            <% } %>
+            <div
+              class="content"
+              id="content"
+              data-class-detail="<%= typeof classDetail !== 'undefined' ? JSON.stringify(classDetail) : '' %>"
+            >
+              <% if (classDetail && classDetail.students.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table list-content">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('name') %></th>
+                      <th scope="col"><%= t('gender.title') %></th>
+                      <th scope="col"><%= t('dob') %></th>
+                      <th scope="col"><%= t('address') %></th>
+                      <th scope="col"><%= t('phone') %></th>
+                      <th scope="col"><%= t('email') %></th>
+                      <th scope="col"><%= t('status.title') %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% classDetail.students.forEach(function(student) { %>
+                    <tr>
+                      <td><%= student.name %></td>
+                      <td>
+                        <% if (student.gender === 1) { %> <%= t('gender.male')
+                        %> <% } else if (student.gender === 2) { %> <%=
+                        t('gender.female') %> <% } else { %> <%=
+                        t('gender.other') %> <% } %>
+                      </td>
+                      <td><%= student.date_of_birth %></td>
+                      <td><%= student.address %></td>
+                      <td><%= student.phone %></td>
+                      <td><%= student.email %></td>
+                      <% if (student.status === 1) { %>
+                      <td><%= t('class.status.active') %></td>
+                      <% } else { %>
+                      <td><%= t('class.status.non_active') %></td>
+                      <% } %>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('class_detail.empty') %></span>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/class/my-class.js"></script>
+  </body>
+</html>

@@ -114,7 +114,9 @@
     "update_toast_msg": "Cập nhật lớp học thành công",
     "existing": "Lớp học đã tồn tại",
     "delete_toast_msg": "Xóa lớp học thành công",
-    "existing_students": "Không thể xóa lớp học do lớp vẫn còn học sinh"
+    "existing_students": "Không thể xóa lớp học do lớp vẫn còn học sinh",
+    "my_class": "Lớp học của tôi",
+    "info": "Thông tin lớp học"
   },
   "classname": {
     "not_empty": "Vui lòng điền tên lớp"

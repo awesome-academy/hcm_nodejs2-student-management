@@ -5,6 +5,7 @@ import {
     IsOptional
 } from "class-validator";
 import { ClassStatus } from "../../common/constants";
+import { IsValidSchoolYear } from "../../common/validators";
 
 export class ClassDto {
   @IsNotEmpty({ message: "classname.not_empty" })
@@ -12,6 +13,7 @@ export class ClassDto {
 
   @IsNotEmpty({ message: "class.school_year_not_empty" })
   @IsNumber({}, {message: "class.school_year_invalid"})
+  @IsValidSchoolYear()
   school_year: number;
 
   @IsEnum(ClassStatus, { message: "class.status_invalid" })

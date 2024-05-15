@@ -7,17 +7,6 @@ $(document).ready(function () {
   const searchBtn = $("#btn-search");
   const content = $("#content");
 
-  const currentPath = window.location.pathname;
-  $(".nav-link").each(function () {
-    var href = $(this).attr("href");
-    if (href === currentPath) {
-      $(this).removeClass("link-dark");
-      $(this)
-        .closest("li")
-        .addClass("nav-item sidebar-item sidebar-item-active");
-    }
-  });
-
   const updateTeacherSelect = (defaulOption) => {
     const subjectId = $("#subject").val();
     const startPeriod = $("#startPeriod").val();

@@ -38,15 +38,19 @@ export const login = asyncHandler(
     } else {
       const user = authResult;
       let role;
+      let redirectTarget;
       switch (true) {
         case user instanceof Staff:
           role = req.t("staff");
+          redirectTarget = "/classes"
           break;
         case user instanceof Teacher:
           role = req.t("teacher.title");
+          redirectTarget = "/classes"
           break;
         case user instanceof Student:
           role = req.t("student.title");
+          redirectTarget = "/classes/my-class"
           break;
         default:
           return;
@@ -65,7 +69,7 @@ export const login = asyncHandler(
       );
 
       res.cookie("token", token, { httpOnly: true });
-      res.redirect("/classes");
+      res.redirect(redirectTarget);
     }
   }
 );

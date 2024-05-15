@@ -1,15 +1,4 @@
 $(document).ready(function () {
-  var currentPath = window.location.pathname;
-  $(".nav-link").each(function () {
-    var href = $(this).attr("href");
-    if (href === currentPath) {
-      $(this).removeClass("link-dark");
-      $(this)
-        .closest("li")
-        .addClass("nav-item sidebar-item sidebar-item-active");
-    }
-  });
-
   const content = $("#content");
   const modal = $("#manageGrades");
   modal.on("show.bs.modal", function (event) {

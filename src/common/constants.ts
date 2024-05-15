@@ -74,6 +74,9 @@ export const MAX_LENGTH_50 = 50;
 export const MAX_LENGTH_100 = 100;
 export const DEFAULT_SECRET = "secret";
 export const TOKEN_EXPIRE = "2h";
+export const COOKIE_MAXAGE = 720000;
+export const DEFAULT_PORT = 3000;
+export const DEFAULT_DB_PORT = 3306;
 
 export const SECONDARY_GRADES = [6, 7, 8, 9];
 export const HIGH_GRADES = [10, 11, 12];

@@ -24,3 +24,23 @@ export function IsBeforeCurrentDate(validationOptions?: ValidationOptions) {
     });
   };
 }
+
+export function IsValidSchoolYear(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: "isValidSchoolYear",
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          const currentYear = new Date().getFullYear();
+          return typeof value === "number" && value >= currentYear;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return "invalid_school_year";
+        },
+      },
+    });
+  };
+}
