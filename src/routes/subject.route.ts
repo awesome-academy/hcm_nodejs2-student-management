@@ -3,17 +3,29 @@ import * as authMiddlewares from "../middlewares/auth.middleware";
 import { Router } from "express";
 const router: Router = Router();
 
-router.get("/", authMiddlewares.isAuth, subjectController.getSubjects);
-router.post("/", authMiddlewares.isAuth, subjectController.createSubject);
+router.get(
+  "/",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  subjectController.getSubjects
+);
+router.post(
+  "/",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  subjectController.createSubject
+);
 
 router.post(
   "/:id/update",
   authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
   subjectController.updateSubject
 );
 router.post(
   "/:id/delete",
   authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
   subjectController.deleteSubject
 );
 

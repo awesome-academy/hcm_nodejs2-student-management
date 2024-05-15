@@ -2,7 +2,14 @@
   <div>
     <img class="icon-img" src="/images/logo.svg" />
   </div>
-  <div class="profile-card">
+  <div
+    class="profile-card"
+    id="profile-card"
+    data-user="<%= typeof user !== 'undefined' ? JSON.stringify(user) : '' %>"
+    data-staff-role="<%= t('staff') %>"
+    data-student-role="<%= t('student.title') %>"
+    data-teacher-role="<%= t('teacher.title') %>"
+  >
     <img class="avatar" src="/images/school.jpg" />
     <div class="profile-info">
       <% if (typeof user !== 'undefined') { %>
@@ -17,46 +24,52 @@
   </div>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
-    <li>
+    <li class="staff-feature d-none">
       <a href="/dashboard" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/bar-chart.svg" />
         <span><%= t('dashboard') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/subjects" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/book.svg" />
         <span><%= t('subject.title') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/students" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/mortarboard.svg" />
         <span><%= t('student.title') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/grades" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/backpack2.svg" />
         <span><%= t('grade.title') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/classes" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/people-fill.svg" />
         <span><%= t('class.title') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/teachers" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/person-workspace.svg" />
         <span><%= t('teacher.title') %></span>
       </a>
     </li>
-    <li>
+    <li class="staff-feature d-none">
       <a href="/schedules" class="nav-link link-dark">
         <img class="sidebar-icon" src="/icons/calendar4-week.svg" />
         <span><%= t('schedule.title') %></span>
+      </a>
+    </li>
+    <li class="student-feature d-none">
+      <a href="/classes/my-class" class="nav-link link-dark">
+        <img class="sidebar-icon" src="/icons/people-fill.svg" />
+        <span><%= t('class.my_class') %></span>
       </a>
     </li>
   </ul>
@@ -65,3 +78,4 @@
     <a href="?locale=vi"><%= t('vietnamese') %></a>
   </span>
 </div>
+<script src="/scripts/navbar.js"></script>

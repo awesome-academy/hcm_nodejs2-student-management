@@ -1,16 +1,17 @@
-import cookieParser from "cookie-parser";
-import express, { Request, Response, NextFunction } from "express";
-import path from "path";
-import router from "./routes/index";
-import logger from "morgan";
-import session from "express-session";
 import flash from "connect-flash";
+import cookieParser from "cookie-parser";
+import express from "express";
+import session from "express-session";
 import i18next from "i18next";
 import i18nextBackend from "i18next-fs-backend";
 import i18nextMiddleware from "i18next-http-middleware";
+import logger from "morgan";
+import path from "path";
+import { COOKIE_MAXAGE, DEFAULT_PORT } from "./common/constants";
 import { AppDataSource } from "./config/typeorm";
+import router from "./routes/index";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || DEFAULT_PORT;
 
 i18next
   .use(i18nextBackend)
@@ -46,10 +47,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: "student-management",
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: COOKIE_MAXAGE },
   })
 );
-app.use(flash());
+app.use(flash()); 
 
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -2,14 +2,12 @@ import { In } from "typeorm";
 import { AccountRoles, ClassStatus, StudentStatus } from "../common/constants";
 import { AppDataSource } from "../config/typeorm";
 import { StudentDto } from "../dto/student/student.dto";
-import { Account } from "../entities/account.entity";
 import { Student } from "../entities/student.entity";
 import * as accountService from "./account.service";
 import * as classService from "./class.service";
 import * as gradeService from "./grade.service"
 
 const studentRepository = AppDataSource.getRepository(Student);
-const accountRepository = AppDataSource.getRepository(Account);
 
 export async function getStudents(): Promise<any[]> {
   let allStudents: any[] = [];
@@ -28,7 +26,7 @@ export async function getStudents(): Promise<any[]> {
   return allStudents;
 }
 
-export async function getStudentsByIds(studentIds: number[]): Promise<any[]> {
+export async function getStudentsByIds(studentIds: number[]): Promise<Student[]> {
   return await studentRepository.find({
     where: { id: In(studentIds) },
     relations: {
@@ -39,6 +37,13 @@ export async function getStudentsByIds(studentIds: number[]): Promise<any[]> {
     loadRelationIds: {
       relations: ["grade"],
     },
+  });
+}
+
+export async function getStudentById(id: number): Promise<Student | null> {
+  return await studentRepository.findOne({
+    where: { id },
+    relations: ["class_schools"]
   });
 }
 
