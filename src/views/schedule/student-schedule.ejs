@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('schedule.title') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('schedule.title') %></span>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('filter') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div class="form-row-item">
+                  <label for="class_filter"><%= t('class.title') %></label>
+                  <select class="form-control" id="_class">
+                    <% classes.forEach(function(_class) { %>
+                    <option value="<%= _class.id %>"><%= _class.name %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="semester"><%= t('semester') %></label>
+                  <select class="form-control" id="semester">
+                    <option value="1"><%= t('semester') %>&nbsp1</option>
+                    <option value="2"><%= t('semester') %>&nbsp2</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-search">
+                <%= t('search') %>
+              </button>
+            </div>
+            <div
+              class="content"
+              data-errors="<%= typeof errors !== 'undefined' ? JSON.stringify(errors) : '' %>"
+              data-classes="<%= typeof classes !== 'undefined' ? JSON.stringify(classes) : '' %>"
+              data-schedule="<%= typeof schedule !== 'undefined' ? JSON.stringify(schedule) : '' %>"
+              id="content"
+            >
+              <% if (typeof schedule !== 'undefined') { %>
+              <div class="table-responsive">
+                <table
+                  id="scheduleTable"
+                  class="table table-bordered text-center schedule-table"
+                  data-teacher-title="<%= t('teacher.title') %>"
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.note') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.monday') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.tuesday') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.wednesday') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.thursday') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.friday') %>
+                      </th>
+                      <th scope="col" class="col-1">
+                        <%= t('schedule.saturday') %>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="scheduleBody"></tbody>
+                </table>
+              </div>
+
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('schedule.empty') %></span>
+              </div>
+              <% } %> <% if (typeof errors !== 'undefined' && errors.length > 0)
+              { %>
+              <div
+                aria-live="polite"
+                aria-atomic="true"
+                class="position-relative"
+                id="toast-wrapper"
+              >
+                <div class="toast-container bottom-0 end-0 p-3">
+                  <% errors.forEach(error => { %> <%-
+                  include('../partials/toast', {bg_color: "text-bg-danger",
+                  extra_class: "toast-error", msg: error.msg}); -%> <% }); %>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/schedule/student-schedule.js"></script>
+  </body>
+</html>

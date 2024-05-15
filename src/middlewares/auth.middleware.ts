@@ -33,7 +33,7 @@ const checkRole = (
   try {
     if (
       req.session &&
-      (req.session as CustomSessionData).user?.role === req.t(role)
+      (req.session as CustomSessionData).user?.roleKey === role
     ) {
       next();
     } else {
@@ -57,7 +57,7 @@ export const isTeacher = async (
   res: Response,
   next: NextFunction
 ) => { 
-  checkRole("teacher.title", req, res, next)
+  checkRole("teacher", req, res, next)
 };
 
 export const isStudent = async (
@@ -65,5 +65,5 @@ export const isStudent = async (
   res: Response,
   next: NextFunction
 ) => {
-  checkRole("student.title", req, res, next)
+  checkRole("student", req, res, next)
 };
