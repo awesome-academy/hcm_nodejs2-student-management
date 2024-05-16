@@ -1,9 +1,8 @@
 import {
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { ClassScore } from "./class_score.entity";
 import { Score } from "./score.entity";

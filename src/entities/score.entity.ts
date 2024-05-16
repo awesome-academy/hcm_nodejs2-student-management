@@ -1,9 +1,8 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   ManyToOne,
-  JoinColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { ScoreType } from "./score_type.entity";
 import { StudentScore } from "./student_score.entity";

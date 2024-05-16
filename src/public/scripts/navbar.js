@@ -12,20 +12,17 @@ $(document).ready(function () {
 
   const profile = $("#profile-card");
   const user = profile.data("user");
-  if (user.role) {
-    const staffRole = profile.data("staff-role");
-    const studentRole = profile.data("student-role");
-    const teacherRole = profile.data("teacher-role");
-    switch (user.role) {
-      case staffRole:
+  if (user.roleKey) {
+    switch (user.roleKey) {
+      case "staff":
         const staffLis = $(".staff-feature");
         staffLis.removeClass("d-none");
         break;
-      case studentRole:
+      case "student":
         const studentLis = $(".student-feature");
         studentLis.removeClass("d-none");
         break;
-      case teacherRole:
+      case "teacher":
         const teacherLis = $(".teacher-feature");
         teacherLis.removeClass("d-none");
         break;

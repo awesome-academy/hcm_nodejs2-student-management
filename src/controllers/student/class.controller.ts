@@ -13,11 +13,10 @@ export const getStudentClass = asyncHandler(
       const classId = sclass ? parseInt(sclass.toString()) : classes[0].id;
       classDetail = await classService.getClassDetail(classId);
     }
-    res.render("class/my-class", {
+    return res.render("class/my-class", {
       user,
       classes,
       classDetail,
     });
-    return;
   }
 );

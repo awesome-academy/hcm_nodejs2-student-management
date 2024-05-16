@@ -38,18 +38,22 @@ export const login = asyncHandler(
     } else {
       const user = authResult;
       let role;
+      let roleKey;
       let redirectTarget;
       switch (true) {
         case user instanceof Staff:
-          role = req.t("staff");
+          role = "staff";
+          roleKey = "staff"
           redirectTarget = "/classes"
           break;
         case user instanceof Teacher:
-          role = req.t("teacher.title");
+          role = "teacher.title";
+          roleKey = "teacher"
           redirectTarget = "/classes"
           break;
         case user instanceof Student:
-          role = req.t("student.title");
+          role = "student.title";
+          roleKey = "student"
           redirectTarget = "/classes/my-class"
           break;
         default:
@@ -59,6 +63,7 @@ export const login = asyncHandler(
         id: user.id,
         name: user.name,
         role,
+        roleKey
       };
       const token = jwt.sign(
         { userId: user.id, accountId: user.account.id },
