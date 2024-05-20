@@ -1,11 +1,10 @@
 import {
-  ArrayMinSize,
   IsDate,
   IsEmail,
   IsEnum,
   IsMobilePhone,
   IsNotEmpty,
-  MinLength,
+  MinLength
 } from "class-validator";
 import { Genders, StudentStatus } from "../../common/constants";
 import { IsBeforeCurrentDate } from "../../common/validators";

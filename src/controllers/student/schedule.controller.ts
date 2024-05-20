@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import {
-  END_MONTH_SS,
-  START_MONTH_SS,
-  SemesterNames
-} from "../../common/constants";
+import { refineSemester } from "../../common/utils";
 import { CustomSessionData } from "../../interfaces/session.interface";
 import * as classService from "../../services/class.service";
 import * as scheduleService from "../../services/schedule.service";
@@ -14,14 +10,7 @@ export const getSchedules = asyncHandler(
     const { semester, sclass } = req.query;
     const user = (req.session as CustomSessionData).user;
     const classes = await classService.getStudentClasses(user?.id!);
-    let semesterName = semester ? parseInt(semester.toString()) : undefined;
-    if (!semesterName || !Object.values(SemesterNames).includes(semesterName)) {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1;
-      if (currentMonth >= START_MONTH_SS && currentMonth <= END_MONTH_SS)
-        semesterName = SemesterNames.SECOND;
-      else semesterName = SemesterNames.FIRST;
-    }
+    let semesterName = refineSemester(semester);
     if (classes.length > 0) {
       const classId = sclass ? parseInt(sclass.toString()) : classes[0].id;
       const isValidClassId = classes.some((_class) => _class.id === classId);

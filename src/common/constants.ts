@@ -36,6 +36,13 @@ export enum ScoreFactors {
   TRIPLE = 3,
 }
 
+export enum ConductTypes {
+  EXCELLENT = 1,
+  GOOD = 2,
+  AVERAGE = 3,
+  WEAK = 4
+}
+
 export enum Periods {
   FIRST = 1,
   SECOND = 2,

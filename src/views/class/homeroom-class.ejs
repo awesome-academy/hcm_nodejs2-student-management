@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('class.homeroom') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="select-header-title"
+                ><%= t('class.homeroom') %></span
+              >
+              <div class="select-header">
+                <div class="select-group">
+                  <label for="school_year" class="label-input"
+                    ><%= t('school_year') %></label
+                  >
+                  <select class="form-control" id="school_year">
+                    <% school_years.forEach(function(year) { %>
+                    <option value="<%= year.split('-')[0] %>">
+                      <%= year %>
+                    </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="select-group">
+                  <label for="semester" class="label-input"
+                    ><%= t('semester') %></label
+                  >
+                  <select class="form-control" id="semester">
+                    <option value="1"><%= t('semester') %>&nbsp1</option>
+                    <option value="2"><%= t('semester') %>&nbsp2</option>
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  id="btn-search-header"
+                >
+                  <%= t('search') %>
+                </button>
+              </div>
+            </div>
+            <% if (classDetail) { %>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('class.info') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div>
+                  <label
+                    ><strong><%= t('class.name') %>:</strong> <%=
+                    classDetail.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('grade.title') %>:</strong> <%=
+                    classDetail.grade.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('school_year') %>:</strong> <%=
+                    classDetail.school_year %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('class.number') %>:</strong> <%=
+                    classDetail.students.length %></label
+                  >
+                </div>
+              </div>
+            </div>
+            <% } %>
+            <div
+              class="content"
+              id="content"
+              data-year="<%= year %>"
+              data-semester="<%= semester %>"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              data-semester-id="<%= typeof semesterId != 'undefined' ? semesterId : '' %>"
+              data-class-detail="<%= typeof classDetail !== 'undefined' ? JSON.stringify(classDetail) : '' %>"
+            >
+              <div
+                class="modal fade"
+                id="conductModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="updateModalLabel">
+                        <%= t('conduct.update') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <div>
+                        <select class="form-control" id="conduct">
+                          <option value="1">
+                            <%= t('conduct.excellent') %>
+                          </option>
+                          <option value="2"><%= t('conduct.good') %></option>
+                          <option value="3"><%= t('conduct.average') %></option>
+                          <option value="4"><%= t('conduct.weak') %></option>
+                        </select>
+                        <ul class="error-list" id="error-conduct"></ul>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button class="btn btn-primary" id="submitBtn">
+                        <%= t('modal.update') %>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (classDetail && classDetail.students.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table list-content">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('name') %></th>
+                      <th scope="col"><%= t('gender.title') %></th>
+                      <th scope="col"><%= t('dob') %></th>
+                      <th scope="col"><%= t('address') %></th>
+                      <th scope="col"><%= t('phone') %></th>
+                      <th scope="col"><%= t('email') %></th>
+                      <th scope="col"><%= t('status.title') %></th>
+                      <th scope="col" colspan="2"><%= t('conduct.title') %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% classDetail.students.forEach(function(student) { %>
+                    <tr>
+                      <td><%= student.name %></td>
+                      <td>
+                        <% if (student.gender === 1) { %> <%= t('gender.male')
+                        %> <% } else if (student.gender === 2) { %> <%=
+                        t('gender.female') %> <% } else { %> <%=
+                        t('gender.other') %> <% } %>
+                      </td>
+                      <td><%= student.date_of_birth %></td>
+                      <td><%= student.address %></td>
+                      <td><%= student.phone %></td>
+                      <td><%= student.email %></td>
+                      <% if (student.status === 1) { %>
+                      <td><%= t('class.status.active') %></td>
+                      <% } else { %>
+                      <td><%= t('class.status.non_active') %></td>
+                      <% } %> <% if (student.conducts[0].type === 1) { %>
+                      <td><%= t('conduct.excellent') %></td>
+                      <% } else if (student.conducts[0].type === 2) { %>
+                      <td><%= t('conduct.good') %></td>
+                      <% } else if (student.conducts[0].type === 3) { %>
+                      <td><%= t('conduct.average') %></td>
+                      <% } else { %>
+                      <td><%= t('conduct.weak') %></td>
+                      <% }%>
+                      <td>
+                        <img
+                          class="sidebar-icon"
+                          data-bs-toggle="modal"
+                          data-student-id="<%= student.id %>"
+                          data-conduct="<%= student.conducts[0].type %>"
+                          data-bs-target="#conductModal"
+                          src="/icons/pencil-square.svg"
+                        />
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('class_detail.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/class/homeroom-class.js"></script>
+  </body>
+</html>

@@ -49,7 +49,7 @@ export const login = asyncHandler(
         case user instanceof Teacher:
           role = "teacher.title";
           roleKey = "teacher"
-          redirectTarget = "/classes"
+          redirectTarget = "/classes/homeroom-class"
           break;
         case user instanceof Student:
           role = "student.title";

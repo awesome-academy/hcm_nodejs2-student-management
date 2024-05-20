@@ -24,7 +24,8 @@
   },
   "staff": "Staff",
   "modal": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "update": "Update"
   },
   "grade": {
     "title": "Grade",
@@ -116,7 +117,8 @@
     "delete_toast_msg": "Delete class successfully",
     "existing_students": "Can not delete class because existing students",
     "my_class": "My class",
-    "info": "Class information"
+    "info": "Class information",
+    "homeroom": "Homeroom class"
   },
   "school_year": "School year",
   "classname": {
@@ -156,5 +158,17 @@
   },
   "start_period": "Start period",
   "end_period": "End period",
-  "semester": "Semester"
+  "semester": "Semester",
+  "class_detail": {
+    "empty": "There are no class information"
+  },
+  "conduct": {
+    "title": "Conduct",
+    "weak": "Weak",
+    "excellent": "Excellent",
+    "good": "Good",
+    "average": "Average",
+    "update": "Update conduct",
+    "update_toast_msg": "Update conduct successfully"
+  }
 }
