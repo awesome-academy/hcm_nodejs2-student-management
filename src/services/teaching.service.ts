@@ -15,6 +15,18 @@ export async function getTeachingByTeacher(
   });
 }
 
+export async function getTeachingYears(teacherId: number): Promise<string[]> {
+  const distinctSchoolYears = await teachingRepository
+    .createQueryBuilder("teaching")
+    .leftJoin("teaching.class_school", "class")
+    .select("DISTINCT(class.school_year)", "school_year")
+    .where("teaching.teacher = :teacherId", { teacherId })
+    .orderBy("class.school_year", "DESC")
+    .getRawMany();
+
+  return distinctSchoolYears.map((row) => row.school_year);
+}
+
 export async function getTeachingBySubject(
   subject: Subject
 ): Promise<Teaching | null> {
