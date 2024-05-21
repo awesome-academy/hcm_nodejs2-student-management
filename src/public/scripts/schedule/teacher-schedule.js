@@ -1,13 +1,13 @@
 $(document).ready(function () {
   $("#btn-search").on("click", function () {
     const semester = $("#semester").val();
-    const classId = $("#_class").val();
-    window.location.href = `/schedules/student-schedule?semester=${semester}&sclass=${classId}`;
+    const year = $("#year").val();
+    window.location.href = `/schedules/teacher-schedule?semester=${semester}&year=${year}`;
   });
 
   const urlParams = new URLSearchParams(window.location.search);
   const semester = urlParams.get("semester");
-  const classId = urlParams.get("sclass");
+  const year = urlParams.get("year");
   if (semester) {
     $("#semester").val(semester);
   } else {
@@ -16,19 +16,19 @@ $(document).ready(function () {
     if (currentMonth >= 0 && currentMonth <= 4) $("#semester").val("2");
     else $("#semester").val("1");
   }
-  if (classId) {
-    $("#_class").val(classId);
+  if (year) {
+    $("#year").val(year);
   } else {
-    const classes = $("#content").data("classes");
-    $("#_class").val(classes[0].id);
+    const years = $("#content").data("years");
+    $("#year").val(years[0].split("-")[0]);
   }
 
-  const classSchedule = $("#content").data("schedule");
-  if (classSchedule != "") {
+  const teacherSchedule = $("#content").data("schedule");
+  if (teacherSchedule != "") {
     const table = $("#scheduleTable");
-    const teacherTitle = table.data("teacher-title");
+    const classTitle = table.data("class-title");
     let prePeriod = [0, 0, 0, 0, 0, 0];
-    classSchedule.period_schedules.forEach((periodSchedule) => {
+    teacherSchedule.forEach((periodSchedule) => {
       const $row = $("<tr>");
       $row.append(`<td>${periodSchedule.period}</td>`);
       for (let i = 1; i < 7; i++) {
@@ -36,21 +36,21 @@ $(document).ready(function () {
           (schedule) => schedule.day === i
         );
         let subject = "";
-        let teacher = "";
+        let _class = "";
         if (schedule) {
           subject = schedule.subject.name;
-          teacher = schedule.teacher.name;
+          _class = schedule.class_school.name;
         }
-        const teacherData =
-          teacher.length > 0 ? JSON.stringify(schedule.teacher) : undefined;
+        const classData =
+          _class.length > 0 ? JSON.stringify(schedule.class_school) : undefined;
         const subjectData =
           subject.length > 0 ? JSON.stringify(schedule.subject) : undefined;
         const preTd = $(`#td-${prePeriod[i - 1]}-${i}`);
         if (
           preTd &&
-          JSON.stringify(preTd.data("teacher")) === teacherData &&
+          JSON.stringify(preTd.data("class")) === classData &&
           JSON.stringify(preTd.data("subject")) === subjectData &&
-          teacherData !== undefined
+          classData !== undefined
         ) {
           const currSpan = +preTd.attr("rowspan");
           preTd.attr("rowspan", currSpan + 1);
@@ -59,26 +59,20 @@ $(document).ready(function () {
           $row.append(
             `<td
                 id="td-${periodSchedule.period}-${i}"
-                data-teacher='${teacherData}'
-                data-subject='${subjectData}'
                 rowspan="1"
+                data-class='${classData}'
+                data-subject='${subjectData}'
                 class="vertical-center">
-                ${
-                  subject.length > 0
-                    ? `${subject}<br>${teacherTitle}: ${teacher}`
-                    : ""
-                }
-              </td>`
+                  ${
+                    subject.length > 0
+                      ? `${subject}<br>${classTitle}: ${_class}`
+                      : ""
+                  }
+            </td>`
           );
         }
       }
       $("#scheduleBody").append($row);
-    });
-  }
-  if ($("#content").data("errors").length > 0) {
-    const toast = $(".toast-error");
-    toast.each(function () {
-      new bootstrap.Toast(this).show();
     });
   }
 });

@@ -118,6 +118,42 @@ export async function getTeacherSchedule(
   });
 }
 
+export async function getTeacherSchedules(
+  year: string,
+  semesterName: number,
+  teacherId: number
+) {
+  const semester = await semesterService.getSemesterByData(semesterName, year);
+  if (!semester) return null;
+  const schedules = await scheduleRepository.find({
+    where: {
+      teacher: { id: teacherId },
+      semester: { id: semester.id },
+    },
+    relations: ["period_schedule", "subject", "class_school"],
+    order: {
+      period_schedule: {
+        period: "ASC",
+      },
+      day: "ASC",
+    },
+  });
+
+  // Initialize an array of objects for the periods
+  const periodScheduleArray: { period: number; schedules: Schedule[] }[] =
+    Array.from({ length: 10 }, (_, i) => ({
+      period: i + 1,
+      schedules: [],
+    }));
+
+  schedules.forEach((schedule) => {
+    const period = schedule.period_schedule.period;
+    periodScheduleArray[period - 1].schedules.push(schedule);
+  });
+
+  return periodScheduleArray;
+}
+
 export async function createClassSchedule(
   class_school: Class,
   semesters: Semester[]
