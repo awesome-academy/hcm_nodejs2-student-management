@@ -2,7 +2,6 @@ import {
     IsEnum,
     IsNotEmpty,
     IsNumber,
-    IsOptional
 } from "class-validator";
 import { ClassStatus } from "../../common/constants";
 import { IsValidSchoolYear } from "../../common/validators";

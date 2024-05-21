@@ -1,7 +1,7 @@
 $(document).ready(function () {
-  $("#_class").on("change", function (event) {
+  $("#_class").on("change", function () {
     window.location.href = `/classes/my-class?sclass=${this.val()}`;
   });
   const classDetail = $("#content").data("class-detail");
-  $("#_class").val(classDetail.id);
+  if (classDetail) $("#_class").val(classDetail.id);
 });

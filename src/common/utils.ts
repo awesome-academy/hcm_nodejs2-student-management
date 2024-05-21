@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
 import sgMail from "../config/sendgrid";
-import { Actions } from "./constants";
+import {
+  Actions,
+  END_MONTH_FS,
+  END_MONTH_SS,
+  START_MONTH_FS,
+  START_MONTH_SS,
+  SemesterNames,
+} from "./constants";
+import { Semester } from "../entities/semester.entity";
 
 export async function sendAccountInfo(
   email: string,
@@ -48,4 +56,45 @@ export function handleError(_errors: any[], req: Request, res: Response) {
     );
   });
   return errors;
+}
+
+export function refineSemester(semester: any): number {
+  let semesterName = semester ? parseInt(semester.toString()) : undefined;
+  if (!semesterName || !Object.values(SemesterNames).includes(semesterName)) {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    if (currentMonth >= START_MONTH_SS && currentMonth <= END_MONTH_SS)
+      semesterName = SemesterNames.SECOND;
+    else semesterName = SemesterNames.FIRST;
+  }
+  return semesterName;
+}
+
+export function getSemesterData(semester: Semester) {
+  let startMonth, endMonth, year;
+  switch (semester.name) {
+    case SemesterNames.FIRST:
+      startMonth = START_MONTH_FS;
+      endMonth = END_MONTH_FS;
+      year = +semester.school_year.split("-")[0];
+      break;
+    case SemesterNames.SECOND:
+      startMonth = START_MONTH_SS;
+      endMonth = END_MONTH_SS;
+      year = +semester.school_year.split("-")[1];
+      break;
+  }
+  return { startMonth, endMonth, year };
+}
+
+export function checkSemesterStarted(month: number, year: number): boolean {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+  if (currentYear > year) {
+    return true;
+  } else if (currentYear == year) {
+    if (currentMonth >= month) return true;
+  }
+  return false;
 }

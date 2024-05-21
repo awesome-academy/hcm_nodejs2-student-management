@@ -1,25 +1,19 @@
-import { UpdateScheduleDto } from "@src/dto/schedule/update-schedule.dto";
 import { Between, In, Not } from "typeorm";
-import {
-  END_MONTH_FS,
-  END_MONTH_SS,
-  START_MONTH_FS,
-  START_MONTH_SS,
-  SemesterNames,
-} from "../common/constants";
+import { checkSemesterStarted, getSemesterData } from "../common/utils";
 import { AppDataSource } from "../config/typeorm";
 import { CreateScheduleDto } from "../dto/schedule/create-schedule.dto";
 import { DeleteScheduleDto } from "../dto/schedule/delete-schedule.dto";
+import { UpdateScheduleDto } from "../dto/schedule/update-schedule.dto";
+import { Class } from "../entities/class.entity";
 import { ClassSchedule } from "../entities/class_schedule.entity";
 import { PeriodSchedule } from "../entities/period_schedule.entity";
 import { Schedule } from "../entities/schedule.entity";
 import { Semester } from "../entities/semester.entity";
+import * as classService from "./class.service";
 import * as semesterService from "./semester.service";
 import * as subjectService from "./subject.service";
-import * as classService from "./class.service";
 import * as teacherService from "./teacher.service";
 import * as teachingService from "./teaching.service";
-import { Class } from "@src/entities/class.entity";
 
 const scheduleRepository = AppDataSource.getRepository(Schedule);
 const periodScheduleRepository = AppDataSource.getRepository(PeriodSchedule);
@@ -147,7 +141,7 @@ export async function createClassSchedule(
       return schedule;
     });
   }
-  await Promise.all([promises])
+  await Promise.all([promises]);
 }
 
 export async function createSchedule(
@@ -158,27 +152,9 @@ export async function createSchedule(
   };
   const _semester = await semesterService.getSemesterById(semester);
   if (!_semester) return "semester.not_exist";
-  let month, year;
-  switch (_semester.name) {
-    case SemesterNames.FIRST:
-      month = START_MONTH_FS;
-      year = +_semester.school_year.split("-")[0];
-      break;
-    case SemesterNames.SECOND:
-      month = START_MONTH_SS;
-      year = +_semester.school_year.split("-")[1];
-      break;
-    default:
-      return;
-  }
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
-  if (currentYear > year) {
-    return "semester.started";
-  } else if (currentYear == year) {
-    if (currentMonth >= month) return "semester.started";
-  }
+  const { startMonth, year } = getSemesterData(_semester);
+  const isSemesterStarted = checkSemesterStarted(startMonth, year);
+  if (isSemesterStarted) return "semester.started";
   const _subject = await subjectService.getSubjectById(subject);
   if (!_subject) return "subject.not_exist";
   const existingClass = await classService.getClassById(_class);
@@ -248,21 +224,7 @@ export async function updateSchedule(
   };
   const _semester = await semesterService.getSemesterById(semester);
   if (!_semester) return "semester.not_exist";
-  let startMonth, endMonth, year;
-  switch (_semester.name) {
-    case SemesterNames.FIRST:
-      startMonth = START_MONTH_FS;
-      endMonth = END_MONTH_FS;
-      year = +_semester.school_year.split("-")[0];
-      break;
-    case SemesterNames.SECOND:
-      startMonth = START_MONTH_SS;
-      endMonth = END_MONTH_SS;
-      year = +_semester.school_year.split("-")[1];
-      break;
-    default:
-      return;
-  }
+  const { startMonth, endMonth, year } = getSemesterData(_semester);
   let isCurrentSemester = false;
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
@@ -446,27 +408,9 @@ export async function deleteSchedule(
   const existingClass = await classService.getClassById(_class);
   if (!existingClass) return "class.not_exist";
   if (startPeriod > endPeriod) return "period.invalid";
-  let month, year;
-  switch (_semester.name) {
-    case SemesterNames.FIRST:
-      month = START_MONTH_FS;
-      year = +_semester.school_year.split("-")[0];
-      break;
-    case SemesterNames.SECOND:
-      month = START_MONTH_SS;
-      year = +_semester.school_year.split("-")[1];
-      break;
-    default:
-      return;
-  }
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
-  if (currentYear > year) {
-    return "semester.started";
-  } else if (currentYear == year) {
-    if (currentMonth >= month) return "semester.started";
-  }
+  const { startMonth, year } = getSemesterData(_semester);
+  const isSemesterStarted = checkSemesterStarted(startMonth, year);
+  if (isSemesterStarted) return "semester.started";
   const oldSchedules = await scheduleRepository.find({
     where: {
       class_school: existingClass,

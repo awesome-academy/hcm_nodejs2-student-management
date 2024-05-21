@@ -154,6 +154,17 @@ body {
     align-items:flex-start;
     flex: 1;
 }
+.select-header-title {
+    font-weight: bold;
+    font-size: x-large;
+    align-items:flex-start;
+}
+.select-header {
+    flex: 1;
+    display: flex;
+    align-items:center;
+    justify-content: flex-end;
+}
 .header-btn {
     align-items: flex-end;
 }
@@ -204,6 +215,9 @@ body {
 #btn-search {
     margin-top: 8px;
     align-self: flex-end;
+}
+#btn-search-header {
+    align-self: center;
 }
 .empty-list {
     font-size: xx-large;
@@ -282,4 +296,13 @@ body {
 .class-select {
     align-items: flex-end;
     width: 200px;
+}
+.select-group {
+    display: flex;
+    margin-right: 20px;
+    align-items: center;
+}
+.label-input {
+    white-space: nowrap;
+    margin-right: 5px;
 }

@@ -1,5 +1,6 @@
 import * as classStaffController from "../controllers/staff/class.controller";
 import * as classStudentController from "../controllers/student/class.controller";
+import * as classHomeRoomController from "../controllers/teacher/homeroom-class.controller";
 import { Router } from "express";
 import * as authMiddlewares from "../middlewares/auth.middleware";
 const router: Router = Router();
@@ -44,6 +45,14 @@ router.get(
   authMiddlewares.isAuth,
   authMiddlewares.isStudent,
   classStudentController.getStudentClass
+);
+
+// Routes for teacher
+router.get(
+  "/homeroom-class",
+  authMiddlewares.isAuth,
+  authMiddlewares.isTeacher,
+  classHomeRoomController.getHomeRoomClass
 );
 
 export default router;

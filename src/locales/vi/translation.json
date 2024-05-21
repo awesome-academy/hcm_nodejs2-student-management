@@ -24,7 +24,8 @@
   },
   "staff": "Nhân viên giáo vụ",
   "modal": {
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "update": "Cập nhật"
   },
   "grade": {
     "title": "Khối",
@@ -116,7 +117,8 @@
     "delete_toast_msg": "Xóa lớp học thành công",
     "existing_students": "Không thể xóa lớp học do lớp vẫn còn học sinh",
     "my_class": "Lớp học của tôi",
-    "info": "Thông tin lớp học"
+    "info": "Thông tin lớp học",
+    "homeroom": "Lớp chủ nhiệm"
   },
   "classname": {
     "not_empty": "Vui lòng điền tên lớp"
@@ -156,5 +158,17 @@
   },
   "start_period": "Tiết bắt đầu",
   "end_period": "Tiết kết thúc",
-  "semester": "Học kỳ"
+  "semester": "Học kỳ",
+  "class_detail": {
+    "empty": "Chưa có dữ liệu"
+  },
+  "conduct": {
+    "title": "Hạnh kiểm",
+    "weak": "Yếu",
+    "excellent": "Tốt",
+    "good": "Khá",
+    "average": "Trung bình",
+    "update": "Cập nhật hạnh kiểm",
+    "update_toast_msg": "Cập nhật hạnh kiểm thành công"
+  }
 }

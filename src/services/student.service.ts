@@ -5,7 +5,7 @@ import { StudentDto } from "../dto/student/student.dto";
 import { Student } from "../entities/student.entity";
 import * as accountService from "./account.service";
 import * as classService from "./class.service";
-import * as gradeService from "./grade.service"
+import * as gradeService from "./grade.service";
 
 const studentRepository = AppDataSource.getRepository(Student);
 
@@ -26,7 +26,9 @@ export async function getStudents(): Promise<any[]> {
   return allStudents;
 }
 
-export async function getStudentsByIds(studentIds: number[]): Promise<Student[]> {
+export async function getStudentsByIds(
+  studentIds: number[]
+): Promise<Student[]> {
   return await studentRepository.find({
     where: { id: In(studentIds) },
     relations: {
@@ -40,10 +42,16 @@ export async function getStudentsByIds(studentIds: number[]): Promise<Student[]>
   });
 }
 
+export async function getActiveStudents(): Promise<Student[]> {
+  return await studentRepository.find({
+    where: { status: StudentStatus.ACTIVE },
+  });
+}
+
 export async function getStudentById(id: number): Promise<Student | null> {
   return await studentRepository.findOne({
     where: { id },
-    relations: ["class_schools"]
+    relations: ["class_schools"],
   });
 }
 
@@ -51,7 +59,7 @@ export async function createStudent(
   studentDto: StudentDto
 ): Promise<void | string> {
   const { grade } = { ...studentDto };
-  const existingGrade = await gradeService.getGradeById(grade)
+  const existingGrade = await gradeService.getGradeById(grade);
   if (!existingGrade) return "grade.not_exist";
   const _student = studentRepository.create({
     ...studentDto,

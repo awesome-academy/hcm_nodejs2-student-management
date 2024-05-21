@@ -9,6 +9,7 @@ import * as semesterService from "./semester.service";
 import * as studentService from "./student.service";
 import * as teacherService from "./teacher.service";
 import * as teachingService from "./teaching.service";
+import * as conductService from "./conduct.service";
 
 const classRepository = AppDataSource.getRepository(Class);
 
@@ -81,14 +82,17 @@ export async function getClassesByYear(school_year: string): Promise<Class[]> {
 export async function getClassById(id: number): Promise<Class | null> {
   return await classRepository.findOne({
     where: { id },
+    loadRelationIds: { relations: ["teacher"] },
   });
 }
 
 export async function getStudentClasses(studentId: number): Promise<Class[]> {
   const student = await studentService.getStudentById(studentId);
-  if(!student) return [];
-  const classes = student.class_schools.sort((a, b) => (a.school_year > b.school_year ? -1 : 1));
-return classes;
+  if (!student) return [];
+  const classes = student.class_schools.sort((a, b) =>
+    a.school_year > b.school_year ? -1 : 1
+  );
+  return classes;
 }
 
 export async function getClassDetail(id: number): Promise<Class | null> {
@@ -96,6 +100,73 @@ export async function getClassDetail(id: number): Promise<Class | null> {
     where: { id },
     relations: ["teacher", "students", "grade"],
   });
+}
+
+export async function getHomeRoomClassData(
+  classId: number,
+  semesterName: number,
+  userId: number
+): Promise<Class | null> {
+  const classInstance = await classRepository.findOne({
+    where: {
+      id: classId,
+      teacher: {
+        id: userId,
+      },
+    },
+    relations: {
+      students: {
+        conducts: {
+          semester: true,
+        },
+      },
+      grade: true,
+    },
+  });
+
+  if (!classInstance) {
+    return null;
+  }
+  // Filter the conduct records for the specified semester and map them to the students
+  classInstance.students = classInstance.students.map((student) => ({
+    ...student,
+    conducts: student.conducts.filter(
+      (conduct) => conduct.semester.name === semesterName
+    ),
+  }));
+  
+  return classInstance;
+}
+
+export async function getHomeRoomClassByYear(
+  year: number,
+  teacherId: number
+): Promise<Class | null> {
+  const school_year = year + "-" + (year + 1);
+  const _class = classRepository.findOne({
+    where: { teacher: { id: teacherId }, school_year },
+  });
+  return _class;
+}
+
+export async function getHomeRoomSchoolYears(
+  teacherId: number
+): Promise<string[]> {
+  const distinctSchoolYears = await classRepository
+    .createQueryBuilder("class")
+    .select("DISTINCT class.school_year", "school_year")
+    .where("class.teacherId = :teacherId", { teacherId })
+    .getRawMany();
+
+  return distinctSchoolYears.map((record) => record.school_year);
+}
+
+export async function getHomeRoomClasses(teacherId: number): Promise<Class[]> {
+  const classes = classRepository.find({
+    where: { teacher: { id: teacherId } },
+    order: { school_year: "DESC" },
+  });
+  return classes;
 }
 
 export async function isExistingClass(
@@ -182,7 +253,13 @@ export async function addStudentsToClass(
   });
   if (!_class) return "class.not_exist";
   _class.students.push(...students);
-  await classRepository.save(_class);
+  const semesters = await semesterService.getSemestersByYear(
+    _class.school_year
+  );
+  await Promise.all([
+    classRepository.save(_class),
+    conductService.createConducts(students, semesters),
+  ]);
 }
 
 export async function removeStudentsFromClass(
@@ -194,6 +271,16 @@ export async function removeStudentsFromClass(
     relations: ["students"],
   });
   if (!_class) return "class.not_exist";
+  const semesters = await semesterService.getSemestersByYear(
+    _class.school_year
+  );
+  const conducts = await conductService.getConductsByData(
+    studentIds,
+    semesters
+  );
   _class.students = _class.students.filter((s) => !studentIds.includes(s.id));
-  await classRepository.save(_class);
+  await Promise.all([
+    classRepository.save(_class),
+    conductService.deleteConducts(conducts),
+  ]);
 }
