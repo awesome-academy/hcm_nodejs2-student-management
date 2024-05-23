@@ -43,18 +43,18 @@ export const login = asyncHandler(
       switch (true) {
         case user instanceof Staff:
           role = "staff";
-          roleKey = "staff"
-          redirectTarget = "/classes"
+          roleKey = "staff";
+          redirectTarget = "/classes";
           break;
         case user instanceof Teacher:
           role = "teacher.title";
-          roleKey = "teacher"
-          redirectTarget = "/classes/homeroom-class"
+          roleKey = "teacher";
+          redirectTarget = "/classes/homeroom-class";
           break;
         case user instanceof Student:
           role = "student.title";
-          roleKey = "student"
-          redirectTarget = "/classes/my-class"
+          roleKey = "student";
+          redirectTarget = "/classes/my-class";
           break;
         default:
           return;
@@ -63,7 +63,7 @@ export const login = asyncHandler(
         id: user.id,
         name: user.name,
         role,
-        roleKey
+        roleKey,
       };
       const token = jwt.sign(
         { userId: user.id, accountId: user.account.id },

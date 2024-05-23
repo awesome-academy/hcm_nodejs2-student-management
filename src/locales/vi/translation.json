@@ -25,7 +25,8 @@
   "staff": "Nhân viên giáo vụ",
   "modal": {
     "cancel": "Hủy",
-    "update": "Cập nhật"
+    "update": "Cập nhật",
+    "add": "Thêm"
   },
   "grade": {
     "title": "Khối",
@@ -133,7 +134,9 @@
     "update": "Cập nhật học sinh",
     "create_toast_msg": "Thêm học sinh thành công",
     "update_toast_msg": "Cập nhật học sinh thành công",
-    "delete_toast_msg": "Xóa học sinh thành công"
+    "delete_toast_msg": "Xóa học sinh thành công",
+    "available_text": "Danh sách học sinh chưa có lớp:",
+    "remove_warning": "Bạn có chắc muốn xóa những học sinh đã chọn ra khỏi lớp?"
   },
   "select_all": "Tất cả",
   "schedule": {

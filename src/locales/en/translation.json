@@ -25,7 +25,8 @@
   "staff": "Staff",
   "modal": {
     "cancel": "Cancel",
-    "update": "Update"
+    "update": "Update",
+    "add": "Add"
   },
   "grade": {
     "title": "Grade",
@@ -133,7 +134,9 @@
     "update": "Update student",
     "create_toast_msg": "Create student successfully",
     "update_toast_msg": "Update student successfully",
-    "delete_toast_msg": "Delete student successfully"
+    "delete_toast_msg": "Delete student successfully",
+    "available_text": "Available students:",
+    "remove_warning": "Are you sure to remove selected students from this class?"
   },
   "select_all": "All",
   "schedule": {

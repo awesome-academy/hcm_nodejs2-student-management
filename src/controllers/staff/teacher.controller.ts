@@ -67,7 +67,7 @@ export const getAvailableTeachers = async (
   const teacherQueryDto = refineQueryDto(data);
   const _errors = await validate(teacherQueryDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   const teachers = await teacherService.getAvailableTeachers(teacherQueryDto);
   return res.json(teachers);
@@ -82,7 +82,7 @@ export const checkAvailableTeacher = async (
   const teacherCheckQueryDto = refineCheckQueryDto(data);
   const _errors = await validate(teacherCheckQueryDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   const isAvailable = await teacherService.checkAvailableTeacher(
     teacherCheckQueryDto
@@ -103,7 +103,7 @@ export const createTeacher = [
     const createTeacherDto = refineDto(data);
     const _errors = await validate(createTeacherDto);
     if (_errors.length > 0) {
-      return res.json({ errors: handleError(_errors, req, res) });
+      return res.json({ errors: handleError(_errors, req) });
     }
     if (await isExistingEmail(data.email)) {
       return res.json({ errors: { email: [req.t("email_existing")] } });
@@ -127,7 +127,7 @@ export const updateTeacher = [
     const _errors = await validate(updateTeacherDto);
     const id = parseInt(req.params.id);
     if (_errors.length > 0) {
-      return res.json({ errors: handleError(_errors, req, res) });
+      return res.json({ errors: handleError(_errors, req) });
     }
     if (await isExistingEmail(data.email, id)) {
       return res.json({ errors: { email: [req.t("email_existing")] } });

@@ -5,12 +5,46 @@ import { Router } from "express";
 import * as authMiddlewares from "../middlewares/auth.middleware";
 const router: Router = Router();
 
+// Routes for student
+router.get(
+  "/my-class",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStudent,
+  classStudentController.getStudentClass
+);
+
+// Routes for teacher
+router.get(
+  "/homeroom-class",
+  authMiddlewares.isAuth,
+  authMiddlewares.isTeacher,
+  classHomeRoomController.getHomeRoomClass
+);
+
 // Routes for staff
 router.get(
   "/",
   authMiddlewares.isAuth,
   authMiddlewares.isStaff,
   classStaffController.getClasses
+);
+router.get(
+  "/:id",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  classStaffController.getClassDetail
+);
+router.post(
+  "/:id/add-student",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  classStaffController.addStudentToClass
+);
+router.post(
+  "/:id/remove-student",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  classStaffController.removeStudentFromClass
 );
 router.post(
   "/",
@@ -37,22 +71,6 @@ router.post(
   authMiddlewares.isAuth,
   authMiddlewares.isStaff,
   classStaffController.deleteClass
-);
-
-// Routes for student
-router.get(
-  "/my-class",
-  authMiddlewares.isAuth,
-  authMiddlewares.isStudent,
-  classStudentController.getStudentClass
-);
-
-// Routes for teacher
-router.get(
-  "/homeroom-class",
-  authMiddlewares.isAuth,
-  authMiddlewares.isTeacher,
-  classHomeRoomController.getHomeRoomClass
 );
 
 export default router;

@@ -134,7 +134,7 @@ export async function getHomeRoomClassData(
       (conduct) => conduct.semester.name === semesterName
     ),
   }));
-  
+
   return classInstance;
 }
 
@@ -274,9 +274,10 @@ export async function removeStudentsFromClass(
   const semesters = await semesterService.getSemestersByYear(
     _class.school_year
   );
+  const semesterIds = semesters.map((s) => s.id);
   const conducts = await conductService.getConductsByData(
     studentIds,
-    semesters
+    semesterIds
   );
   _class.students = _class.students.filter((s) => !studentIds.includes(s.id));
   await Promise.all([

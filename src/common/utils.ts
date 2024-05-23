@@ -48,7 +48,7 @@ export function getSuccessMessage(
   }
 }
 
-export function handleError(_errors: any[], req: Request, res: Response) {
+export function handleError(_errors: any[], req: Request) {
   let errors: any = {};
   _errors.map((error) => {
     errors[error.property] = Object.values(error.constraints!).map(

@@ -36,6 +36,19 @@ export const getStudents = asyncHandler(
   }
 );
 
+export const getAvailableStudents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const grade = req.query.grade;
+  const gradeId = grade ? parseInt(grade.toString()) : undefined;
+  const students = gradeId
+    ? await studentService.getAvailableStudents(gradeId)
+    : [];
+  return res.json(students);
+};
+
 export const createStudent = async (
   req: Request,
   res: Response,
@@ -45,10 +58,10 @@ export const createStudent = async (
   const createStudentDto = refineDto(data);
   const _errors = await validate(createStudentDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   if (await isExistingEmail(data.email)) {
-    return res.json({ errors : { email: [req.t("email_existing")] }});
+    return res.json({ errors: { email: [req.t("email_existing")] } });
   }
   const createResult = await studentService.createStudent(createStudentDto);
   if (typeof createResult === "string") {
@@ -67,7 +80,7 @@ export const updateStudent = async (
   const _errors = await validate(updateStudentDto);
   const id = parseInt(req.params.id);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   if (await isExistingEmail(data.email, id)) {
     return res.json({ errors: { email: [req.t("email_existing")] } });
