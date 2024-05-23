@@ -2,6 +2,7 @@ import { CustomSessionData } from "../../interfaces/session.interface";
 import * as gradeService from "../../services/grade.service";
 import * as teacherService from "../../services/teacher.service";
 import * as classService from "../../services/class.service";
+import * as studentService from "../../services/student.service";
 import * as semesterService from "../../services/semester.service";
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
@@ -25,6 +26,18 @@ const refineDto = (data: any) => {
   classDto.teacher = +data.teacher;
   classDto.grade = +data.grade;
   return classDto;
+};
+
+const validateIds = async (
+  req: Request
+): Promise<string | [number, number[]]> => {
+  const classId = +req.params.id;
+  const students = req.body.students;
+  const studentIds = students.map(Number);
+  if (studentIds.includes(NaN)) return "class.student_invalid";
+  const nonExistIds = await studentService.isNonExistIds(studentIds);
+  if (nonExistIds) return "class.student_not_exist";
+  return [classId, studentIds];
 };
 
 export const getClasses = asyncHandler(
@@ -75,6 +88,66 @@ export const getClassesByGrade = async (
   return res.json(classes);
 };
 
+export const getClassDetail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { source } = req.query;
+  const _source = source?.toString() || "";
+  const msg = getSuccessMessage(_source, "student");
+  const success_msg = msg.length > 0 ? req.t(msg) : undefined;
+  const id = +req.params.id;
+  const classDetail = id ? await classService.getClassDetail(id) : undefined;
+  return res.render("class/class-detail", {
+    user: (req.session as CustomSessionData).user,
+    classDetail,
+    success_msg,
+  });
+};
+
+export const addStudentToClass = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const validateResult = await validateIds(req);
+  if (typeof validateResult === "string") {
+    return res.json({ errors: { student: validateResult } });
+  } else {
+    const classId = validateResult[0];
+    const studentIds = validateResult[1];
+    const createResult = classId
+      ? await classService.addStudentsToClass(studentIds, classId)
+      : "class.invalid";
+    if (typeof createResult === "string") {
+      return res.json({ errors: { student: createResult } });
+    }
+    return res.redirect(`/classes/${classId}`);
+  }
+};
+
+export const removeStudentFromClass = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const validateResult = await validateIds(req);
+  if (typeof validateResult === "string") {
+    return res.json({ errors: { student: validateResult } });
+  } else {
+    const classId = validateResult[0];
+    const studentIds = validateResult[1];
+    const deleteResult = classId
+      ? await classService.removeStudentsFromClass(studentIds, classId)
+      : "class.invalid";
+    if (typeof deleteResult === "string") {
+      return res.json({ errors: { student: deleteResult } });
+    }
+    return res.redirect(`/classes/${classId}`);
+  }
+};
+
 export const createClass = async (
   req: Request,
   res: Response,
@@ -84,7 +157,7 @@ export const createClass = async (
   const createClassDto = refineDto(data);
   const _errors = await validate(createClassDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   if (await classService.isExistingClass(createClassDto)) {
     return res.json({ errors: { name: [req.t("class.existing")] } });
@@ -104,9 +177,9 @@ export const updateClass = async (
   const data = { ...req.body };
   const updateClassDto = refineDto(data);
   const _errors = await validate(updateClassDto);
-  const id = parseInt(req.params.id);
+  const id = +req.params.id;
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   if (await classService.isExistingClass(updateClassDto, id)) {
     return res.json({ errors: { name: [req.t("class.existing")] } });
@@ -123,8 +196,8 @@ export const deleteClass = async (
   res: Response,
   next: NextFunction
 ) => {
-  const id = req.params.id;
-  const deleteResult = await classService.deleteClass(+id);
+  const id = +req.params.id;
+  const deleteResult = await classService.deleteClass(id);
   if (typeof deleteResult === "string") {
     const errors = [{ msg: req.t(deleteResult) }];
     const [grades, teachers, classes, school_years] = await Promise.all([

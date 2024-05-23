@@ -99,7 +99,7 @@ export const createSchedule = async (
   const scheduleDto = refineCreateDto(data);
   const _errors = await validate(scheduleDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   const createResult = await scheduleService.createSchedule(scheduleDto);
   if (typeof createResult === "string") {
@@ -118,7 +118,7 @@ export const updateSchedule = async (
   scheduleDto;
   const _errors = await validate(scheduleDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   const updateResult = await scheduleService.updateSchedule(scheduleDto);
   if (typeof updateResult === "string") {
@@ -136,7 +136,7 @@ export const deleteSchedule = async (
   const scheduleDto = refineDeleteDto(data);
   const _errors = await validate(scheduleDto);
   if (_errors.length > 0) {
-    return res.json({ errors: handleError(_errors, req, res) });
+    return res.json({ errors: handleError(_errors, req) });
   }
   const deleteResult = await scheduleService.deleteSchedule(scheduleDto);
   if (typeof deleteResult === "string") {

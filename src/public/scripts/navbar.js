@@ -2,7 +2,7 @@ $(document).ready(function () {
   const currentPath = window.location.pathname;
   $(".nav-link").each(function () {
     const href = $(this).attr("href");
-    if (href === currentPath) {
+    if (currentPath.startsWith(href)) {
       $(this).removeClass("link-dark");
       $(this)
         .closest("li")

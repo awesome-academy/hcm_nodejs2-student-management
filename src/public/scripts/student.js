@@ -36,7 +36,7 @@ $(document).ready(function () {
       dobInput.val(data.date_of_birth);
       statusInput.val(data.status);
       statusInput.prop("disabled", false);
-      gradeInput.val(data.grade);
+      gradeInput.val(data.gradeId);
       gradeInput.prop("disabled", true);
     }
   });

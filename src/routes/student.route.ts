@@ -11,6 +11,12 @@ router.get(
   authMiddlewares.isStaff,
   staffStudentController.getStudents
 );
+router.get(
+  "/available-students",
+  authMiddlewares.isAuth,
+  authMiddlewares.isStaff,
+  staffStudentController.getAvailableStudents
+);
 router.post(
   "/",
   authMiddlewares.isAuth,

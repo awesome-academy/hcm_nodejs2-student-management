@@ -237,7 +237,7 @@
                   </thead>
                   <tbody>
                     <% classes.forEach(function(_class) { %>
-                    <tr>
+                    <tr class="class-row" data-class-id="<%= _class.id %>">
                       <td><%= _class.name %></td>
                       <td><%= _class.grade.name %></td>
                       <td><%= _class.school_year %></td>

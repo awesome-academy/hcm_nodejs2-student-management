@@ -41,6 +41,11 @@ $(document).ready(function () {
     teacherInput.find("option[data-added-option]").remove();
   });
 
+  $(".class-row").on("click", function () {
+    const classId = $(this).data("class-id");
+    window.location.href = `/classes/${classId}`;
+  });
+
   clearError = () => {
     const errorLists = $(".error-list");
     for (let errorList of errorLists) {
@@ -58,7 +63,7 @@ $(document).ready(function () {
     const grade = $("#grade").val();
     const teacher = $("#teacher").val();
     const status = $("#status").val();
-    const school_year = $('#school_year').val();
+    const school_year = $("#school_year").val();
     const body = {};
     body.name = name;
     body.grade = grade;

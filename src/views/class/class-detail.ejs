@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('class.info') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('class.info') %></span>
+              <button
+                type="button"
+                class="btn btn-danger header-btn d-none"
+                id="delete-student"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+              >
+                <%= t('student.delete') %>
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary header-btn"
+                name="addStudent"
+                data-bs-toggle="modal"
+                data-bs-target="#studentModal"
+              >
+                <%= t('student.add') %>
+              </button>
+              <div
+                class="modal fade"
+                id="deleteModal"
+                tabindex="-1"
+                aria-labelledby="deleteModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="deleteModalLabel">
+                        <%= t('student.delete') %>
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <%= t('student.remove_warning') %>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        id="deleteBtn"
+                        class="btn btn-danger"
+                      >
+                        <%= t('student.delete') %>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="modal fade"
+                id="studentModal"
+                data-class-id="<%= classDetail ? classDetail.id : '' %>"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5"><%= t('student.add') %></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body form-container">
+                      <span
+                        ><strong
+                          ><%= t('student.available_text') %></strong
+                        ></span
+                      >
+                      <div id="student-list" class="d-none">
+                        <table class="table list-content">
+                          <thead class="table-info">
+                            <tr>
+                              <th scope="col"></th>
+                              <th scope="col"><%= t('name') %></th>
+                              <th scope="col"><%= t('phone') %></th>
+                              <th scope="col"><%= t('email') %></th>
+                            </tr>
+                          </thead>
+                          <tbody id="table-body"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="submitBtn"
+                      >
+                        <%= t('modal.add') %>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% if (classDetail) { %>
+            <div class="filter-container">
+              <div class="filter-row">
+                <div>
+                  <label
+                    ><strong><%= t('class.name') %>:</strong> <%=
+                    classDetail.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('grade.title') %>:</strong> <%=
+                    classDetail.grade.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('school_year') %>:</strong> <%=
+                    classDetail.school_year %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('class.number') %>:</strong> <%=
+                    classDetail.students.length %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('teacher.homeroom') %>:</strong> <%=
+                    classDetail.teacher.name %></label
+                  >
+                </div>
+              </div>
+            </div>
+            <% } %>
+            <div
+              class="content"
+              id="content"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              data-class-detail="<%= typeof classDetail !== 'undefined' ? JSON.stringify(classDetail) : '' %>"
+            >
+              <% if (classDetail && classDetail.students.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table list-content">
+                  <thead class="table-info">
+                    <tr>
+                      <th>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="check-all"
+                        />
+                      </th>
+                      <th scope="col"><%= t('name') %></th>
+                      <th scope="col"><%= t('gender.title') %></th>
+                      <th scope="col"><%= t('dob') %></th>
+                      <th scope="col"><%= t('address') %></th>
+                      <th scope="col"><%= t('phone') %></th>
+                      <th scope="col"><%= t('email') %></th>
+                      <th scope="col"><%= t('status.title') %></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% classDetail.students.forEach(function(student) { %>
+                    <tr>
+                      <td>
+                        <input
+                          class="form-check-input student-check"
+                          type="checkbox"
+                          value="<%= student.id %>"
+                          name="students-to-delete"
+                        />
+                      </td>
+                      <td><%= student.name %></td>
+                      <td>
+                        <% if (student.gender === 1) { %> <%= t('gender.male')
+                        %> <% } else if (student.gender === 2) { %> <%=
+                        t('gender.female') %> <% } else { %> <%=
+                        t('gender.other') %> <% } %>
+                      </td>
+                      <td><%= student.date_of_birth %></td>
+                      <td><%= student.address %></td>
+                      <td><%= student.phone %></td>
+                      <td><%= student.email %></td>
+                      <% if (student.status === 1) { %>
+                      <td><%= t('class.status.active') %></td>
+                      <% } else { %>
+                      <td><%= t('class.status.non_active') %></td>
+                      <% } %>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('class_detail.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/class/class-detail.js"></script>
+  </body>
+</html>

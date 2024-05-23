@@ -37,7 +37,10 @@ export const getHomeRoomClass = asyncHandler(
       }
     }
     const school_year = _year + "-" + (_year + 1);
-    const _semester = await semesterService.getSemesterByData(semesterName, school_year);
+    const _semester = await semesterService.getSemesterByData(
+      semesterName,
+      school_year
+    );
     return res.render("class/homeroom-class", {
       user,
       semester: semesterName,
@@ -45,7 +48,7 @@ export const getHomeRoomClass = asyncHandler(
       year: _year,
       school_years,
       classDetail,
-      success_msg
+      success_msg,
     });
   }
 );

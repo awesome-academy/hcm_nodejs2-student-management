@@ -32,7 +32,7 @@ export async function createConducts(
 
 export async function getConductsByData(
   studentIds: number[],
-  semesters: Semester[]
+  semesters: number[]
 ): Promise<Conduct[]> {
   return await conductRepository.find({
     where: {
