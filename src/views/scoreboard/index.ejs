@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('scoreboard.title') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('scoreboard.title') %></span>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('class.info') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div>
+                  <label
+                    ><strong><%= t('class.name') %>:</strong> <%=
+                    scoreboard.class_school.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('grade.title') %>:</strong> <%=
+                    scoreboard.class_school.grade.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('school_year') %>:</strong> <%=
+                    scoreboard.class_school.school_year %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('semester') %>:</strong> <%=
+                    scoreboard.semester.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('subject.title') %>:</strong> <%=
+                    scoreboard.subject.name %></label
+                  >
+                </div>
+                <div>
+                  <label
+                    ><strong><%= t('class.number') %>:</strong> <%=
+                    scoreboard.student_scores.length %></label
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="content"
+              id="content"
+              data-success-msg="<%= typeof success_msg !== 'undefined' ? success_msg : '' %>"
+              data-scoreboard="<%= typeof scoreboard !== 'undefined' ? JSON.stringify(scoreboard) : '' %>"
+            >
+              <div
+                class="modal fade"
+                id="scoreModal"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="modalTitle"></h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body form-container">
+                      <div class="form-row">
+                        <div class="form-group form-row-item">
+                          <strong><%= t('student.title') %>:</strong>
+                          <span id="student-name"></span>
+                        </div>
+                      </div>
+                      <input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.25"
+                        class="form-control name-input"
+                        placeholder="<%= t('scoreboard.score_ph') %>"
+                        id="score-input"
+                      />
+                      <ul class="error-list" id="error-score"></ul>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <%= t('modal.cancel') %>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="submitBtn"
+                      >
+                        <%= t('scoreboard.update') %>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% if (scoreboard.student_scores.length > 0) { %>
+              <p id="note"><%= t('scoreboard.instruction') %></p>
+              <div class="table-responsive">
+                <table class="table list-content table-bordered text-center">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('name') %></th>
+                      <th scope="col" colspan="10"><%= t('score.test') %></th>
+                      <th scope="col"><%= t('score.midterm') %></th>
+                      <th scope="col"><%= t('score.final') %></th>
+                      <th scope="col"><%= t('score.average') %></th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="scoreboard"
+                    data-test-title="<%= t('scoreboard.test_title') %>"
+                    data-midterm-title="<%= t('scoreboard.midterm_title') %>"
+                    data-final-title="<%= t('scoreboard.final_title') %>"
+                  ></tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('scoreboard.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/scoreboard/scoreboard.js"></script>
+  </body>
+</html>

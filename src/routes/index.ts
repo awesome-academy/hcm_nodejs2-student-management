@@ -6,6 +6,7 @@ import scheduleRoute from "./schedule.route";
 import studentRoute from "./student.route";
 import subjectRoute from "./subject.route";
 import teacherRoute from "./teacher.route";
+import scoreRoute from "./score.route";
 const router: Router = Router();
 
 router.use("/auth", authRoute);
@@ -15,5 +16,6 @@ router.use("/schedules", scheduleRoute);
 router.use("/students", studentRoute);
 router.use("/subjects", subjectRoute);
 router.use("/teachers", teacherRoute);
+router.use("/scores", scoreRoute);
 
 export default router;

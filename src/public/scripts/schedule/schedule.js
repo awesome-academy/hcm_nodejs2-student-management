@@ -348,12 +348,14 @@ $(document).ready(function () {
           (currentYear === year && currentMonth < startMonth)
         ) {
           modalTarget = "#scheduleModal";
+          $("#note").removeClass("d-none")
         } else if (
           currentYear === year &&
           currentMonth <= endMonth &&
           schedule
         ) {
           modalTarget = "#scheduleModal";
+          $("#note").removeClass("d-none")
         }
         if (
           preTd &&

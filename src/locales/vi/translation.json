@@ -119,7 +119,8 @@
     "existing_students": "Không thể xóa lớp học do lớp vẫn còn học sinh",
     "my_class": "Lớp học của tôi",
     "info": "Thông tin lớp học",
-    "homeroom": "Lớp chủ nhiệm"
+    "homeroom": "Lớp chủ nhiệm",
+    "teaching": "Các lớp giảng dạy"
   },
   "classname": {
     "not_empty": "Vui lòng điền tên lớp"
@@ -173,5 +174,23 @@
     "average": "Trung bình",
     "update": "Cập nhật hạnh kiểm",
     "update_toast_msg": "Cập nhật hạnh kiểm thành công"
+  },
+  "teaching": "Giảng dạy",
+  "score": {
+    "test": "Điểm kiểm tra thường xuyên",
+    "midterm": "Điểm giữa kì",
+    "final": "Điểm cuối kì",
+    "average": "Điểm trung bình",
+    "invalid_value": "Điểm số phải nằm trong khoảng từ 0 tới 10 điểm",
+    "invalid_time": "Chỉ được phép cập nhật điểm khi học kì đang diễn ra"
+  },
+  "scoreboard": {
+    "title": "Bảng điểm môn học",
+    "instruction": "(*) Nhấn vào ô trên bảng điểm để nhập điểm",
+    "test_title": "Cập nhật điểm kiểm tra thường xuyên",
+    "midterm_title": "Cập nhật điểm thi giữa kì",
+    "final_title": "Cập nhật điểm thi cuối kì",
+    "score_ph": "Nhập điểm",
+    "update": "Cập nhật điểm"
   }
 }

@@ -4,6 +4,7 @@ import { getSuccessMessage, refineSemester } from "../../common/utils";
 import { CustomSessionData } from "../../interfaces/session.interface";
 import * as classService from "../../services/class.service";
 import * as semesterService from "../../services/semester.service";
+import * as teachingService from "../../services/teaching.service";
 
 export const getHomeRoomClass = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,6 +50,30 @@ export const getHomeRoomClass = asyncHandler(
       school_years,
       classDetail,
       success_msg,
+    });
+  }
+);
+
+export const getTeachingClasses = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { year, semester } = req.query;
+    const user = (req.session as CustomSessionData).user;
+    const userId = user?.id!;
+    let semesterName = refineSemester(semester);
+    let _year = year ? parseInt(year.toString()) : undefined;
+    const school_years = await teachingService.getTeachingYears(userId);
+    if (!_year) {
+      _year = +school_years[0].split("-")[0];
+    }
+    const teachings = await teachingService.getTeachingsByData(
+      _year,
+      semesterName,
+      userId
+    );
+    return res.render("class/teaching-classes", {
+      user,
+      years: school_years,
+      teachings,
     });
   }
 );

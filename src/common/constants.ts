@@ -94,3 +94,6 @@ export const START_MONTH_FS = 9;
 export const END_MONTH_FS = 12;
 export const START_MONTH_SS = 1;
 export const END_MONTH_SS = 5;
+
+export const MIN_SCORE = 0;
+export const MAX_SCORE = 10;
