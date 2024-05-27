@@ -119,7 +119,8 @@
     "existing_students": "Can not delete class because existing students",
     "my_class": "My class",
     "info": "Class information",
-    "homeroom": "Homeroom class"
+    "homeroom": "Homeroom class",
+    "teaching": "Teaching classes"
   },
   "school_year": "School year",
   "classname": {
@@ -173,5 +174,23 @@
     "average": "Average",
     "update": "Update conduct",
     "update_toast_msg": "Update conduct successfully"
+  },
+  "teaching": "Teaching",
+  "score": {
+    "test": "Test score",
+    "midterm": "Midterm score",
+    "final": "Final score",
+    "average": "Average score",
+    "invalid_value": "Score must be >= 0 and <= 10",
+    "invalid_time": "Score can be updated only in semester"
+  },
+  "scoreboard": {
+    "title": "Score board",
+    "instruction": "(*) Click to a table cell to update score",
+    "test_title": "Update test score",
+    "midterm_title": "Update midterm score",
+    "final_title": "Update final score",
+    "score_ph": "Enter score",
+    "update": "Update score"
   }
 }

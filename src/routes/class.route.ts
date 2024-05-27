@@ -1,6 +1,7 @@
 import * as classStaffController from "../controllers/staff/class.controller";
 import * as classStudentController from "../controllers/student/class.controller";
-import * as classHomeRoomController from "../controllers/teacher/homeroom-class.controller";
+import * as classHomeRoomController from "../controllers/teacher/class.controller";
+import * as scoreController from "../controllers/teacher/scoreboard.controller";
 import { Router } from "express";
 import * as authMiddlewares from "../middlewares/auth.middleware";
 const router: Router = Router();
@@ -19,6 +20,18 @@ router.get(
   authMiddlewares.isAuth,
   authMiddlewares.isTeacher,
   classHomeRoomController.getHomeRoomClass
+);
+router.get(
+  "/teachings",
+  authMiddlewares.isAuth,
+  authMiddlewares.isTeacher,
+  classHomeRoomController.getTeachingClasses
+);
+router.get(
+  "/teachings/:id",
+  authMiddlewares.isAuth,
+  authMiddlewares.isTeacher,
+  scoreController.getScoreboard
 );
 
 // Routes for staff

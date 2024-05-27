@@ -18,7 +18,7 @@
           <%- include('../layout/header'); -%>
           <div class="content-container">
             <div class="header-container">
-              <span class="header-title"><%= t('schedule.title') %></span>
+              <span class="header-title"><%= t('class.teaching') %></span>
             </div>
             <div class="filter-container">
               <div>
@@ -50,48 +50,34 @@
             <div
               class="content"
               data-years="<%= typeof years !== 'undefined' ? JSON.stringify(years) : '' %>"
-              data-schedule="<%= typeof schedule !== 'undefined' ? JSON.stringify(schedule) : '' %>"
               id="content"
             >
-              <% if (typeof schedule !== 'undefined') { %>
+              <% if (teachings && teachings.length > 0) { %>
               <div class="table-responsive">
-                <table
-                  id="scheduleTable"
-                  class="table table-bordered text-center schedule-table"
-                  data-class-title="<%= t('class.title') %>"
-                >
-                  <thead>
+                <table class="table list-content">
+                  <thead class="table-info">
                     <tr>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.note') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.monday') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.tuesday') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.wednesday') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.thursday') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.friday') %>
-                      </th>
-                      <th scope="col" class="col-1">
-                        <%= t('schedule.saturday') %>
-                      </th>
+                      <th scope="col"><%= t('class.name') %></th>
+                      <th scope="col"><%= t('grade.title') %></th>
+                      <th scope="col"><%= t('teacher.homeroom') %></th>
+                      <th scope="col"><%= t('subject.title') %></th>
                     </tr>
                   </thead>
-                  <tbody id="scheduleBody"></tbody>
+                  <tbody>
+                    <% teachings.forEach(function(teaching) { %>
+                    <tr class="class-row" data-teaching-id="<%= teaching.id %>">
+                      <td><%= teaching.class_school.name %></td>
+                      <td><%= teaching.class_school.grade.name %></td>
+                      <td><%= teaching.class_school.teacher.name %></td>
+                      <td><%= teaching.subject.name %></td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
                 </table>
               </div>
-
               <% } else { %>
               <div class="empty-list">
-                <span><%= t('schedule.empty') %></span>
+                <span><%= t('class.empty') %></span>
               </div>
               <% } %>
             </div>
@@ -99,6 +85,6 @@
         </div>
       </div>
     </main>
-    <script src="/scripts/schedule/teacher-schedule.js"></script>
+    <script src="/scripts/schedule/teaching-classes.js"></script>
   </body>
 </html>

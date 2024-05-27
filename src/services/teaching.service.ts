@@ -4,6 +4,9 @@ import { AppDataSource } from "../config/typeorm";
 import { Subject } from "../entities/subject.entity";
 import { Class } from "../entities/class.entity";
 import { Semester } from "../entities/semester.entity";
+import * as semesterService from "./semester.service";
+import * as scoreService from "./score.service";
+import { Not } from "typeorm";
 
 const teachingRepository = AppDataSource.getRepository(Teaching);
 
@@ -12,6 +15,36 @@ export async function getTeachingByTeacher(
 ): Promise<Teaching | null> {
   return await teachingRepository.findOne({
     where: { teacher },
+  });
+}
+
+export async function getTeachingById(id: number): Promise<Teaching | null> {
+  return await teachingRepository.findOne({
+    where: { id },
+    loadRelationIds: { relations: ["teacher"] },
+  });
+}
+
+export async function getTeachingsByData(
+  year: number,
+  semester: number,
+  teacherId: number
+): Promise<Teaching[]> {
+  const school_year = year + "-" + (year + 1);
+  const _semester = await semesterService.getSemesterByData(
+    semester,
+    school_year
+  );
+  if (!_semester) return [];
+  return await teachingRepository.find({
+    where: { teacher: { id: teacherId }, semester: _semester },
+    relations: {
+      class_school: {
+        grade: true,
+        teacher: true,
+      },
+      subject: true,
+    },
   });
 }
 
@@ -86,11 +119,26 @@ export async function createTeaching(
       class_school,
       semester,
     });
+    await scoreService.createClassScore(class_school, subject, semester);
     return await teachingRepository.save(_teaching);
   }
   return existingTeaching;
 }
 
 export async function deleteTeaching(teaching: Teaching): Promise<void> {
-  await teachingRepository.remove(teaching);
+  const { subject, class_school, semester, id } = { ...teaching };
+  const existingTeaching = await teachingRepository.findOne({
+    where: {
+      subject,
+      class_school,
+      semester,
+      id: Not(id),
+    },
+  });
+  if (existingTeaching) await teachingRepository.remove(teaching);
+  else
+    await Promise.all([
+      teachingRepository.remove(teaching),
+      scoreService.deleteClassScore(class_school, subject, semester),
+    ]);
 }

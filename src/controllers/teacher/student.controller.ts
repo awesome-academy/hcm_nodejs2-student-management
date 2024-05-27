@@ -23,7 +23,6 @@ export const updateConductStudent = async (
   const updateConductDto = refineDto(data);
   const _errors = await validate(updateConductDto);
   const id = parseInt(req.params.id);
-
   if (_errors.length > 0) {
     return res.json({ errors: handleError(_errors, req) });
   }
