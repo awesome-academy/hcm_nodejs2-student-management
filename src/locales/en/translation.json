@@ -182,7 +182,9 @@
     "final": "Final score",
     "average": "Average score",
     "invalid_value": "Score must be >= 0 and <= 10",
-    "invalid_time": "Score can be updated only in semester"
+    "invalid_time": "Score can be updated only in semester",
+    "create_toast_msg": "Create score successfully",
+    "update_toast_msg": "Update score successfully"
   },
   "scoreboard": {
     "title": "Score board",
@@ -191,6 +193,40 @@
     "midterm_title": "Update midterm score",
     "final_title": "Update final score",
     "score_ph": "Enter score",
-    "update": "Update score"
+    "update": "Update score",
+    "note": "(*) Overall result is only determined when all subjects have an average score"
+  },
+  "overall": {
+    "title": "Overall",
+    "weak": "Weak",
+    "excellent": "Excellent",
+    "good": "Good",
+    "average": "Average"
+  },
+  "regulation": "Regulation",
+  "regulation_note": "Student classification results are based on the following regulations:",
+  "classify": {
+    "excellent": {
+      "title": "Excellent student",
+      "average": "Average score of all subjects >= 8.0",
+      "below": "No subject average score < 6.5",
+      "conduct": "Conduct rated as excellent"
+    },
+    "good": {
+      "title": "Good student",
+      "average": "Average score of all subjects >= 6.5",
+      "below": "No subject average score < 5.0",
+      "conduct": "Conduct rated as fairly good or better"
+    },
+    "average": {
+      "title": "Average student",
+      "average": "Average score of all subjects >= 5.0",
+      "below": "No subject average score < 3.5",
+      "conduct": "Conduct rated as average or better"
+    },
+    "weak": {
+      "title": "Weak Student",
+      "note": "Does not fall under any of the above student categories"
+    }
   }
 }

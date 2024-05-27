@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= t('scoreboard.title') %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/bootstrap.bundle.min.js"></script>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="layout-container">
+        <%- include('../layout/navbar'); -%>
+        <div class="parent-content-container">
+          <%- include('../layout/header'); -%>
+          <div class="content-container">
+            <div class="header-container">
+              <span class="header-title"><%= t('scoreboard.title') %></span>
+            </div>
+            <div class="filter-container">
+              <div>
+                <h4><strong><%= t('filter') %></strong></h4>
+              </div>
+              <div class="filter-row">
+                <div class="form-row-item">
+                  <label for="_class"><%= t('class.title') %></label>
+                  <select class="form-control" id="_class">
+                    <% classes.forEach(function(_class) { %>
+                    <option value="<%= _class.id %>"><%= _class.name %></option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-row-item">
+                  <label for="semester"><%= t('semester') %></label>
+                  <select class="form-control" id="semester">
+                    <option value="1"><%= t('semester') %>&nbsp1</option>
+                    <option value="2"><%= t('semester') %>&nbsp2</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-search">
+                <%= t('search') %>
+              </button>
+            </div>
+            <div
+              class="content"
+              id="content"
+              data-classes="<%= typeof classes !== 'undefined' ? JSON.stringify(classes) : '' %>"
+              data-conduct="<%= typeof conduct !== 'undefined' ? JSON.stringify(conduct) : '' %>"
+              data-scoreboard="<%= typeof scoreboard !== 'undefined' ? JSON.stringify(scoreboard) : '' %>"
+              data-average-title="<%= t('score.average') %>"
+              data-conduct-title="<%= t('conduct.title') %>"
+              data-overall-title="<%= t('overall.title') %>"
+              data-conduct-excellent="<%= t('conduct.excellent') %>"
+              data-conduct-good="<%= t('conduct.good') %>"
+              data-conduct-average="<%= t('conduct.average') %>"
+              data-conduct-weak="<%= t('conduct.weak') %>"
+              data-overall-excellent="<%= t('overall.excellent') %>"
+              data-overall-good="<%= t('overall.good') %>"
+              data-overall-average="<%= t('overall.average') %>"
+              data-overall-weak="<%= t('overall.weak') %>"
+            >
+              <% if (conduct || scoreboard) { %>
+              <div class="note-container">
+                <button
+                  type="button"
+                  class="btn btn-info info-button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#regulationModal"
+                >
+                  <%= t('regulation') %>
+                </button>
+                <div
+                  class="modal fade"
+                  id="regulationModal"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          <%= t('regulation') %>
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>
+                          <strong><%= t('regulation_note') %>:</strong>
+                        </p>
+                        <p>
+                          <strong><%= t('classify.excellent.title') %>:</strong>
+                          <ul>
+                            <li><%= t('classify.excellent.average') %></li>
+                            <li><%= t('classify.excellent.below') %></li>
+                            <li><%= t('classify.excellent.conduct') %></li>
+                          </ul>
+                        </p>
+                        <p>
+                          <strong><%= t('classify.good.title') %>:</strong>
+                          <ul>
+                            <li><%= t('classify.good.average') %></li>
+                            <li><%= t('classify.good.below') %></li>
+                            <li><%= t('classify.good.conduct') %></li>
+                          </ul>
+                        </p>
+                        <p>
+                          <strong><%= t('classify.average.title') %>:</strong>
+                          <ul>
+                            <li><%= t('classify.average.average') %></li>
+                            <li><%= t('classify.average.below') %></li>
+                            <li><%= t('classify.average.conduct') %></li>
+                          </ul>
+                        </p>
+                        <p>
+                          <strong><%= t('classify.weak.title') %>:</strong>
+                          <ul>
+                            <li><%= t('classify.weak.note') %></li>
+                          </ul>
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          <%= t('modal.cancel') %>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p id="note"><%= t('scoreboard.note') %></p>
+              </div>
+              <div class="table-responsive">
+                <table class="table list-content table-bordered text-ce nter">
+                  <thead class="table-info">
+                    <tr>
+                      <th scope="col"><%= t('subject.title') %></th>
+                      <th scope="col" colspan="10"><%= t('score.test') %></th>
+                      <th scope="col"><%= t('score.midterm') %></th>
+                      <th scope="col"><%= t('score.final') %></th>
+                      <th scope="col"><%= t('score.average') %></th>
+                    </tr>
+                  </thead>
+                  <tbody id="scoreboard"></tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-list">
+                <span><%= t('scoreboard.empty') %></span>
+              </div>
+              <% } %> <% if (typeof success_msg !== 'undefined') { %>
+              <div class="toast-container bottom-0 end-0 p-3">
+                <%- include('../partials/toast', {bg_color: "text-bg-success",
+                extra_class: "", msg: success_msg}); -%>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/scripts/scoreboard/student-scoreboard.js"></script>
+  </body>
+</html>

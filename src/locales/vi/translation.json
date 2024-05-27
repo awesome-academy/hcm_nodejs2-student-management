@@ -182,15 +182,51 @@
     "final": "Điểm cuối kì",
     "average": "Điểm trung bình",
     "invalid_value": "Điểm số phải nằm trong khoảng từ 0 tới 10 điểm",
-    "invalid_time": "Chỉ được phép cập nhật điểm khi học kì đang diễn ra"
+    "invalid_time": "Chỉ được phép cập nhật điểm khi học kì đang diễn ra",
+    "create_toast_msg": "Thêm điểm thành công",
+    "update_toast_msg": "Cập nhật điểm thành công"
   },
   "scoreboard": {
-    "title": "Bảng điểm môn học",
+    "title": "Bảng điểm",
     "instruction": "(*) Nhấn vào ô trên bảng điểm để nhập điểm",
     "test_title": "Cập nhật điểm kiểm tra thường xuyên",
     "midterm_title": "Cập nhật điểm thi giữa kì",
     "final_title": "Cập nhật điểm thi cuối kì",
     "score_ph": "Nhập điểm",
-    "update": "Cập nhật điểm"
+    "update": "Cập nhật điểm",
+    "note": "(*) Kết quả xếp loại chỉ có sẵn khi tất cả các môn đã có điểm trung bình"
+  },
+  "overall": {
+    "title": "Xếp loại",
+    "excellent": "Giỏi",
+    "good": "Khá",
+    "average": "Trung bình",
+    "weak": "Yếu"
+  },
+  "regulation": "Quy định xếp loại",
+  "regulation_note": "Kết quả xếp loại học sinh dựa lên quy định sau:",
+  "classify": {
+    "excellent": {
+      "title": "Học sinh giỏi",
+      "average": "Điểm trung bình tất cả các môn >=8.0",
+      "below": "Không có điểm trung bình môn nào <6.5",
+      "conduct": "Hạnh kiểm xếp loại tốt"
+    },
+    "good": {
+      "title": "Học sinh khá",
+      "average": "Điểm trung bình tất cả các môn >=6.5",
+      "below": "Không có điểm trung bình môn nào <5.0",
+      "conduct": "Hạnh kiểm xếp loại khá trở lên"
+    },
+    "average": {
+      "title": "Học sinh trung bình",
+      "average": "Điểm trung bình tất cả các môn >=5.0",
+      "below": "Không có điểm trung bình môn nào <3.5",
+      "conduct": "Hạnh kiểm xếp loại trung bình trở lên"
+    },
+    "weak": {
+      "title": "Học sinh yếu",
+      "note": "Không thuộc bất cứ diện học sinh nào ở trên"
+    }
   }
 }

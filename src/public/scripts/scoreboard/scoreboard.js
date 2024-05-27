@@ -127,6 +127,7 @@ $(document).ready(function () {
       for (let i = 0; i < 10; i++) {
         if (i >= testScores.length) {
           $row.append(`<td
+                            class="score-cell"
                             data-score-factor="1"
                             data-bs-toggle="modal"
                             data-bs-target=${modalTarget}
@@ -138,6 +139,7 @@ $(document).ready(function () {
           $row.append(
             `<td
                 id="${testScores[i].id}"
+                class="score-cell"
                 data-bs-toggle="modal"
                 data-value=${testScores[i].score}
                 data-bs-target=${modalTarget}
