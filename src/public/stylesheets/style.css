@@ -200,8 +200,15 @@ body {
 .info-button {
     align-items: flex-start;
 }
+#note-child {
+    font-size:medium;
+    color: #6e6e6e;
+    font-style: italic;
+}
 #note {
-    
+    position: absolute;
+    top: 0px;
+    right: 10px;
     font-size:medium;
     color: #6e6e6e;
     font-style: italic;

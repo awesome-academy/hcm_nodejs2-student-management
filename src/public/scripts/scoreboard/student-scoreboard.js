@@ -19,6 +19,40 @@ $(document).ready(function () {
     window.location.href = `/scores?semester=${semester}&sclass=${classId}`;
   });
 
+  function generateExcel() {
+    // Get the table element
+    const table = document.querySelector("#score-table");
+    // Convert the table to a worksheet
+    const ws = XLSX.utils.table_to_sheet(table);
+
+    const rowCount = table.rows.length;
+
+    // Apply right alignment to the first cell of the last three rows
+    for (let i = rowCount - 3; i < rowCount; i++) {
+      const cellAddress = `A${i + 1}:M${i + 1}`;
+      if (!ws[cellAddress]) {
+        ws[cellAddress] = {};
+      }
+      ws[cellAddress].s = {
+        alignment: {
+          horizontal: "right",
+        },
+      };
+    }
+
+    // Create a new workbook and append the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Scoreboard");
+
+    // Write the workbook to a file
+    XLSX.writeFile(wb, "scoreboard.xlsx");
+  }
+
+  // Attach the event handler to the export button
+  $("#export-btn").on("click", function () {
+    generateExcel();
+  });
+
   const urlParams = new URLSearchParams(window.location.search);
   const semester = urlParams.get("semester");
   const classId = urlParams.get("sclass");

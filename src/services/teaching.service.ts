@@ -22,6 +22,7 @@ export async function getTeachingById(id: number): Promise<Teaching | null> {
   return await teachingRepository.findOne({
     where: { id },
     loadRelationIds: { relations: ["teacher"] },
+    relations: ["class_school", "semester", "subject"]
   });
 }
 
