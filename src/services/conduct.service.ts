@@ -44,6 +44,22 @@ export async function getConductsByData(
   });
 }
 
+export async function getStudentConduct(
+  studentId: number,
+  semesterId: number
+): Promise<Conduct | null> {
+  return await conductRepository.findOne({
+    where: {
+      student: {
+        id: studentId,
+      },
+      semester: {
+        id: semesterId,
+      },
+    },
+  });
+}
+
 export async function updateConduct(
   studentId: number,
   conductDto: UpdateConductDto,

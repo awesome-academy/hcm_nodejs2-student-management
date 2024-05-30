@@ -5,11 +5,13 @@ import { CreateScoreDto } from "../dto/score/create-score.dto";
 import { UpdateScoreDto } from "../dto/score/update-score.dto";
 import { Class } from "../entities/class.entity";
 import { ClassScore } from "../entities/class_score.entity";
+import { Conduct } from "../entities/conduct.entity";
 import { Score } from "../entities/score.entity";
 import { Semester } from "../entities/semester.entity";
 import { StudentScore } from "../entities/student_score.entity";
 import { Subject } from "../entities/subject.entity";
 import * as classService from "./class.service";
+import * as conductService from "./conduct.service";
 import * as semesterService from "./semester.service";
 
 const classScoreRepository = AppDataSource.getRepository(ClassScore);
@@ -87,6 +89,36 @@ export async function getClassScoreDetail(
       },
     },
   });
+}
+
+export async function getStudentScoreboard(
+  classId: number,
+  semesterName: number,
+  studentId: number
+): Promise<[Conduct | null, StudentScore[]] | string> {
+  const _class = await classService.getClassById(classId);
+  if (!_class) return "class.not_exist";
+  const semester = await semesterService.getSemesterByData(
+    semesterName,
+    _class.school_year
+  );
+  if (!semester) return "semester.not_exist";
+  const semesterId = semester.id;
+  return await Promise.all([
+    conductService.getStudentConduct(studentId, semesterId),
+    studentScoreRepository
+      .createQueryBuilder("studentScore")
+      .innerJoinAndSelect("studentScore.class_score", "classScore")
+      .innerJoinAndSelect("classScore.class_school", "classSchool")
+      .innerJoinAndSelect("classScore.subject", "subject")
+      .innerJoinAndSelect("classScore.semester", "classSemester")
+      .innerJoinAndSelect("studentScore.student", "student")
+      .innerJoinAndSelect("studentScore.scores", "scores")
+      .where("student.id = :studentId", { studentId })
+      .andWhere("classSchool.id = :classId", { classId })
+      .andWhere("classSemester.id = :semesterId", { semesterId })
+      .getMany(),
+  ]);
 }
 
 export async function createClassScore(

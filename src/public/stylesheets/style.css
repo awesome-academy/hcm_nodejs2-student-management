@@ -188,10 +188,20 @@ body {
     justify-content: center;
     position: relative;
 }
-#note {
+.note-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     position: absolute;
     top: 0px;
-    right: 15px;
+    padding: 5px 10px 0 10px;
+    width: 100%;
+}
+.info-button {
+    align-items: flex-start;
+}
+#note {
+    
     font-size:medium;
     color: #6e6e6e;
     font-style: italic;
@@ -276,7 +286,7 @@ body {
 .table-responsive {
     max-height:550px;
     position: absolute;
-    top: 20px;
+    top: 60px;
     left: 10px;
     justify-content:flex-start;
     width: calc(100% - 20px) ;
@@ -306,4 +316,11 @@ body {
 .label-input {
     white-space: nowrap;
     margin-right: 5px;
+}
+.score-cell {
+    width: 80px;
+}
+.average-cell {
+    font-weight:bold;
+    text-align: right;
 }
