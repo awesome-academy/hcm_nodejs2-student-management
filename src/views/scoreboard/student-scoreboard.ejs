@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script src="/scripts/bootstrap.bundle.min.js"></script>
     <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/xlsx.full.min.js"></script>
   </head>
   <body>
     <main>
@@ -19,6 +20,9 @@
           <div class="content-container">
             <div class="header-container">
               <span class="header-title"><%= t('scoreboard.title') %></span>
+              <button id="export-btn" class="btn btn-success">
+                <%= t('export') %>
+              </button>
             </div>
             <div class="filter-container">
               <div>
@@ -140,10 +144,13 @@
                     </div>
                   </div>
                 </div>
-                <p id="note"><%= t('scoreboard.note') %></p>
+                <p id="note-child"><%= t('scoreboard.note') %></p>
               </div>
               <div class="table-responsive">
-                <table class="table list-content table-bordered text-ce nter">
+                <table
+                  class="table list-content table-bordered text-center"
+                  id="score-table"
+                >
                   <thead class="table-info">
                     <tr>
                       <th scope="col"><%= t('subject.title') %></th>

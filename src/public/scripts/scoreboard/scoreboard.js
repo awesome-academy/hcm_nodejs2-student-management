@@ -86,6 +86,141 @@ $(document).ready(function () {
       });
   });
 
+  function exportTableToExcel(scoreboard, filename = "data.xlsx") {
+    if (scoreboard === "") return;
+    const workbook = XLSX.utils.book_new();
+
+    // Add class information sheet
+    const infoSheetData = [
+      ["Class Name", scoreboard.class_school.name],
+      ["Grade", scoreboard.class_school.grade.name],
+      ["School Year", scoreboard.class_school.school_year],
+      ["Semester", scoreboard.semester.name],
+      ["Subject", scoreboard.subject.name],
+      ["Number of Students", scoreboard.student_scores.length],
+    ];
+    const infoSheet = XLSX.utils.aoa_to_sheet(infoSheetData);
+    XLSX.utils.book_append_sheet(workbook, infoSheet, "Class Info");
+
+    // Create a new worksheet for scores
+    const headers = [
+      "Name",
+      "Test Scores",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Midterm",
+      "Final",
+      "Average",
+    ];
+    const data = scoreboard.student_scores.map((studentScore) => {
+      const row = [studentScore.student.name];
+      const testScores = studentScore.scores.filter(
+        (score) => score.factor === 1
+      );
+      for (let i = 0; i < 10; i++) {
+        row.push(testScores[i] ? testScores[i].score : "");
+      }
+      const midtermScore = studentScore.scores.find(
+        (score) => score.factor === 2
+      );
+      row.push(midtermScore ? midtermScore.score : "");
+      const finalScore = studentScore.scores.find(
+        (score) => score.factor === 3
+      );
+      row.push(finalScore ? finalScore.score : "");
+      const average = calculateAverage(studentScore);
+      row.push(average !== null ? average : "");
+      return row;
+    });
+    data.unshift(headers); // Add headers to the data
+
+    const scoreSheet = XLSX.utils.aoa_to_sheet(data);
+
+    // Define the merged cell range for "Test Scores"
+    scoreSheet["!merges"] = [
+      { s: { r: 0, c: 1 }, e: { r: 0, c: 10 } }, // Merge cells B1 to K1
+    ];
+
+    // Apply styles to headers
+    const headerStyle = {
+      font: { bold: true },
+    };
+
+    const centerAlignment = { alignment: { horizontal: "center" } };
+
+    // Apply header styles
+    headers.forEach((header, index) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+      if (!scoreSheet[cellAddress]) scoreSheet[cellAddress] = {};
+      scoreSheet[cellAddress].s = headerStyle;
+    });
+
+    // Apply styles to data cells
+    for (let r = 1; r < data.length; r++) {
+      for (let c = 0; c < data[r].length; c++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: r, c: c });
+        if (!scoreSheet[cellAddress]) scoreSheet[cellAddress] = {};
+        scoreSheet[cellAddress].s = centerAlignment;
+      }
+    }
+    // Set column widths
+    infoSheet["!cols"] = [{ wch: 15 }, { wch: 10 }];
+    scoreSheet["!cols"] = [
+      { wch: 20 }, // Set the width of the first column to be larger
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 8 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 10 },
+    ];
+    
+    // Append the styled sheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, scoreSheet, "Scores");
+
+    // Write the workbook to file
+    XLSX.writeFile(workbook, filename, { bookType: "xlsx", type: "buffer" });
+  }
+
+  // Calculate the average score
+  function calculateAverage(studentScore) {
+    const testScores = studentScore.scores.filter(
+      (score) => score.factor === 1
+    );
+    const midtermScore = studentScore.scores.find(
+      (score) => score.factor === 2
+    );
+    const finalScore = studentScore.scores.find((score) => score.factor === 3);
+    if (finalScore) {
+      let sum = testScores.reduce((acc, curr) => acc + +curr.score, 0);
+      if (midtermScore) {
+        sum += midtermScore.score * 2;
+      }
+      sum += finalScore.score * 3;
+      const numberOfScores = testScores.length + (midtermScore ? 2 : 0) + 3;
+      return +(sum / numberOfScores).toFixed(2);
+    }
+    return null;
+  }
+
+  $("#export-btn").on("click", function () {
+    exportTableToExcel(scoreboard, "scoreboard.xlsx");
+  });
+
   if (scoreboard != "") {
     const tableBody = $("#scoreboard");
     const testTitle = tableBody.data("test-title");
@@ -188,7 +323,7 @@ $(document).ready(function () {
         let average;
         if (midtermScore) {
           let sum = testScores.reduce(
-            (accumulator, currentValue) => accumulator + (+currentValue.score),
+            (accumulator, currentValue) => accumulator + +currentValue.score,
             0
           );
           sum += midtermScore.score * 2 + finalScore.score * 3;

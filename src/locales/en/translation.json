@@ -228,5 +228,6 @@
       "title": "Weak Student",
       "note": "Does not fall under any of the above student categories"
     }
-  }
+  },
+  "export": "Export to Excel"
 }
