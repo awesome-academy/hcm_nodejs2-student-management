@@ -107,6 +107,10 @@ export async function createStudent(
     student.id,
     student.email
   );
+  if(!account){
+    await studentRepository.remove(student);
+    return "account.create_fail";
+  }
   student.account = account;
   await studentRepository.save(student);
 }

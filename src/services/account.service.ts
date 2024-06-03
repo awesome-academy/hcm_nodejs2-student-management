@@ -10,7 +10,7 @@ export async function createAccount(
   role: AccountRoles,
   id: number,
   email: string
-): Promise<Account> {
+): Promise<Account | null> {
   let username;
   switch (role) {
     case AccountRoles.TEACHER:
@@ -20,8 +20,7 @@ export async function createAccount(
       username = "student" + id;
       break;
     default:
-      username = "staff" + id;
-      break;
+      return null;
   }
   const password = createRandomPassword();
   const _account = accountRepository.create({
@@ -47,5 +46,6 @@ export async function deleteAccount(id: number): Promise<void> {
   const account = await accountRepository.findOne({
     where: { id },
   });
-  await accountRepository.remove(account!);
+  if (!account) return;
+  await accountRepository.remove(account);
 }

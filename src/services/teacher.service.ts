@@ -94,7 +94,9 @@ export async function getNonHomeRoomTeachers(year: number): Promise<Teacher[]> {
   return teachers;
 }
 
-export async function createTeacher(teacherDto: TeacherDto): Promise<void> {
+export async function createTeacher(
+  teacherDto: TeacherDto
+): Promise<void | string> {
   const existingSubjects = await subjectService.getSubjectsById(
     teacherDto.subjects
   );
@@ -108,6 +110,10 @@ export async function createTeacher(teacherDto: TeacherDto): Promise<void> {
     teacher.id,
     teacher.email
   );
+  if(!account){
+    await teacherRepository.remove(teacher);
+    return "account.create_fail";
+  }
   teacher.account = account;
   await teacherRepository.save(teacher);
 }
