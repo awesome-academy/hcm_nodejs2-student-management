@@ -1,11 +1,15 @@
 import * as accountService from "../services/account.service";
 import { AppDataSource } from "../config/typeorm";
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { AccountRoles } from "../common/constants";
+import { faker } from "@faker-js/faker";
+import { Account } from "../entities/account.entity";
 
 let connection: DataSource;
+let accountRepository: Repository<Account>;
 beforeAll(async () => {
   connection = await AppDataSource.initialize();
+  accountRepository = AppDataSource.getRepository(Account);
 });
 
 afterAll(async () => {
@@ -16,8 +20,8 @@ describe("createAccount", () => {
   it("should return teacher account when creating is successful", async () => {
     const accountParams = {
       role: AccountRoles.TEACHER,
-      id: 200,
-      email: "Test1213@gmail.com",
+      id: faker.number.int(),
+      email: faker.internet.email(),
     };
 
     const account = await accountService.createAccount(
@@ -34,8 +38,8 @@ describe("createAccount", () => {
   it("should return student account when creating is successful", async () => {
     const accountParams = {
       role: AccountRoles.STUDENT,
-      id: 201,
-      email: "Test1214@gmail.com",
+      id: 100,
+      email: faker.internet.email(),
     };
 
     const account = await accountService.createAccount(
@@ -68,8 +72,10 @@ describe("createAccount", () => {
 
 describe("deleteAccount", () => {
   it("should delete account when account is exist", async () => {
-    const id = 201;
-    await accountService.deleteAccount(id);
+    const account = await accountRepository.findOneBy({
+      username: "student100",
+    });
+    await accountService.deleteAccount(account!.id);
   });
 
   it("should not delete account when account is not exist", async () => {

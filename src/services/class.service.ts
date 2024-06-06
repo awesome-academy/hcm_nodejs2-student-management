@@ -54,7 +54,7 @@ export async function getClassesByGrade(
 export async function getClassByGrades(
   gradeNames: number[]
 ): Promise<Class | null> {
-  return classRepository.findOne({
+  return await classRepository.findOne({
     where: { grade: { name: In(gradeNames) } },
   });
 }

@@ -11,10 +11,12 @@ export async function isExistingEmail(
   email: string,
   id?: number
 ): Promise<boolean> {
-  const existingEmail = await Promise.race([
+  const [teacher, staff, student] = await Promise.all([
     teacherRepository.findOneBy({ email }),
     staffRepository.findOneBy({ email }),
     studentRepository.findOneBy({ email }),
   ]);
-  return !!existingEmail && existingEmail.id !== id;
+
+  const existingUser = [teacher, staff, student].find((user) => user !== null);
+  return !!existingUser && existingUser.id !== id;
 }
