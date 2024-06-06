@@ -1,12 +1,10 @@
 import { DataSource, Repository } from "typeorm";
 import { AppDataSource } from "../config/typeorm";
+import { Account } from "../entities/account.entity";
+import { Staff } from "../entities/staff.entity";
+import { Student } from "../entities/student.entity";
 import { Teacher } from "../entities/teacher.entity";
 import * as authService from "../services/auth.service";
-import { Student } from "../entities/student.entity";
-import { Staff } from "../entities/staff.entity";
-import { Account } from "../entities/account.entity";
-import { faker } from "@faker-js/faker";
-import { Genders } from "../common/constants";
 
 let connection: DataSource;
 let studentRepository: Repository<Student>;

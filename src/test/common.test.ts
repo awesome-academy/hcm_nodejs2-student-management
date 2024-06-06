@@ -1,14 +1,12 @@
-import { DataSource, IsNull, Not, Repository } from "typeorm";
-import { AppDataSource } from "../config/typeorm";
-import * as commonService from "../services/common.service";
-import * as studentService from "../services/student.service";
-import { Student } from "../entities/student.entity";
-import { StudentDto } from "../dto/student/student.dto";
 import { faker } from "@faker-js/faker";
-import { AccountRoles, Genders, StudentStatus } from "../common/constants";
-import { Teacher } from "../entities/teacher.entity";
-import { Staff } from "../entities/staff.entity";
+import { DataSource, Repository } from "typeorm";
+import { AccountRoles, Genders } from "../common/constants";
+import { AppDataSource } from "../config/typeorm";
 import { Account } from "../entities/account.entity";
+import { Staff } from "../entities/staff.entity";
+import { Student } from "../entities/student.entity";
+import { Teacher } from "../entities/teacher.entity";
+import * as commonService from "../services/common.service";
 
 let connection: DataSource;
 let studentRepository: Repository<Student>;

@@ -70,7 +70,7 @@ export async function checkAvailableTeacher(
   if (!_semester) return false;
   const _teacher = await getTeacherById(teacher);
   if (!_teacher) return false;
-  const schedule = scheduleService.getTeacherSchedule(
+  const schedule = await scheduleService.getTeacherSchedule(
     _semester,
     day,
     start,
@@ -110,7 +110,7 @@ export async function createTeacher(
     teacher.id,
     teacher.email
   );
-  if(!account){
+  if (!account) {
     await teacherRepository.remove(teacher);
     return "account.create_fail";
   }
