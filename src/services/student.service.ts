@@ -6,7 +6,6 @@ import { Student } from "../entities/student.entity";
 import * as accountService from "./account.service";
 import * as classService from "./class.service";
 import * as gradeService from "./grade.service";
-import { Class } from "../entities/class.entity";
 
 const studentRepository = AppDataSource.getRepository(Student);
 
@@ -107,7 +106,7 @@ export async function createStudent(
     student.id,
     student.email
   );
-  if(!account){
+  if (!account) {
     await studentRepository.remove(student);
     return "account.create_fail";
   }
