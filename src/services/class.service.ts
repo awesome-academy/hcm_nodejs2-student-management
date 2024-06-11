@@ -143,10 +143,9 @@ export async function getHomeRoomClassByYear(
   teacherId: number
 ): Promise<Class | null> {
   const school_year = year + "-" + (year + 1);
-  const _class = classRepository.findOne({
+  return await classRepository.findOne({
     where: { teacher: { id: teacherId }, school_year },
   });
-  return _class;
 }
 
 export async function getHomeRoomSchoolYears(
